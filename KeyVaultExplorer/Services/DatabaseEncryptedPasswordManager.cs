@@ -86,17 +86,16 @@ public static class DatabaseEncryptedPasswordManager
 
                 var encryptor = aes.CreateEncryptor();
 
-                byte[] secretBytes = Encoding.UTF8.GetBytes(secret); // Encode secret consistently
+                byte[] secretBytes = Encoding.UTF8.GetBytes(secret);
                 byte[] encryptedSecret = encryptor.TransformFinalBlock(secretBytes, 0, secretBytes.Length);
 
-                // Store the IV along with the encrypted data
                 byte[] iv = aes.IV;
                 byte[] combinedData = new byte[iv.Length + encryptedSecret.Length];
                 Array.Copy(iv, 0, combinedData, 0, iv.Length);
                 Array.Copy(encryptedSecret, 0, combinedData, iv.Length, encryptedSecret.Length);
 
                 string encryptedSecretPath = Path.Combine(Constants.LocalAppDataFolder, Constants.EncryptedSecretFileName);
-                File.WriteAllBytes(encryptedSecretPath, combinedData); // Write bytes directly
+                File.WriteAllBytes(encryptedSecretPath, combinedData); 
             }
         }
     }
@@ -128,7 +127,6 @@ public static class DatabaseEncryptedPasswordManager
             byte[] protectedKey = ProtectedData.Protect(key, entropySource, DataProtectionScope.LocalMachine);
             File.WriteAllBytes(protectedKeyPath, protectedKey);
             return protectedKey;
-            // if linux or macOS then use an empty string as the password
         }
         return new byte[32];
     }
