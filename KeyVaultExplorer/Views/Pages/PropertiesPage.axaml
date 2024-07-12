@@ -186,7 +186,7 @@
                             BorderThickness="1"
                             CornerRadius="4">
                             <ScrollViewer VerticalScrollBarVisibility="Visible">
-                                <StackPanel  VerticalAlignment="Stretch">
+                                <StackPanel VerticalAlignment="Stretch">
                                     <TextBlock Text="Properties" Theme="{StaticResource BodyStrongTextBlockStyle}" />
                                     <Grid
                                         HorizontalAlignment="Stretch"
