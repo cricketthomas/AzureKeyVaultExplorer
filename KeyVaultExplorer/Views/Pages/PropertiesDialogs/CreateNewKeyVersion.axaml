@@ -1,0 +1,107 @@
+<UserControl
+    x:Class="KeyVaultExplorer.CreateNewKeyVersion"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:KeyVaultExplorer.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:CreateNewKeyVersionViewModel"
+    mc:Ignorable="d">
+
+
+
+    <ScrollViewer>
+        <StackPanel MinWidth="400" Margin="10">
+
+            <Grid ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*">
+
+                <StackPanel Grid.Row="0" Orientation="Vertical">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Center"
+                        Text="Name" />
+                    <TextBox IsEnabled="{Binding Identifier, Converter={x:Static ObjectConverters.IsNull}}" Text="{Binding KeyVaultKeyModel.Name}" />
+                </StackPanel>
+
+
+                <StackPanel
+                    Grid.Row="1"
+                    Orientation="Vertical"
+                    ToolTip.Tip="Type of key to create.">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Center"
+                        Text="Key type" />
+                    <RadioButton Content="RSA" GroupName="keyType" />
+                    <RadioButton Content="EC" GroupName="keyType" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Orientation="Vertical">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Center"
+                        Text="Key type" />
+                    <RadioButton Content="2048" GroupName="keySize" />
+                    <RadioButton Content="3072" GroupName="keySize" />
+                    <RadioButton Content="4096" GroupName="keySize" />
+
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="3">
+                    <CheckBox
+                        Name="SetActivationDateCheckbox"
+                        IsChecked="{Binding HasActivationDate}"
+                        ToolTip.Tip="Sets when this resource will become active. This sets the 'nbf' property on the resource. A new current but inactive version will still be created after this operation.">
+                        Set Activation Date
+                    </CheckBox>
+                    <StackPanel
+                        IsVisible="{Binding #SetActivationDateCheckbox.IsChecked}"
+                        Orientation="Vertical"
+                        Spacing="5">
+                        <DatePicker
+                            MinWidth="400"
+                            HorizontalAlignment="Left"
+                            SelectedDate="{Binding KeyVaultKeyModel.NotBefore}" />
+                        <TimePicker MinWidth="400" SelectedTime="{Binding NotBeforeTimespan}" />
+                    </StackPanel>
+                    <CheckBox
+                        Name="SetExpirationDateCheckbox"
+                        IsChecked="{Binding HasExpirationDate}"
+                        ToolTip.Tip="Sets when this resource will become inactive. This sets the 'exp' property on the resource.">
+                        Set Expiration Date
+                    </CheckBox>
+                    <StackPanel
+                        IsVisible="{Binding #SetExpirationDateCheckbox.IsChecked}"
+                        Orientation="Vertical"
+                        Spacing="5">
+                        <DatePicker MinWidth="400" SelectedDate="{Binding KeyVaultKeyModel.ExpiresOn}" />
+                        <TimePicker MinWidth="400" SelectedTime="{Binding ExpiresOnTimespan, Mode=TwoWay}" />
+                    </StackPanel>
+                </StackPanel>
+
+
+                <StackPanel
+                    Grid.Row="4"
+                    Orientation="Horizontal"
+                    Spacing="5">
+                    <TextBlock
+                        Margin="0,4,0,0"
+                        VerticalAlignment="Center"
+                        Text="Enabled" />
+                    <ToggleSwitch
+                        IsChecked="{Binding KeyVaultKeyModel.Enabled}"
+                        OffContent="No"
+                        OnContent="Yes" />
+                </StackPanel>
+
+
+
+
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
