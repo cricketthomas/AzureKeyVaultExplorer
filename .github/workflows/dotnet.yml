@@ -40,17 +40,32 @@ jobs:
         name: keyvaultexplorer.win-x64
         path: keyvaultexplorer.win-x64.tar
       # mpdev.exe on Docker need to return Exit code 1 when error: Status: FAILED
-    - name: build MSIX with (Master Packager Dev)
-      uses: oleksis/setup-mpdev@v1
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
       with:
-        mpdev-params: "['build', 'apptest/mpdev.json', '--verbose', '--properties $.version=1.0.${{github.run_number }} $.fileSystemEntries.sourcePath=$env:GITHUB_WORKSPACE\\win-x64\\publish']"
-  
-    # - name: Upload artifacts
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: mpdev-hello
-    #     path: "./dist/mpdev-hello_1.0.0_x64.msi"
-    #     if-no-files-found: error
+        registry: ${{ github.repository_owner }}
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GHCR_PAT }}
+
+    - name: MPDev MSI/MSIX
+      run: |
+        docker run --name mpdev-build -i --workdir /src -v ${{ github.workspace }}:/src ghcr.io/oleksis/setup-mpdev:v1 build mpdev/msix.json --verbose --properties $.version=1.0.${{ github.run_number }} $.fileSystemEntries.sourcePath=$env:GITHUB_WORKSPACE\\win-x64\\publish
+
+    - name: Display Directory
+      run: tree /F /A .
+
+    - name: Upload MSI artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: mpdev-hello
+        path: "./dist/*.msi"
+        if-no-files-found: error
+    - name: Upload MSIX artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: mpdev-hello-msix
+        path: "./dist/*.msix"
+        if-no-files-found: error
 
   build_macos_intel:
     name: Build macOS intel
