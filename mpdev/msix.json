@@ -1,7 +1,7 @@
 {
   "outputTypes": [
-   
-    "msix"
+    "msix",
+    "msi"
   ],
   "outputDirectory": "Key Vault Explorer\\output",
   "packageName": "Key Vault Explorer",

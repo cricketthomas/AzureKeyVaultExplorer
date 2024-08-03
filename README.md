@@ -36,11 +36,19 @@ The Sqlite database is encrypted using DPAPI on windows, and on macOS the passwo
 ## Screenshots
 
 
-<img width="1419" alt="WinOS Dark"  src="https://github.com/cricketthomas/AzureKeyVaultExplorer/assets/15821271/e5b99908-47b9-45ac-a234-d9a5947bdc9c6">
-<img width="1419" alt="WinOS Light" src="https://github.com/cricketthomas/AzureKeyVaultExplorer/assets/15821271/1f5e1a5b-1796-43c1-bbd9-1ee60e3deeb0">
+<img width="1419" alt="WinOSDark" src="https://github.com/user-attachments/assets/9b26fafb-e2b7-4f03-880c-4653fbcf0903">
+<img width="1419" alt="WinOSLight" src="https://github.com/cricketthomas/AzureKeyVaultExplorer/assets/15821271/1f5e1a5b-1796-43c1-bbd9-1ee60e3deeb0">
 
-<img width="1419" alt="Dark" src="https://github.com/cricketthomas/KeyVaultExplorer/assets/15821271/365cea71-2a68-4cab-997c-2631922e7bc6">
-<img width="1426" alt="Light" src="https://github.com/cricketthomas/KeyVaultExplorer/assets/15821271/41793cfa-eb01-4954-b062-56072d19d5ea">
+<img width="1419" alt="MacDark" src="https://github.com/cricketthomas/KeyVaultExplorer/assets/15821271/365cea71-2a68-4cab-997c-2631922e7bc6">
+<img width="1426" alt="MacLight" src="https://github.com/cricketthomas/KeyVaultExplorer/assets/15821271/41793cfa-eb01-4954-b062-56072d19d5ea">
+
+
+
+<img width="400" alt="Light" src="https://github.com/user-attachments/assets/ed0b7919-666d-4f03-a09a-c6763fe2ca1d">
+<img width="400" alt="Light" src="https://github.com/user-attachments/assets/87823029-e98d-4f4b-91d3-b7ea78f934ae">
+<img width="400" alt="Light" src="https://github.com/user-attachments/assets/d33521b6-effd-4a51-b0c5-161feac56ffe">
+<img width="400" alt="Light" src="https://github.com/user-attachments/assets/ec1c614d-5de1-47c4-97ce-20c0246690ea">
+<!-- <img height="350" alt="Light" src="https://github.com/user-attachments/assets/8d051a29-c653-4e35-9968-388f9dcc5d07"> -->
 
 
 ## Running the application:
@@ -85,8 +93,9 @@ Repeat step 5. The build starts and might take a couple of minutes. The final ou
 
 7. It will lauch your default browser window and prompt you to login and grant consent. 
 ### Notes: 
-The app is shown as unverified. I am working on getting into the Microsoft Partner Program to verify the app. 
-<img width="400" src="https://github.com/user-attachments/assets/f2500559-21ae-452c-af12-f7aca366eed7"/>
+The app is now verified as I am member of the Microsoft Partner Program. 
+<img width="400" src="https://github.com/user-attachments/assets/1e7e802f-cabf-481c-8f39-b78875772ffd"/>
+
 
 When you run it for the first time, it creates an enterprise application in your tenant. 
 Please contact your Azure tenant admin to make sure the application has been consented for use. 
@@ -112,7 +121,7 @@ Accepting PRs, suggestions, code reviews, feature requests and more. This is my 
 
 ### Dependencies
 - **[.NET 8](https://github.com/dotnet/runtime)**
-- **[AvaloniaUI](https://github.com/AvaloniaUI/Avalonia/)** 
+- **[Avalonia](https://github.com/AvaloniaUI/Avalonia/)** 
 - **[FluentAvalonia](https://github.com/amwx/FluentAvalonia/)**
 - **Azure.ResourceManager.KeyVault**
 - **Azure.Security.KeyVault.Certificates**
