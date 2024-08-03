@@ -15,10 +15,10 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+    # - name: Setup .NET
+    #   uses: actions/setup-dotnet@v4
+    #   with:
+    #     dotnet-version: 8.0.x
     - uses: actions/cache@v3
       with:
           path: ~/.nuget/win-packages
@@ -49,7 +49,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN  }}
 
     - name: Pull Docker image
-      run: docker pull ghcr.io/oleksis/setup-mpdev:latest
+      run: docker pull ghcr.io/oleksis/setup-mpdev::v1.2.0
 
 
     # - name: MPDev MSI/MSIX
