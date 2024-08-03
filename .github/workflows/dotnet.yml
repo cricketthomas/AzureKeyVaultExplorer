@@ -8,6 +8,15 @@ on:
 permissions:
   contents: write
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME_SHORT: setup-mpdev
+  IMAGE_NAME: ${{ github.repository }}
+  SHA: ${{ github.event.pull_request.head.sha || github.event.after }}
+  # Use `latest` as the tag to compare to if empty, assuming that it's already pushed
+  COMPARE_TAG: latest
+
+
 jobs:
   build_windows:
     name: Build Windows
@@ -45,7 +54,7 @@ jobs:
       with:
         registry: ${{ github.repository_owner }}
         username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.GHCR_PAT  }}
 
     - name: MPDev MSI/MSIX
       run: |
