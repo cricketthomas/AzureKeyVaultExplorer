@@ -45,8 +45,8 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: 'ghcr.io'
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN  }}
+        username: ${{ secrets.GHCR_USERNAME }}
+        password: ${{ secrets.GHCR_PAT }}
 
     - name: Pull Docker image
       run: docker pull ghcr.io/oleksis/setup-mpdev:v1.2.0
