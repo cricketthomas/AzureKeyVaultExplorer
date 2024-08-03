@@ -41,7 +41,7 @@ jobs:
         path: keyvaultexplorer.win-x64.tar
       # mpdev.exe on Docker need to return Exit code 1 when error: Status: FAILED
     - name: build MSIX with (Master Packager Dev)
-      uses: github.com/oleksis/setup-mpdev@v1
+      uses: oleksis/setup-mpdev@v1
       with:
         mpdev-params: "['build', 'apptest/mpdev.json', '--verbose', '--properties $.version=1.0.${{github.run_number }} $.fileSystemEntries.sourcePath=$env:GITHUB_WORKSPACE\\win-x64\\publish']"
   
@@ -51,8 +51,6 @@ jobs:
     #     name: mpdev-hello
     #     path: "./dist/mpdev-hello_1.0.0_x64.msi"
     #     if-no-files-found: error
-      
-
 
   build_macos_intel:
     name: Build macOS intel
