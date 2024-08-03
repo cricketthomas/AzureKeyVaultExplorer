@@ -11,7 +11,7 @@ permissions:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME_SHORT: setup-mpdev
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: 'setup-mpdev'
   SHA: ${{ github.event.pull_request.head.sha || github.event.after }}
   # Use `latest` as the tag to compare to if empty, assuming that it's already pushed
   COMPARE_TAG: latest
