@@ -27,25 +27,25 @@ jobs:
             win-nuget
     - name: Publish Windows
       run: | 
-        ./build.ps1 -Runtime win-x64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'
-        New-Item -ItemType Directory -Path "win-x64" 
-        Move-Item -Path ".\publish" -Destination "$env:GITHUB_WORKSPACE\win-x64\publish"
-        gci -path  "$env:GITHUB_WORKSPACE\win-x64\publish"
+        # ./build.ps1 -Runtime win-x64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'
+        # New-Item -ItemType Directory -Path "win-x64" 
+        # Move-Item -Path ".\publish" -Destination "$env:GITHUB_WORKSPACE\win-x64\publish"
+        # gci -path  "$env:GITHUB_WORKSPACE\win-x64\publish"
       shell: pwsh
-    - name: Create Package
-      run: tar -cvf keyvaultexplorer.win-x64.tar win-x64
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: keyvaultexplorer.win-x64
-        path: keyvaultexplorer.win-x64.tar
+    # - name: Create Package
+    #   run: tar -cvf keyvaultexplorer.win-x64.tar win-x64
+    # - name: Upload Artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: keyvaultexplorer.win-x64
+    #     path: keyvaultexplorer.win-x64.tar
       # mpdev.exe on Docker need to return Exit code 1 when error: Status: FAILED
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v2
       with:
         registry: ${{ github.repository_owner }}
         username: ${{ github.repository_owner }}
-        password: ${{ secrets.GHCR_PAT }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: MPDev MSI/MSIX
       run: |
@@ -67,85 +67,85 @@ jobs:
         path: "./dist/*.msix"
         if-no-files-found: error
 
-  build_macos_intel:
-    name: Build macOS intel
-    runs-on: macos-12
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - uses: actions/cache@v3
-      with:
-          path: ~/.nuget/osx-intel-packages
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            mac-nuget
-    - name: publish_macOS_intel
-      run: |
-        ./build.ps1 -Runtime osx-x64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'       
-        New-Item -ItemType Directory -Path "osx-x64" 
-        Move-Item -Path "Key Vault Explorer for Azure.app" -Destination "$env:GITHUB_WORKSPACE\osx-x64\Key Vault Explorer for Azure.app"
-      shell: pwsh
-    - name: Create Package
-      run: tar -cvf keyvaultexplorer.osx-x64.tar osx-x64/
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: keyvaultexplorer.osx-x64
-        path: keyvaultexplorer.osx-x64.tar    
+  # build_macos_intel:
+  #   name: Build macOS intel
+  #   runs-on: macos-12
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Setup .NET
+  #     uses: actions/setup-dotnet@v4
+  #     with:
+  #       dotnet-version: 8.0.x
+  #   - uses: actions/cache@v3
+  #     with:
+  #         path: ~/.nuget/osx-intel-packages
+  #         # Look to see if there is a cache hit for the corresponding requirements file
+  #         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+  #         restore-keys: |
+  #           mac-nuget
+  #   - name: publish_macOS_intel
+  #     run: |
+  #       ./build.ps1 -Runtime osx-x64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'       
+  #       New-Item -ItemType Directory -Path "osx-x64" 
+  #       Move-Item -Path "Key Vault Explorer for Azure.app" -Destination "$env:GITHUB_WORKSPACE\osx-x64\Key Vault Explorer for Azure.app"
+  #     shell: pwsh
+  #   - name: Create Package
+  #     run: tar -cvf keyvaultexplorer.osx-x64.tar osx-x64/
+  #   - name: Upload Artifact
+  #     uses: actions/upload-artifact@v4
+  #     with:
+  #       name: keyvaultexplorer.osx-x64
+  #       path: keyvaultexplorer.osx-x64.tar    
 
-  build_macos:
-    name: Build macOS Arm64
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - uses: actions/cache@v3
-      with:
-          path: ~/.nuget/macos-arm-packages
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-armnuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            #mac-arm-nuget
-    - name: Publish macOS Arm
-      run: | 
-        ./build.ps1 -Runtime osx-arm64 -PublishAot:$false -BuildNumber '1.0.${{github.run_number }}'      
-        New-Item -ItemType Directory -Path "osx-arm64" 
-        Move-Item -Path ".\publish" -Destination "$env:GITHUB_WORKSPACE\osx-arm64\publish"
-        Rename-Item -Path "$env:GITHUB_WORKSPACE\osx-arm64\publish\keyvaultexplorerdesktop" -NewName "Key Vault Explorer for Azure" -Force 
+  # build_macos:
+  #   name: Build macOS Arm64
+  #   runs-on: macos-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Setup .NET
+  #     uses: actions/setup-dotnet@v4
+  #     with:
+  #       dotnet-version: 8.0.x
+  #   - uses: actions/cache@v3
+  #     with:
+  #         path: ~/.nuget/macos-arm-packages
+  #         # Look to see if there is a cache hit for the corresponding requirements file
+  #         key: ${{ runner.os }}-armnuget-${{ hashFiles('**/*.csproj') }}
+  #         restore-keys: |
+  #           #mac-arm-nuget
+  #   - name: Publish macOS Arm
+  #     run: | 
+  #       ./build.ps1 -Runtime osx-arm64 -PublishAot:$false -BuildNumber '1.0.${{github.run_number }}'      
+  #       New-Item -ItemType Directory -Path "osx-arm64" 
+  #       Move-Item -Path ".\publish" -Destination "$env:GITHUB_WORKSPACE\osx-arm64\publish"
+  #       Rename-Item -Path "$env:GITHUB_WORKSPACE\osx-arm64\publish\keyvaultexplorerdesktop" -NewName "Key Vault Explorer for Azure" -Force 
 
-      shell: pwsh
-    - name: Create Package
-      run: tar -cvf keyvaultexplorer.osx-arm64.tar osx-arm64/
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: keyvaultexplorer.osx-arm64
-        path: keyvaultexplorer.osx-arm64.tar    
-  release:
-    name: Release code
-    needs: [ build_macos, build_windows, build_macos_intel]
-    runs-on: ubuntu-latest
-    steps: 
-      - uses: actions/checkout@v4
-      - name: Download built artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: keyvaultexplorer.*
-      - name: Create Release
-        run: |
-          Get-ChildItem -Recurse
-          gh release create v0.0.${{github.run_number }} --draft
-          gh release upload v0.0.${{github.run_number }} "./keyvaultexplorer.win-x64/keyvaultexplorer.win-x64.tar" "./keyvaultexplorer.osx-arm64/keyvaultexplorer.osx-arm64.tar" "./keyvaultexplorer.osx-x64/keyvaultexplorer.osx-x64.tar"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: pwsh
+  #     shell: pwsh
+  #   - name: Create Package
+  #     run: tar -cvf keyvaultexplorer.osx-arm64.tar osx-arm64/
+  #   - name: Upload Artifact
+  #     uses: actions/upload-artifact@v4
+  #     with:
+  #       name: keyvaultexplorer.osx-arm64
+  #       path: keyvaultexplorer.osx-arm64.tar    
+  # release:
+  #   name: Release code
+  #   needs: [ build_macos, build_windows, build_macos_intel]
+  #   runs-on: ubuntu-latest
+  #   steps: 
+  #     - uses: actions/checkout@v4
+  #     - name: Download built artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         pattern: keyvaultexplorer.*
+  #     - name: Create Release
+  #       run: |
+  #         Get-ChildItem -Recurse
+  #         gh release create v0.0.${{github.run_number }} --draft
+  #         gh release upload v0.0.${{github.run_number }} "./keyvaultexplorer.win-x64/keyvaultexplorer.win-x64.tar" "./keyvaultexplorer.osx-arm64/keyvaultexplorer.osx-arm64.tar" "./keyvaultexplorer.osx-x64/keyvaultexplorer.osx-x64.tar"
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       shell: pwsh
       
       
 
