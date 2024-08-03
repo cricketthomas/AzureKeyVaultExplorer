@@ -8,14 +8,6 @@ on:
 permissions:
   contents: write
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME_SHORT: setup-mpdev
-  IMAGE_NAME: 'setup-mpdev'
-  SHA: ${{ github.event.pull_request.head.sha || github.event.after }}
-  # Use `latest` as the tag to compare to if empty, assuming that it's already pushed
-  COMPARE_TAG: latest
-
 
 jobs:
   build_windows:
@@ -52,13 +44,17 @@ jobs:
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v2
       with:
-        registry: ${{ github.repository_owner }}
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GHCR_PAT  }}
+        registry: 'ghcr.io'
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN  }}
 
-    - name: MPDev MSI/MSIX
-      run: |
-        docker run --name mpdev-build -i --workdir /src -v ${{ github.workspace }}:/src ghcr.io/oleksis/setup-mpdev:v1 build mpdev/msix.json --verbose --properties $.version=1.0.${{ github.run_number }} $.fileSystemEntries.sourcePath=$env:GITHUB_WORKSPACE\\win-x64\\publish
+    - name: Pull Docker image
+      run: docker pull ghcr.io/oleksis/setup-mpdev:latest
+
+
+    # - name: MPDev MSI/MSIX
+    #   run: |
+    #     docker run --name mpdev-build -i --workdir /src -v ${{ github.workspace }}:/src ghcr.io/oleksis/setup-mpdev:v1 build mpdev/msix.json --verbose --properties $.version=1.0.${{ github.run_number }} $.fileSystemEntries.sourcePath=$env:GITHUB_WORKSPACE\\win-x64\\publish
 
     - name: Display Directory
       run: tree /F /A .
