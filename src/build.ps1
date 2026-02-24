@@ -15,9 +15,9 @@ $DebugPreference = 'continue';
 Set-Content -Path "VERSION" -Value $BuildNumber -Force
 
 $command = @"
-dotnet publish  ./Desktop/Desktop.csproj `
+dotnet publish  ./src/Desktop/Desktop.csproj `
     -r $Runtime `
-    -o .\publish `
+    -o .\src\publish `
     -c Release  `
     -f $Platform `
     -p:PublishAot=$PublishAot `
@@ -32,9 +32,9 @@ dotnet publish  ./Desktop/Desktop.csproj `
 Write-Host $command -ForegroundColor Green
 
 
-dotnet publish  ./Desktop/Desktop.csproj `
+dotnet publish  ./src/Desktop/Desktop.csproj `
     -r $Runtime `
-    -o .\publish `
+    -o .\src\publish `
     -c Release  `
     -f $Platform `
     -p:PublishAot=$PublishAot `
@@ -60,12 +60,12 @@ if ($Runtime -eq "osx-x64") {
     New-Item -ItemType Directory -Path $macOSDir -Force | Out-Null
     New-Item -ItemType Directory -Path $resourcesPath -Force | Out-Null
 
-    $filesToMove = Get-ChildItem  -Exclude @("*.pdb", "*.dsym", "Key Vault Explorer for Azure")  -Path .\publish
+    $filesToMove = Get-ChildItem  -Exclude @("*.pdb", "*.dsym", "Key Vault Explorer for Azure")  -Path .\src\publish
     foreach ($file in $filesToMove) {
         Copy-Item -Path $file -Destination $macOSDir -Force 
     }
-    Copy-Item -Path ".\KeyVaultExplorer\Assets\Info.plist" -Destination $contentsDir -Force
-    Copy-Item -Path ".\KeyVaultExplorer\Assets\AppIcon.icns" -Destination $resourcesPath -Force
+    Copy-Item -Path ".\src\KeyVaultExplorer\Assets\Info.plist" -Destination $contentsDir -Force
+    Copy-Item -Path ".\src\KeyVaultExplorer\Assets\AppIcon.icns" -Destination $resourcesPath -Force
 
     # $filesToModify = Get-ChildItem  -Path $macOSDir 
     # foreach ($file in $filesToModify) {

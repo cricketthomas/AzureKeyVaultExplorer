@@ -27,9 +27,9 @@ jobs:
             win-nuget
     - name: Publish Windows
       run: | 
-        ./build.ps1 -Runtime win-x64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'
+        ./src/build.ps1 -Runtime win-x64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'
         New-Item -ItemType Directory -Path "win-x64" 
-        Move-Item -Path ".\publish" -Destination "$env:GITHUB_WORKSPACE\win-x64\publish"
+        Move-Item -Path ".\src\publish" -Destination "$env:GITHUB_WORKSPACE\win-x64\publish"
         gci -path  "$env:GITHUB_WORKSPACE\win-x64\publish"
       shell: pwsh
     - name: Create Package
@@ -57,9 +57,9 @@ jobs:
             winarm-nuget
     - name: Publish Windows
       run: | 
-        ./build.ps1 -Runtime win-arm64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'
+        ./src/build.ps1 -Runtime win-arm64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'
         New-Item -ItemType Directory -Path "win-arm64" 
-        Move-Item -Path ".\publish" -Destination "$env:GITHUB_WORKSPACE\win-arm64\publish"
+        Move-Item -Path ".\src\publish" -Destination "$env:GITHUB_WORKSPACE\win-arm64\publish"
         gci -path  "$env:GITHUB_WORKSPACE\win-arm64\publish"
       shell: pwsh
     - name: Create Package
@@ -87,9 +87,9 @@ jobs:
             #mac-arm-nuget
     - name: Publish macOS Arm
       run: | 
-        ./build.ps1 -Runtime osx-arm64 -PublishAot:$false -BuildNumber '1.0.${{github.run_number }}'      
+        ./src/build.ps1 -Runtime osx-arm64 -PublishAot:$false -BuildNumber '1.0.${{github.run_number }}'      
         New-Item -ItemType Directory -Path "osx-arm64" 
-        Move-Item -Path ".\publish" -Destination "$env:GITHUB_WORKSPACE\osx-arm64\publish"
+        Move-Item -Path ".\src\publish" -Destination "$env:GITHUB_WORKSPACE\osx-arm64\publish"
         Rename-Item -Path "$env:GITHUB_WORKSPACE\osx-arm64\publish\keyvaultexplorerdesktop" -NewName "Key Vault Explorer for Azure" -Force 
 
       shell: pwsh
@@ -118,9 +118,9 @@ jobs:
             linux-nuget
     - name: Publish Linux
       run: | 
-        ./build.ps1 -Runtime linux-x64 -PublishAot:$false -BuildNumber '1.0.${{github.run_number }}'
+        ./src/build.ps1 -Runtime linux-x64 -PublishAot:$false -BuildNumber '1.0.${{github.run_number }}'
         New-Item -ItemType Directory -Path "linux-x64" 
-        Move-Item -Path ".\publish" -Destination "$env:GITHUB_WORKSPACE\linux-x64\publish"
+        Move-Item -Path ".\src\publish" -Destination "$env:GITHUB_WORKSPACE\linux-x64\publish"
         gci -path  "$env:GITHUB_WORKSPACE\linux-x64\publish"
       shell: pwsh
     - name: Create Package
