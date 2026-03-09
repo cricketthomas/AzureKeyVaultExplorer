@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img width="280" align="center" src="/KeyVaultExplorer/Assets/AppIcon.png">
+  <img width="280" align="center" src="src/KeyVaultExplorer/Assets/AppIcon.png">
 </p>
 <h1 align="center">
   Azure Key Vault Explorer
