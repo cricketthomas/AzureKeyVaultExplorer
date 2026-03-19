@@ -79,7 +79,7 @@ jobs:
       shell: pwsh
       run: |
           dotnet build src/avalonia/kv.sln;
-          dotnet build src/uno/AzureKeyVaultStudio.slnx
+          dotnet build src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio.slnx
         
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
