@@ -27,7 +27,7 @@ jobs:
             win-nuget
     - name: Publish Windows
       run: | 
-        ./src/build.ps1 -Runtime win-x64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'
+        ./src/avalonia/build.ps1 -Runtime win-x64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'
         New-Item -ItemType Directory -Path "win-x64" 
         Move-Item -Path ".\src\publish" -Destination "$env:GITHUB_WORKSPACE\win-x64\publish"
         gci -path  "$env:GITHUB_WORKSPACE\win-x64\publish"
@@ -57,7 +57,7 @@ jobs:
             winarm-nuget
     - name: Publish Windows
       run: | 
-        ./src/build.ps1 -Runtime win-arm64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'
+        ./src/avalonia/build.ps1 -Runtime win-arm64 -PublishAot -BuildNumber '1.0.${{github.run_number }}'
         New-Item -ItemType Directory -Path "win-arm64" 
         Move-Item -Path ".\src\publish" -Destination "$env:GITHUB_WORKSPACE\win-arm64\publish"
         gci -path  "$env:GITHUB_WORKSPACE\win-arm64\publish"
@@ -87,7 +87,7 @@ jobs:
             #mac-arm-nuget
     - name: Publish macOS Arm
       run: | 
-        ./src/build.ps1 -Runtime osx-arm64 -PublishAot:$false -BuildNumber '1.0.${{github.run_number }}'      
+        ./src/avalonia/build.ps1 -Runtime osx-arm64 -PublishAot:$false -BuildNumber '1.0.${{github.run_number }}'      
         New-Item -ItemType Directory -Path "osx-arm64" 
         Move-Item -Path ".\src\publish" -Destination "$env:GITHUB_WORKSPACE\osx-arm64\publish"
         Rename-Item -Path "$env:GITHUB_WORKSPACE\osx-arm64\publish\keyvaultexplorerdesktop" -NewName "Key Vault Explorer for Azure" -Force 
@@ -118,7 +118,7 @@ jobs:
             linux-nuget
     - name: Publish Linux
       run: | 
-        ./src/build.ps1 -Runtime linux-x64 -PublishAot:$false -BuildNumber '1.0.${{github.run_number }}'
+        ./src/avalonia/build.ps1 -Runtime linux-x64 -PublishAot:$false -BuildNumber '1.0.${{github.run_number }}'
         New-Item -ItemType Directory -Path "linux-x64" 
         Move-Item -Path ".\src\publish" -Destination "$env:GITHUB_WORKSPACE\linux-x64\publish"
         gci -path  "$env:GITHUB_WORKSPACE\linux-x64\publish"

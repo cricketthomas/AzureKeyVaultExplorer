@@ -76,9 +76,10 @@ jobs:
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
     - if: matrix.build-mode == 'manual'
-      shell: bash
+      shell: pwsh
       run: |
-          dotnet build kv.sln
+          dotnet build src/avalonia/kv.sln;
+          dotnet build src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio.slnx
         
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

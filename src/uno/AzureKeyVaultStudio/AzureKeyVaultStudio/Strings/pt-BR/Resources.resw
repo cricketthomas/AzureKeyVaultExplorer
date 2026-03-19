@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApplicationName" xml:space="preserve">
+    <value>AzureKeyVaultExplorer-pt-BR</value>
+  </data>
+  <data name="RefreshButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Atualizar assinaturas disponíveis</value>
+  </data>
+  <data name="SettingsIconButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="ExpandAllButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Expandir tudo</value>
+  </data>
+  <data name="OpenExternalVaultButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Abrir cofre externo</value>
+  </data>
+  <data name="CollapseAllButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Recolher tudo</value>
+  </data>
+  <data name="RefreshButton.Label" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="ExpandAllButton.Label" xml:space="preserve">
+    <value>Expandir</value>
+  </data>
+  <data name="OpenExternalVaultButton.Text" xml:space="preserve">
+    <value>Abrir externo</value>
+  </data>
+  <data name="CollapseAllButton.Label" xml:space="preserve">
+    <value>Recolher</value>
+  </data>
+  <data name="ThemeSettingsCardLightRadioButton.Content" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="SearchTextBox.PlaceholderText" xml:space="preserve">
+    <value>Pesquise recursos, cofres.. (Ctrl+K)</value>
+  </data>
+  <data name="SettingsPageClientIdCheckbox.Content" xml:space="preserve">
+    <value>Usar ID do cliente personalizado / ID do aplicativo</value>
+  </data>
+  <data name="SettingsPageTenantIdCheckbox.Content" xml:space="preserve">
+    <value>Usar ID de locatário / ID de diretório personalizado (requer reiniciar o aplicativo)</value>
+  </data>
+  <data name="SettingsPageClientIdTextBox.PlaceholderText" xml:space="preserve">
+    <value>ID do cliente Azure: por exemplo 18405e16..</value>
+  </data>
+  <data name="SettingsPageTenantIdTextBox.PlaceholderText" xml:space="preserve">
+    <value>ID do locatário do Azure: ex.: 18405e16-1ba4aca2…</value>
+  </data>
+  <data name="ClipboardCard.Description" xml:space="preserve">
+    <value>Isso limpará a área de transferência após um período definido em segundos, ao usar Ctrl + C ou qualquer botão 'Copiar'</value>
+  </data>
+  <data name="ClipboardCard.Header" xml:space="preserve">
+    <value>Limpar valor da área de transferência após</value>
+  </data>
+  <data name="SettingsSigninCard.Header" xml:space="preserve">
+    <value>Entre no Key Vault Explorer para Azure com uma conta da Microsoft</value>
+  </data>
+  <data name="SettingsSignoutCard.Header" xml:space="preserve">
+    <value>Remover a conta atual do cache e sair</value>
+  </data>
+  <data name="SettingsPurgeDatabaseCard.Header" xml:space="preserve">
+    <value>Limpar banco de dados Sqlite de todos os itens salvos</value>
+  </data>
+  <data name="SettingsPageResetApplicationCard.Header" xml:space="preserve">
+    <value>Limpar banco de dados Sqlite de todos os itens salvos</value>
+  </data>
+  <data name="SignInButton.Content" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="SignOutButton.Content" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="PurgeDbButton.Content" xml:space="preserve">
+    <value>Excluir banco de dados</value>
+  </data>
+  <data name="ResetAppButton.Content" xml:space="preserve">
+    <value>Redefinir aplicativo</value>
+  </data>
+  <data name="VaultPageSearchTextBox.PlaceholderText" xml:space="preserve">
+    <value>Pesquisar nomes, tags, tipos de conteúdo (Ctrl+F)</value>
+  </data>
+  <data name="VaultPageCopyButton.Text" xml:space="preserve">
+    <value>Copiar valor</value>
+  </data>
+  <data name="VaultPageShowPropertiesButton.Text" xml:space="preserve">
+    <value>Mostrar propriedades</value>
+  </data>
+  <data name="VaultPageOpenInAzureButton.Text" xml:space="preserve">
+    <value>Abrir no portal Azure</value>
+  </data>
+  <data name="VaultPageCopyUriButton.Text" xml:space="preserve">
+    <value>Copiar link</value>
+  </data>
+  <data name="BlankPage3ClearSelectedButton.Label" xml:space="preserve">
+    <value>Limpar seleção</value>
+  </data>
+  <data name="BlankPage3SelectAllButton.Label" xml:space="preserve">
+    <value>Selecionar tudo</value>
+  </data>
+  <data name="BlankPage3RefreshButton.Label" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="BlankPage3LoadMoreButton.Label" xml:space="preserve">
+    <value>Carregar mais assinaturas</value>
+  </data>
+  <data name="BlankPage3SaveButton.Label" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="SaveSettingsButton.Content" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="SavedTitle" xml:space="preserve">
+    <value>Salvo</value>
+  </data>
+  <data name="NewItemTextbox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Forneça um nome de secretão válido. Nomes de secretão podem conter apenas caracteres alfanuméricos e hífens. O valor fornecido pode ser copiado globalmente para fins de execução do serviço. O valor fornecido não deve conter informações de identificação pessoal ou sensíveis.</value>
+  </data>
+  <data name="NewItemSubmitButtonText.Text" xml:space="preserve">
+    <value>Enviar</value>
+  </data>
+  <data name="ItemDetailsPropertiesTextBlock.Text" xml:space="preserve">
+    <value>PROPRIEDADES</value>
+  </data>
+  <data name="ItemDetailsVersionsTextBlock.Text" xml:space="preserve">
+    <value>VERSIONS</value>
+  </data>
+  <data name="SecretValueTextbox.PlaceholderText" xml:space="preserve">
+    <value>Digite o segredo</value>
+  </data>
+  <data name="SetActivationDateCheckbox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Define quando este recurso entrará em atividade. Isso define a propriedade 'nbf' no recurso.</value>
+  </data>
+  <data name="SetActivationDateTextBlock.Text" xml:space="preserve">
+    <value>Definir data de ativação</value>
+  </data>
+  <data name="SetExpirationDateTextBlock.Text" xml:space="preserve">
+    <value>Definir data de vencimento</value>
+  </data>
+  <data name="SetExpirationDateCheckbox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Define quando este recurso se tornará inativo. Isso define a propriedade 'exp' no recurso.</value>
+  </data>
+  <data name="PaneHeader.Text" xml:space="preserve">
+    <value>Explorador</value>
+  </data>
+  <data name="PaneToggleButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Alternar explorador (Ctrl+ B) </value>
+  </data>
+  <data name="PaneToggleSplitButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Alternar explorador (Ctrl+ B) </value>
+  </data>
+  <data name="PaneDisplayToggleButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Alterar posicionamento do painel de sobreposição ou em linha</value>
+  </data>
+  <data name="BackButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Voltar</value>
+  </data>
+  <data name="CancelSearchButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Cancelar busca</value>
+  </data>
+  <data name="SegmentedItemSecret.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Segredo</value>
+  </data>
+  <data name="SegmentedItemKey.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Chave</value>
+  </data>
+  <data name="SegmentedItemCertificate.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Certificado</value>
+  </data>
+  <data name="SegmentedItemAll.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="SubscriptionsMenuItem.Text" xml:space="preserve">
+    <value>Gerenciar assinaturas...</value>
+  </data>
+  <data name="PasswordGeneratorMenuItem.Text" xml:space="preserve">
+    <value>Gerador de senha..</value>
+  </data>
+  <data name="VaultPageCopyVersionDetailsButton.Text" xml:space="preserve">
+    <value>Copiar ID da versão</value>
+  </data>
+  <data name="TabsControlHyperlinkButton.Content" xml:space="preserve">
+    <value>Documentação Azure RBAC</value>
+  </data>
+  <data name="TabsControlHelpText1.Text" xml:space="preserve">
+    <value>Você não tem cofres de chaves selecionados.</value>
+  </data>
+  <data name="TabsControlHelpText2.Text" xml:space="preserve">
+    <value>Expanda a barra de navegação à esquerda para visualizar assinaturas e expandir cofres</value>
+  </data>
+  <data name="TabsControlHelpText3.Text" xml:space="preserve">
+    <value>Não está vendo valores ou cofres de chaves? Peça ao administrador para conceder privilégios</value>
+  </data>
+  <data name="NewItemErrorTitle" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <data name="NewItemDismissButtonText" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="NewItemCreatedMessage" xml:space="preserve">
+    <value>O valor do secretão para '{0}' foi criado</value>
+  </data>
+  <data name="SecretCopiedMessage" xml:space="preserve">
+    <value>O valor de '{0}' foi copiado para a área de transferência.</value>
+  </data>
+  <data name="NewItemSuccessTitle" xml:space="preserve">
+    <value>Sucesso</value>
+  </data>
+  <data name="NewItemVersionSavedMessage" xml:space="preserve">
+    <value>As alterações foram salvas.</value>
+  </data>
+  <data name="SubscriptionIdTextBox.PlaceholderText" xml:space="preserve">
+    <value>ID da assinatura, por exemplo cd7a227e-4...</value>
+  </data>
+  <data name="ResourceGroupNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Nome do Grupo de Recursos, por exemplo rg-my-resource-group</value>
+  </data>
+  <data name="VaultNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Nome do Cofre de Chaves, por exemplo my-key-vault</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="SubmitButtonText" xml:space="preserve">
+    <value>Enviar</value>
+  </data>
+  <data name="ExternalVaultMessage.Text" xml:space="preserve">
+    <value>Abra um cofre de chaves usando suas credenciais existentes quando não tiver direitos de leitura explícitos sobre uma assinatura ou grupo de recursos.</value>
+  </data>
+  <data name="SettingsMenuItem.Text" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="OpenExternalDialogTitle" xml:space="preserve">
+    <value>Abrir cofre externo</value>
+  </data>
+  <data name="FailureInfoBar.Title" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <data name="FailureInfoBar.Message" xml:space="preserve">
+    <value>O formulário foi preenchido com alguns erros.</value>
+  </data>
+  <data name="OpenExternalItemByURLMenuItem.Text" xml:space="preserve">
+    <value>Abrir item por URL</value>
+  </data>
+  <data name="OpenExternalItemByURLMenuItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Abra um secretão pela URI da versão do secret located em um cofre do seu inquilino atual</value>
+  </data>
+  <data name="LoginPageSettingsText.Text" xml:space="preserve">
+    <value>Configurações do aplicativo</value>
+  </data>
+  <data name="GetStartedButton.Text" xml:space="preserve">
+    <value>Visualizar cofres</value>
+  </data>
+  <data name="CancelTextBlock.Text" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="LoginPageHeaderText.Text" xml:space="preserve">
+    <value>Começando..</value>
+  </data>
+  <data name="LoginPageGettingStartedCallSign.Text" xml:space="preserve">
+    <value>Pesquise seus cofres de chaves Azure rapidamente</value>
+  </data>
+  <data name="LoginPageGettingStartedMessage.Text" xml:space="preserve">
+    <value>Azure Key Vault Explorer ajuda você a procurar, organizar, secrets, chaves e certificados em assinaturas em um único local.</value>
+  </data>
+  <data name="WelcomeText.Text" xml:space="preserve">
+    <value>Bem-vindo</value>
+  </data>
+  <data name="SubscriptionTablePinnedColumn.Header" xml:space="preserve">
+    <value>Fixado</value>
+  </data>
+  <data name="SubscriptionTableSubscriptionIdColumn.Header" xml:space="preserve">
+    <value>Assinatura</value>
+  </data>
+  <data name="SubscriptionTableDisplayNameColumn.Header" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="SubscriptionTableTenantIdColumn.Header" xml:space="preserve">
+    <value>ID do locatario</value>
+  </data>
+  <data name="SubscriptionTableStateColumn.Header" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="RefreshTreeCancelButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Cancelar o carregamento dos itens da árvore de exibição atual</value>
+  </data>
+  <data name="OpenExternalVaultItemDialogTitle" xml:space="preserve">
+    <value>Abrir item de cofre externo</value>
+  </data>
+  <data name="ExternalVaultItemMessage.Text" xml:space="preserve">
+    <value>Abra um item de um cofre de chaves diferente quando você não tiver direitos de leitura explícitos sobre uma assinatura ou grupo de recursos.</value>
+  </data>
+  <data name="ExternalVaultItemTypeComboBox.Header" xml:space="preserve">
+    <value>Selecionar um tipo de item</value>
+  </data>
+  <data name="ExternalItemVaultNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Nome do item, por exemplo "meu-secret"</value>
+  </data>
+  <data name="ExternalVaultItemUriTextBox.PlaceholderText" xml:space="preserve">
+    <value>https:/YOUR_VAULT.vault.azure.net</value>
+  </data>
+  <data name="PasswordGeneratorViewTitle.Text" xml:space="preserve">
+    <value>Gerador de senha</value>
+  </data>
+  <data name="PasswordGeneratorViewLength.Text" xml:space="preserve">
+    <value>Comprimento da senha</value>
+  </data>
+  <data name="PasswordGeneratorViewCharacterSets.Text" xml:space="preserve">
+    <value>Incluir conjuntos de caracteres</value>
+  </data>
+  <data name="PasswordGeneratorViewLowercaseCheckBox.Content" xml:space="preserve">
+    <value>Minúsculas (a-z)</value>
+  </data>
+  <data name="PasswordGeneratorViewUppercaseCheckBox.Content" xml:space="preserve">
+    <value>Maiúsculas (A-Z)</value>
+  </data>
+  <data name="PasswordGeneratorViewDigitsCheckBox.Content" xml:space="preserve">
+    <value>Dígitos (0-9)</value>
+  </data>
+  <data name="PasswordGeneratorViewSpecialCheckBox.Content" xml:space="preserve">
+    <value>Caracteres especiais (!@#$%...)</value>
+  </data>
+  <data name="PasswordGeneratorView.ExcludeCharacters.PlaceholderText" xml:space="preserve">
+    <value>Separar com vírgulas (por exemplo, l,1,O,0)</value>
+  </data>
+  <data name="PasswordGeneratorViewExcludeCharactersLabel.Text" xml:space="preserve">
+    <value>Excluir caracteres</value>
+  </data>
+  <data name="PasswordGeneratorViewExcludeCharactersTextBox.PlaceholderText" xml:space="preserve">
+    <value>Separar com vírgulas (por exemplo, l,1,O,0)</value>
+  </data>
+  <data name="PasswordGeneratorViewPassword.Text" xml:space="preserve">
+    <value>Senha gerada</value>
+  </data>
+  <data name="PasswordGeneratorViewGenerateButton.Content" xml:space="preserve">
+    <value>Gerar</value>
+  </data>
+  <data name="PaneLocationToggleButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Alterar local do painel</value>
+  </data>
+  <data name="CheckForUpdatesHyperlinkButton.Content" xml:space="preserve">
+    <value>Verificar atualizações</value>
+  </data>
+  <data name="SourceHyperlinkButton.Content" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="LicenseHyperlinkButton.Content" xml:space="preserve">
+    <value>Licença</value>
+  </data>
+  <data name="LanguageSettingsCard.Header" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="AzureCloudInstanceSettingsCard.Header" xml:space="preserve">
+    <value>Instância do Azure Cloud</value>
+  </data>
+  <data name="LanguageSettingsCard.Description" xml:space="preserve">
+    <value>Selecione o idioma de exibição</value>
+  </data>
+  <data name="AzureCloudInstanceSettingsCard.Description" xml:space="preserve">
+    <value>Selecione a instância de nuvem do Azure à qual você deseja se conectar (por exemplo, Pública, Governo ou China).</value>
+  </data>
+  <data name="ThemeSettingsCard.Header" xml:space="preserve">
+    <value>Tema do aplicativo</value>
+  </data>
+  <data name="ThemeSettingsCard.Description" xml:space="preserve">
+    <value>Escolher tema do aplicativo</value>
+  </data>
+  <data name="ThemeSettingsCardSystemRadioButton.Content" xml:space="preserve">
+    <value>Padrão do sistema</value>
+  </data>
+  <data name="ThemeSettingsCardDarkRadioButton.Content" xml:space="preserve">
+    <value>Escuro</value>
+  </data>
+  <data name="AccountInformationExpander.Header" xml:space="preserve">
+    <value>Informações da conta</value>
+  </data>
+  <data name="AccountInformationExpander.Description" xml:space="preserve">
+    <value>Ver detalhes da conta e executar ações</value>
+  </data>
+  <data name="SettingsHeader.Text" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="OpenInNewTabMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Abrir em aba</value>
+  </data>
+  <data name="PinToQuickAccessMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Fixar no acesso rápido</value>
+  </data>
+  <data name="UnPinToQuickAccessMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Remover do acesso rápido</value>
+  </data>
+  <data name="OpenInAzureMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Abrir no portal Azure</value>
+  </data>
+  <data name="PropertiesText" xml:space="preserve">
+    <value>Propriedades</value>
+  </data>
+  <data name="NewItemButton.Content" xml:space="preserve">
+    <value>Novo..</value>
+  </data>
+  <data name="NewSecretButton.Text" xml:space="preserve">
+    <value>Segredo..</value>
+  </data>
+  <data name="ItemDetailsOpenAppBarButton.Label" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="ItemDetailsCopyAppBarButton.Label" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="ItemDetailsEditAppBarButton.Label" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="ItemDetailsNewVersionAppBarButton.Label" xml:space="preserve">
+    <value>Nova versão</value>
+  </data>
+  <data name="ItemDetailsDownloadKeyAppBarButton.Label" xml:space="preserve">
+    <value>Baixar chave pública</value>
+  </data>
+  <data name="ItemDetailsDownloadCerAppBarButton.Label" xml:space="preserve">
+    <value>Baixar CER</value>
+  </data>
+  <data name="ItemDetailsDownloadPfxAppBarButton.Label" xml:space="preserve">
+    <value>Baixar PFX/PEM</value>
+  </data>
+  <data name="NewSecret" xml:space="preserve">
+    <value>Novo Secret</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Copiado</value>
+  </data>
+  <data name="SecretNotFoundMessage" xml:space="preserve">
+    <value>Nenhum valor foi encontrado para '{0}'.</value>
+  </data>
+  <data name="InsufficientPrivilegesMessage" xml:space="preserve">
+    <value>Privilégios insuficientes para acessar '{}'</value>
+  </data>
+  <data name="CancelButtonTextBlock.Text" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="ItemsText" xml:space="preserve">
+    <value>itens</value>
+  </data>
+  <data name="ItemText" xml:space="preserve">
+    <value>item</value>
+  </data>
+  <data name="DataGridTextColumnName.Header" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="DataGridTextColumnWhenLastModified.Header" xml:space="preserve">
+    <value>Modificado</value>
+  </data>
+  <data name="DataGridTextColumnWhenExpires.Header" xml:space="preserve">
+    <value>Expira</value>
+  </data>
+  <data name="DataGridTextColumnTags.Header" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="DataGridTextColumnUpdated.Header" xml:space="preserve">
+    <value>Atualizado</value>
+  </data>
+  <data name="DataGridTextColumnContentType.Header" xml:space="preserve">
+    <value>Tipo de conteúdo</value>
+  </data>
+  <data name="QuickAccessText" xml:space="preserve">
+    <value>Acesso rápido</value>
+  </data>
+  <data name="DataGridTextColumnVersions.Header" xml:space="preserve">
+    <value>Versão</value>
+  </data>
+  <data name="SendFeedbackHyperlinkButton.Content" xml:space="preserve">
+    <value>Enviar feedback</value>
+  </data>
+  <data name="DataGridTextSubscriptionId.Header" xml:space="preserve">
+    <value>Assinatura Id</value>
+  </data>
+  <data name="DataGridTextTenantId.Header" xml:space="preserve">
+    <value>Tenant Id</value>
+  </data>
+  <data name="DataGridTextState.Header" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="SignOutMessage" xml:space="preserve">
+    <value>Você foi desconectado.</value>
+  </data>
+  <data name="AccountTextBlock.Text" xml:space="preserve">
+    <value>Conta</value>
+  </data>
+  <data name="AppearanceTextBlock.Text" xml:space="preserve">
+    <value>Aparência</value>
+  </data>
+  <data name="AboutTextBlock.Text" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="AdvancedAccountTextBlock.Text" xml:space="preserve">
+    <value>Conta avançada</value>
+  </data>
+  <data name="AzureCloudInstanceSettingsTextBlock.Text" xml:space="preserve">
+    <value>Alterar esta configuração encerrará sua sessão e exigirá reiniciar o aplicativo.</value>
+  </data>
+  <data name="SplitButtonTeachingTip.Title" xml:space="preserve">
+    <value>Menu principal</value>
+  </data>
+  <data name="SplitButtonTeachingTip.Subtitle" xml:space="preserve">
+    <value>Use este botão para abrir ou fechar o painel de navegação, acessar Configurações e abrir outras ferramentas ou recursos.</value>
+  </data>
+  <data name="ShowErrorsButton.Content" xml:space="preserve">
+    <value>Mostrar erros</value>
+  </data>
+  <data name="NewItemTextBlock.Text" xml:space="preserve">
+    <value>Criar segredo</value>
+  </data>
+  <data name="SecretNameTextBlock.Text" xml:space="preserve">
+    <value>Nome do segredo</value>
+  </data>
+  <data name="VaultLocationTextBlock.Text" xml:space="preserve">
+    <value>Localização do cofre</value>
+  </data>
+  <data name="SecretValueTextBlock.Text" xml:space="preserve">
+    <value>Valor do segredo</value>
+  </data>
+  <data name="SecretContentTypeTextBlock.Text" xml:space="preserve">
+    <value>Tipo de conteúdo do segredo (opcional)</value>
+  </data>
+  <data name="EnabledTextBlock.Text" xml:space="preserve">
+    <value>Habilitado</value>
+  </data>
+  <data name="EnabledToggleSwitch.OnContent" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="EnabledToggleSwitch.OffContent" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="ShowToggleButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Alternar visibilidade do valor</value>
+  </data>
+  <data name="ClipboardTextBlock.Text" xml:space="preserve">
+    <value>Área de transferência</value>
+  </data>
+  <data name="ApplicationResetMessage" xml:space="preserve">
+    <value>O aplicativo foi redefinido. Por favor, feche o aplicativo.</value>
+  </data>
+  <data name="DatabseDeletedMessage" xml:space="preserve">
+    <value>O banco de dados foi excluído. Reinicie o aplicativo para recriar o banco de dados.</value>
+  </data>
+  <data name="SavedChangesMessage" xml:space="preserve">
+    <value>Suas alterações foram salvas.</value>
+  </data>
+</root>

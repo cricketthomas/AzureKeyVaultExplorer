@@ -1,0 +1,55 @@
+﻿<UserControl
+    x:Class="AzureKeyVaultStudio.UserControls.StatusBarControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:AzureKeyVaultStudio.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:skia="http://uno.ui/not_win"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
+    xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    mc:Ignorable="skia d">
+
+
+    <RelativePanel
+        Grid.Row="1"
+        HorizontalAlignment="Stretch"
+        Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
+        BorderBrush="{ThemeResource SolidBackgroundFillColorBaseAltBrush}"
+        BorderThickness="0,1,0,0"
+        IsHitTestVisible="False">
+
+        <TextBlock
+            Name="ItemCount"
+            skia:Margin="6,0,0,0"
+            win:Margin="4,0,0,0"
+            RelativePanel.AlignLeftWithPanel="True"
+            Text="{x:Bind ViewModel.ItemCount, Mode=OneWay}" />
+
+        <toolkit:SwitchPresenter RelativePanel.AlignRightWithPanel="True" Value="{x:Bind ViewModel.Claims, Mode=OneWay}">
+            <toolkit:Case Value="{x:Null}">
+                <StackPanel win:Margin="4,0" Orientation="Horizontal">
+                    <FontIcon Glyph="&#xEC9C;" />
+                    <TextBlock Text="You are currently signed out" />
+                </StackPanel>
+            </toolkit:Case>
+
+            <toolkit:Case IsDefault="True">
+                <StackPanel
+                    skia:Margin="0,0,6,0"
+                    win:Margin="0,0,4,0"
+                    Orientation="Horizontal"
+                    Spacing="4">
+                    <FontIcon
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        Glyph="&#xE753;" />
+                    <TextBlock Text="{x:Bind ViewModel.Claims.Email, Mode=OneWay}" />
+                </StackPanel>
+            </toolkit:Case>
+        </toolkit:SwitchPresenter>
+
+    </RelativePanel>
+</UserControl>
