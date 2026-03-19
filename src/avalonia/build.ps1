@@ -15,7 +15,7 @@ $DebugPreference = 'continue';
 Set-Content -Path "VERSION" -Value $BuildNumber -Force
 
 $command = @"
-dotnet publish  ./src/Desktop/Desktop.csproj `
+dotnet publish  ./src/avalonia/Desktop/Desktop.csproj `
     -r $Runtime `
     -o .\src\publish `
     -c Release  `
@@ -32,7 +32,7 @@ dotnet publish  ./src/Desktop/Desktop.csproj `
 Write-Host $command -ForegroundColor Green
 
 
-dotnet publish  ./src/Desktop/Desktop.csproj `
+dotnet publish  ./src/avalonia/Desktop/Desktop.csproj `
     -r $Runtime `
     -o .\src\publish `
     -c Release  `
@@ -64,8 +64,8 @@ if ($Runtime -eq "osx-x64") {
     foreach ($file in $filesToMove) {
         Copy-Item -Path $file -Destination $macOSDir -Force 
     }
-    Copy-Item -Path ".\src\KeyVaultExplorer\Assets\Info.plist" -Destination $contentsDir -Force
-    Copy-Item -Path ".\src\KeyVaultExplorer\Assets\AppIcon.icns" -Destination $resourcesPath -Force
+    Copy-Item -Path ".\src\avalonia\KeyVaultExplorer\Assets\Info.plist" -Destination $contentsDir -Force
+    Copy-Item -Path ".\src\avalonia\KeyVaultExplorer\Assets\AppIcon.icns" -Destination $resourcesPath -Force
 
     # $filesToModify = Get-ChildItem  -Path $macOSDir 
     # foreach ($file in $filesToModify) {

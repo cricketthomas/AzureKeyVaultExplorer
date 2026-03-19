@@ -1,4 +1,4 @@
-name: CI
+name: Build and Release
 
 on:
   workflow_dispatch:
@@ -58,7 +58,7 @@ jobs:
         run: |
           cd ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio
           dotnet publish -f net10.0-windows10.0.26100 -r win-x64 -p:SelfContained=true -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:Version=2.0.${{ github.run_number }} -c Release  -p:WindowsPackageType=None ./AzureKeyVaultStudio.csproj
-          New-Item -ItemType Directory -Path "win-x64" -Force
+          New-Item -ItemType Directory -Path "$env:GITHUB_WORKSPACE/win-x64" -Force
           Move-Item -Path ".\bin\Release\net10.0-windows10.0.26100\win-x64\publish\*.exe" -Destination "$env:GITHUB_WORKSPACE\win-x64\" -Force
       - name: Create Package
         shell: pwsh
@@ -89,7 +89,7 @@ jobs:
         run: |
           cd ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio
           dotnet publish -f net10.0-windows10.0.26100 -r win-arm64 -p:Platform=arm64 -p:SelfContained=true -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:PublishTrimmed=false -p:Version=2.0.${{ github.run_number }} -c Release  -p:WindowsPackageType=None ./AzureKeyVaultStudio.csproj
-          New-Item -ItemType Directory -Path "win-arm64" -Force
+          New-Item -ItemType Directory -Path "$env:GITHUB_WORKSPACE/win-arm64" -Force
           Move-Item -Path ".\bin\Release\net10.0-windows10.0.26100\win-arm64\publish\*.exe" -Destination "$env:GITHUB_WORKSPACE\win-arm64\" -Force
       - name: Create Package
         shell: pwsh
@@ -121,8 +121,8 @@ jobs:
           dotnet workload restore
           cd ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio
           dotnet publish -f net10.0-desktop -p:UnoMacOSCustomInfoPlist=Info.plist -p:PackageFormat=app -p:SelfContained=true -p:PublishReadyToRun=true -r osx-x64 -p:Version=2.0.${{ github.run_number }} -c Release  ./AzureKeyVaultStudio.csproj
-          New-Item -ItemType Directory -Path "osx-x64" -Force
-          Move-Item -Path ".\bin\Release\net10.0-desktop\osx-x64\publish\*.app" -Destination "$env:GITHUB_WORKSPACE\osx-x64\" -Force
+          New-Item -ItemType Directory -Path "$env:GITHUB_WORKSPACE/osx-x64" -Force
+          Move-Item -Path "./bin/Release/net10.0-desktop/osx-x64/publish/*.app" -Destination "$env:GITHUB_WORKSPACE/osx-x64/" -Force
       - name: Create Package
         shell: pwsh
         run: tar -cvf azurekeyvaultstudio.macos-x64.tar osx-x64
@@ -153,8 +153,8 @@ jobs:
           cd ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio
           dotnet workload restore
           dotnet publish -f net10.0-desktop -p:UnoMacOSCustomInfoPlist=Info.plist -p:PackageFormat=app -p:PublishReadyToRun=true -r osx-arm64 -p:Version=2.0.${{ github.run_number }} -c Release ./AzureKeyVaultStudio.csproj
-          New-Item -ItemType Directory -Path "osx-arm64" -Force
-          Move-Item -Path ".\bin\Release\net10.0-desktop\osx-arm64\publish\*.app" -Destination "$env:GITHUB_WORKSPACE\osx-arm64\" -Force
+          New-Item -ItemType Directory -Path "$env:GITHUB_WORKSPACE/osx-arm64" -Force
+          Move-Item -Path "./bin/Release/net10.0-desktop/osx-arm64/publish/*.app" -Destination "$env:GITHUB_WORKSPACE/osx-arm64/" -Force
       - name: Create Package
         shell: pwsh
         run: tar -cvf azurekeyvaultstudio.macos-arm64.tar osx-arm64
@@ -184,7 +184,7 @@ jobs:
         run: |
           cd ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio
           dotnet publish -f net10.0-desktop -r linux-x64 -p:SelfContained=true -p:PublishReadyToRun=true -p:Version=2.0.${{ github.run_number }} -c Release  ./AzureKeyVaultStudio.csproj
-          New-Item -ItemType Directory -Path "linux-x64" -Force
+          New-Item -ItemType Directory -Path "$env:GITHUB_WORKSPACE/linux-x64" -Force
           Move-Item -Path ".\bin\Release\net10.0-desktop\linux-x64\publish\*" -Destination "$env:GITHUB_WORKSPACE\linux-x64\" -Force
       - name: Create Package
         shell: pwsh
