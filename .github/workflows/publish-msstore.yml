@@ -1,0 +1,182 @@
+name: Publish to Microsoft Store
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_notes:
+        description: 'Release notes for Store submission'
+        required: false
+        default: 'Updated version'
+
+env:
+  DOTNET_VERSION: 10.0.x
+  CONFIGURATION: Release
+  STORE_PRODUCT_ID: 9NBLGGH4NNS1
+  STORE_APP_ID: ${{ secrets.STORE_APP_ID }}
+
+jobs:
+  debug_store_access:
+    name: Debug Store credentials
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Microsoft Store CLI
+        uses: microsoft/microsoft-store-apppublisher@v1.1
+
+      - name: Reconfigure store credentials
+        shell: pwsh
+        run: |
+          msstore reconfigure `
+            --tenantId ${{ secrets.AZURE_AD_TENANT_ID }} `
+            --sellerId ${{ secrets.SELLER_ID }} `
+            --clientId ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }} `
+            --clientSecret ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+
+      - name: List all apps (find correct IDs)
+        shell: pwsh
+        run: |
+          Write-Host "--- Listing all apps visible to these credentials ---"
+          msstore apps list
+
+      - name: Try getting product by Store ID
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          Write-Host "--- Trying apps get with ProductId: ${{ env.STORE_PRODUCT_ID }} ---"
+          msstore apps get ${{ env.STORE_PRODUCT_ID }} --verbose
+
+      - name: Print configured info
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          msstore info
+
+  # build_and_publish:
+  #   name: Build MSIX and Publish to Store
+  #   runs-on: windows-latest
+  #   needs: debug_store_access
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup .NET
+  #       uses: actions/setup-dotnet@v4
+  #       with:
+  #         dotnet-version: ${{ env.DOTNET_VERSION }}
+  #
+  #     - name: Restore workloads
+  #       run: dotnet workload restore
+  #
+  #     - name: Restore NuGet packages
+  #       run: dotnet restore ./AzureKeyVaultStudio/AzureKeyVaultStudio.csproj
+  #
+  #     - name: Build MSIX for x64
+  #       shell: pwsh
+  #       run: |
+  #         dotnet publish ./AzureKeyVaultStudio/AzureKeyVaultStudio.csproj `
+  #           -f net10.0-windows10.0.26100 `
+  #           -r win-x64 `
+  #           -c ${{ env.CONFIGURATION }} `
+  #           -p:WindowsPackageType=MSIX `
+  #           -p:GenerateAppxPackageOnBuild=true `
+  #           -p:UapAppxPackageBuildMode=StoreUpload `
+  #           -p:AppxPackageSigningEnabled=false `
+  #           -p:AppxBundle=Never `
+  #           -p:AppxPackageDir="${{ github.workspace }}\AzureKeyVaultStudio\artifacts\win-x64\" `
+  #           -p:SelfContained=true `
+  #           -p:PublishReadyToRun=true `
+  #           -p:PublishTrimmed=false `
+  #           -p:Version=2.0.${{ github.run_number }}
+  #
+  #     - name: Build MSIX for ARM64
+  #       shell: pwsh
+  #       run: |
+  #         dotnet publish ./AzureKeyVaultStudio/AzureKeyVaultStudio.csproj `
+  #           -f net10.0-windows10.0.26100 `
+  #           -r win-arm64 `
+  #           -c ${{ env.CONFIGURATION }} `
+  #           -p:Platform=arm64 `
+  #           -p:WindowsPackageType=MSIX `
+  #           -p:GenerateAppxPackageOnBuild=true `
+  #           -p:UapAppxPackageBuildMode=StoreUpload `
+  #           -p:AppxPackageSigningEnabled=false `
+  #           -p:AppxBundle=Never `
+  #           -p:AppxPackageDir="${{ github.workspace }}\AzureKeyVaultStudio\artifacts\win-arm64\" `
+  #           -p:SelfContained=true `
+  #           -p:PublishReadyToRun=true `
+  #           -p:PublishTrimmed=false `
+  #           -p:Version=2.0.${{ github.run_number }}
+  #
+  #     - name: Locate Store packages
+  #       shell: pwsh
+  #       run: |
+  #         $packageRoot = "${{ github.workspace }}\AzureKeyVaultStudio\artifacts"
+  #         $patterns = @("*.msix", "*.msixupload", "*.msixbundle", "*.appxbundle")
+  #         $packages = foreach ($pattern in $patterns) {
+  #           Get-ChildItem -Recurse -Filter $pattern -Path $packageRoot -ErrorAction SilentlyContinue
+  #         }
+  #         if (-not $packages) {
+  #           Write-Error "No Store package files found!"
+  #           exit 1
+  #         }
+  #         foreach ($file in $packages) {
+  #           Write-Host "Found: $($file.FullName)"
+  #         }
+  #
+  #     - name: Configure Microsoft Store CLI
+  #       uses: microsoft/microsoft-store-apppublisher@v1.1
+  #
+  #     - name: Reconfigure store credentials
+  #       shell: pwsh
+  #       run: |
+  #         msstore reconfigure `
+  #           --tenantId ${{ secrets.AZURE_AD_TENANT_ID }} `
+  #           --sellerId ${{ secrets.SELLER_ID }} `
+  #           --clientId ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }} `
+  #           --clientSecret ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+  #
+  #     - name: Publish x64 MSIX to Store
+  #       shell: pwsh
+  #       run: |
+  #         $outputRoot = "${{ github.workspace }}\AzureKeyVaultStudio\artifacts\win-x64"
+  #         $patterns = @("*.msix", "*.msixupload", "*.msixbundle", "*.appxbundle")
+  #         $packageFile = @(
+  #           foreach ($pattern in $patterns) {
+  #             Get-ChildItem -Recurse -Filter $pattern -Path $outputRoot -ErrorAction SilentlyContinue | Select-Object -First 1
+  #           }
+  #         ) | Where-Object { $_ } | Select-Object -First 1
+  #         if (-not $packageFile) {
+  #           Write-Error "Could not find x64 Store package"
+  #           exit 1
+  #         }
+  #         msstore publish "$($packageFile.FullName)" `
+  #           -id ${{ env.STORE_APP_ID }}
+  #
+  #     - name: Publish ARM64 MSIX to Store
+  #       shell: pwsh
+  #       run: |
+  #         $outputRoot = "${{ github.workspace }}\AzureKeyVaultStudio\artifacts\win-arm64"
+  #         $patterns = @("*.msix", "*.msixupload", "*.msixbundle", "*.appxbundle")
+  #         $packageFile = @(
+  #           foreach ($pattern in $patterns) {
+  #             Get-ChildItem -Recurse -Filter $pattern -Path $outputRoot -ErrorAction SilentlyContinue | Select-Object -First 1
+  #           }
+  #         ) | Where-Object { $_ } | Select-Object -First 1
+  #         if (-not $packageFile) {
+  #           Write-Error "Could not find ARM64 Store package"
+  #           exit 1
+  #         }
+  #         msstore publish "$($packageFile.FullName)" `
+  #           -id ${{ env.STORE_APP_ID }}
+  #
+  #     - name: Upload artifacts
+  #       if: always()
+  #       continue-on-error: true
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: store-packages
+  #         path: |
+  #           AzureKeyVaultStudio\artifacts\**\*.msix
+  #           AzureKeyVaultStudio\artifacts\**\*.msixupload

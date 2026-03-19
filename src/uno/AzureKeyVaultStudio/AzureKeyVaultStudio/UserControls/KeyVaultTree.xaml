@@ -1,0 +1,256 @@
+﻿<UserControl
+    x:Class="AzureKeyVaultStudio.UserControls.KeyVaultTree"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:arm="using:Azure.ResourceManager.KeyVault"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:AzureKeyVaultStudio.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:AzureKeyVaultStudio.Models"
+    xmlns:skia="http://uno.ui/not_win"
+    xmlns:vm="using:AzureKeyVaultStudio.UserControls.ViewModels"
+    xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    x:Name="rootControl"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    mc:Ignorable="d skia">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <win:ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <MenuFlyout x:Key="TreeViewContextFlyout" x:Uid="TreeViewContextFlyout">
+                <MenuFlyoutItem
+                    x:Uid="OpenInNewTabMenuFlyoutItem"
+                    Command="{x:Bind ViewModel.OpenInNewTabCommand}"
+                    CommandParameter="{Binding}">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon Glyph="&#xE838;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem
+                    Name="PinToQuickAccess"
+                    x:Uid="PinToQuickAccessMenuFlyoutItem"
+                    Command="{x:Bind ViewModel.PinVaultToQuickAccessCommand}"
+                    CommandParameter="{Binding}">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon Glyph="&#xE840;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem
+                    Name="UnpinFromQuickAccess"
+                    x:Uid="UnPinToQuickAccessMenuFlyoutItem"
+                    Command="{x:Bind ViewModel.RemovePinVaultToQuickAccessCommand}"
+                    CommandParameter="{Binding}">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon Glyph="&#xE77A;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem
+                    x:Uid="OpenInAzureMenuFlyoutItem"
+                    Command="{x:Bind ViewModel.OpenInAzureCommand}"
+                    CommandParameter="{Binding}">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon Glyph="&#xE72D;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+
+            </MenuFlyout>
+
+            <DataTemplate x:Key="PinnedItemTemplate" x:DataType="models:KvSubscriptionModel">
+                <TreeViewItem
+                    AutomationProperties.Name="{x:Bind DisplayName}"
+                    IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}"
+                    IsSelected="{x:Bind IsSelected, Mode=TwoWay}"
+                    ItemsSource="{x:Bind PinnedItems, Mode=OneWay}">
+
+                    <StackPanel IsHitTestVisible="False" Orientation="Horizontal">
+                        <FontIcon
+                            Margin="0,0,6,2"
+                            FontSize="15"
+                            Glyph="&#xE840;" />
+                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind DisplayName, FallbackValue='Failed to fetch'}" />
+                    </StackPanel>
+                </TreeViewItem>
+            </DataTemplate>
+
+
+            <DataTemplate x:Key="SubscriptionTemplate" x:DataType="models:KvSubscriptionModel">
+                <TreeViewItem
+                    AutomationProperties.Name="{x:Bind DisplayName}"
+                    IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}"
+                    IsSelected="{x:Bind IsSelected, Mode=TwoWay}"
+                    ItemsSource="{x:Bind ResourceGroups, Mode=OneWay}">
+                    <StackPanel IsHitTestVisible="False" Orientation="Horizontal">
+                        <FontIcon
+                            Margin="0,0,6,2"
+                            FontSize="15"
+                            Foreground="{ThemeResource IconForegroundColorBrush}"
+                            Glyph="&#xE774;" />
+                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind DisplayName}" />
+                    </StackPanel>
+                </TreeViewItem>
+            </DataTemplate>
+
+
+
+            <DataTemplate x:Key="ResourceGroupTemplate" x:DataType="models:KvResourceGroupModel">
+                <TreeViewItem
+                    AutomationProperties.Name="{x:Bind DisplayName}"
+                    IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}"
+                    IsSelected="{x:Bind IsSelected, Mode=TwoWay}"
+                    ItemsSource="{x:Bind KeyVaultResources, Mode=OneWay}">
+                    <StackPanel IsHitTestVisible="False" Orientation="Horizontal">
+                        <FontIcon
+                            Margin="0,0,6,2"
+                            FontSize="15"
+                            Foreground="#996f00"
+                            Glyph="&#xE8B7;" />
+                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind DisplayName}" />
+                    </StackPanel>
+                </TreeViewItem>
+            </DataTemplate>
+
+
+
+            <!--  //AutomationProperties.Name="{x:Bind Data}"  -->
+            <DataTemplate x:Key="KeyVaultResourceTemplate" x:DataType="arm:KeyVaultResource">
+                <TreeViewItem ContextFlyout="{StaticResource TreeViewContextFlyout}" DoubleTapped="TreeViewItem_DoubleTapped">
+                    <StackPanel IsHitTestVisible="False" Orientation="Horizontal">
+                        <FontIcon
+                            Margin="0,0,6,2"
+                            FontSize="15"
+                            Foreground="{ThemeResource IconForegroundSecondaryColorBrush}"
+                            Glyph="&#xEC19;" />
+                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind Data.Name, FallbackValue='Failed to fetch'}" />
+                    </StackPanel>
+                </TreeViewItem>
+            </DataTemplate>
+
+            <models:ExplorerItemTemplateSelector
+                x:Key="ExplorerItemTemplateSelector"
+                KeyVaultResourceTemplate="{StaticResource KeyVaultResourceTemplate}"
+                PinnedItemTemplate="{StaticResource PinnedItemTemplate}"
+                ResourceGroupTemplate="{StaticResource ResourceGroupTemplate}"
+                SubscriptionTemplate="{StaticResource SubscriptionTemplate}" />
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  Toolbar  -->
+        <Border
+            Grid.Row="0"
+            Margin="5"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="4">
+
+            <CommandBar
+                Margin="-12"
+                HorizontalAlignment="Left"
+                DefaultLabelPosition="Collapsed">
+                <AppBarButton
+                    x:Uid="RefreshButton"
+                    Command="{x:Bind ViewModel.RefreshCommand, Mode=OneWay}"
+                    FontFamily="Segoe Fluent Icons"
+                    Icon="Refresh"
+                    Visibility="{x:Bind ViewModel.RefreshCommand.IsRunning, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}" />
+                <!--  this buttton ONLY is active when youre refreshing, a button that cancels is for search is TODO  -->
+                <AppBarButton
+                    x:Uid="RefreshTreeCancelButton"
+                    Command="{x:Bind ViewModel.RefreshCancelCommand, Mode=OneWay}"
+                    Foreground="{ThemeResource SystemFillColorAttentionBrush}"
+                    Visibility="{x:Bind ViewModel.RefreshCommand.IsRunning, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=False}">
+                    <AppBarButton.Content>
+                        <FontIcon Foreground="{ThemeResource SystemFillColorAttentionBrush}" Glyph="&#xE978;" />
+                    </AppBarButton.Content>
+                </AppBarButton>
+
+                <AppBarButton
+                    x:Uid="CollapseAllButton"
+                    Command="{x:Bind ViewModel.CollapseAllCommand, Mode=OneWay}"
+                    Content="&#xF165;"
+                    FontFamily="Segoe Fluent Icons" />
+                <AppBarButton
+                    x:Uid="ExpandAllButton"
+                    Command="{x:Bind ViewModel.ExpandAllCommand, Mode=OneWay}"
+                    Content="&#xECCD;"
+                    FontFamily="Segoe Fluent Icons" />
+            </CommandBar>
+        </Border>
+        <Grid Grid.Row="1" Margin="4,-4,4,4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBox
+                x:Name="SearchTextBox"
+                x:Uid="SearchTextBox"
+                Grid.Row="1"
+                skia:Height="30"
+                skia:MaxHeight="30"
+                skia:MinHeight="30"
+                AcceptsReturn="False"
+                Text="{x:Bind ViewModel.SearchQuery, Mode=TwoWay}"
+                TextChanged="TextBox_TextChanged">
+                <TextBox.KeyboardAccelerators>
+                    <KeyboardAccelerator
+                        Key="K"
+                        Invoked="SearchTextBox_KeyboardAcceleratorInvoked"
+                        Modifiers="Control" />
+                </TextBox.KeyboardAccelerators>
+            </TextBox>
+            <Button
+                x:Uid="CancelSearchButton"
+                Grid.Row="1"
+                Margin="4,0"
+                Padding="2"
+                HorizontalAlignment="Right"
+                Command="{x:Bind ViewModel.ExecuteSearchCancelCommand, Mode=OneWay}"
+                FontFamily="Segoe Fluent Icons"
+                Foreground="{ThemeResource SystemFillColorAttentionBrush}"
+                Style="{ThemeResource TransparentButton}"
+                Visibility="{x:Bind ViewModel.ExecuteSearchCommand.IsRunning, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=False}">
+                <Button.Content>
+                    <FontIcon
+                        FontSize="16"
+                        Foreground="{ThemeResource SystemFillColorAttentionBrush}"
+                        Glyph="&#xE978;" />
+                </Button.Content>
+            </Button>
+            <ProgressBar
+                Grid.Row="0"
+                Padding="0"
+                VerticalAlignment="Top"
+                IsHitTestVisible="False"
+                IsIndeterminate="True"
+                Visibility="{x:Bind ViewModel.ExecuteSearchCommand.IsRunning, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=False}" />
+        </Grid>
+
+        <ScrollViewer
+            Grid.Row="2"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Auto">
+            <TreeView
+                Name="KeyVaultTreeView"
+                Background="Transparent"
+                ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}"
+                ItemsSource="{x:Bind ViewModel.TreeDataSource, Mode=TwoWay}"
+                SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}" />
+        </ScrollViewer>
+    </Grid>
+
+
+</UserControl>

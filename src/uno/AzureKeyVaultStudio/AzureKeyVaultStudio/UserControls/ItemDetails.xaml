@@ -1,0 +1,433 @@
+﻿<UserControl
+    x:Class="AzureKeyVaultStudio.UserControls.ItemDetails"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:converters="using:CommunityToolkit.WinUI.Converters"
+    xmlns:custom="using:AzureKeyVaultStudio.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ext="using:AzureKeyVaultStudio.Extensions"
+    xmlns:local="using:AzureKeyVaultStudio.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:AzureKeyVaultStudio.Models"
+    xmlns:nc="using:CommunityToolkit.WinUI.Controls"
+    xmlns:primitives="using:CommunityToolkit.WinUI.UI.Controls.Primitives"
+    xmlns:skia="http://uno.ui/skia"
+    xmlns:sys="using:System"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
+    xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    mc:Ignorable="d skia">
+
+
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                    <ToolkitResources xmlns="using:Uno.Toolkit.UI" />
+                    <ResourceDictionary Source="ms-appx:///Assets/CustomCompactStyles.xaml" />
+                    <ResourceDictionary Source="ms-appx:///Assets/Styles.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <local:OverrideTitlebar
+            Name="OverrideTitlebar"
+            Grid.Row="0"
+            skia:Visibility="Collapsed"
+            SecondaryTitle="{x:Bind ViewModel.OpenedItem.Name, Mode=OneWay}" />
+
+        <CommandBar
+            Grid.Row="1"
+            Padding="4,0"
+            HorizontalAlignment="Left"
+            DefaultLabelPosition="Right"
+            IsOpen="False">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton
+                    x:Uid="ItemDetailsOpenAppBarButton"
+                    Command="{x:Bind ViewModel.OpenInAzureCommand, Mode=OneWay}"
+                    Icon="OpenFile" />
+                <AppBarButton
+                    x:Uid="ItemDetailsCopyAppBarButton"
+                    Command="{x:Bind ViewModel.CopyCommand, Mode=OneWay}"
+                    Icon="Copy"
+                    Visibility="{x:Bind ViewModel.ShowCopyButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=ViewModel.ShowCopyButton}" />
+                <AppBarButton
+                    x:Uid="ItemDetailsEditAppBarButton"
+                    Click="OnEditVersionClick"
+                    Icon="Edit"
+                    Visibility="{x:Bind ViewModel.ShowEditVersionButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=ViewModel.ShowEditVersionButton}" />
+                <AppBarButton
+                    x:Uid="ItemDetailsNewVersionAppBarButton"
+                    Click="OnNewVersionClick"
+                    Icon="Add"
+                    Visibility="{x:Bind ViewModel.ShowNewVersionButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=ViewModel.ShowNewVersionButton}" />
+
+                <AppBarSeparator />
+                <AppBarButton
+                    x:Uid="ItemDetailsDownloadKeyAppBarButton"
+                    Command="{x:Bind ViewModel.DownloadCommand, Mode=OneWay}"
+                    CommandParameter="Key"
+                    Icon="Download"
+                    Visibility="{x:Bind ViewModel.ShowDownloadKeyButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=ViewModel.ShowDownloadKeyButton}" />
+                <AppBarButton
+                    x:Uid="ItemDetailsDownloadCerAppBarButton"
+                    Command="{x:Bind ViewModel.DownloadCommand, Mode=OneWay}"
+                    CommandParameter="Cert"
+                    Icon="Download"
+                    Visibility="{x:Bind ViewModel.ShowDownloadCertButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=ViewModel.ShowDownloadCertButton}" />
+
+                <AppBarButton
+                    x:Uid="ItemDetailsDownloadPfxAppBarButton"
+                    Command="{x:Bind ViewModel.DownloadCommand, Mode=OneWay}"
+                    CommandParameter="Pfx"
+                    Icon="Download"
+                    Visibility="{x:Bind ViewModel.ShowDownloadPfxButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=ViewModel.ShowDownloadPfxButton}" />
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+
+        <Grid
+            Grid.Row="2"
+            Margin="10,5"
+            RowSpacing="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Visibility="{x:Bind ViewModel.ShowNewVersionButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=ViewModel.ShowNewVersionButton}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    Grid.Column="0"
+                    MaxHeight="120"
+                    Padding="8,6"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="{x:Bind ViewModel.SecretHidden, Mode=OneWay}"
+                                Visibility="{x:Bind ViewModel.ShowValue, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}" />
+                            <TextBlock
+                                xml:space="preserve"
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                IsTextSelectionEnabled="True"
+                                Text="{x:Bind ViewModel.SecretPlainText, Mode=OneWay}"
+                                TextWrapping="Wrap"
+                                Visibility="{x:Bind ViewModel.ShowValue, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=ViewModel.ShowValue}" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <ToggleButton
+                    Name="ShowToggleButton"
+                    x:Uid="ShowToggleButton"
+                    Grid.Column="1"
+                    Margin="4,0,0,0"
+                    VerticalAlignment="Stretch"
+                    Command="{x:Bind ViewModel.ShouldShowValueCommand, Mode=OneWay}"
+                    CommandParameter="{x:Bind ViewModel.ShowValue, Mode=OneWay}"
+                    Content="&#xE7B3;"
+                    CornerRadius="4"
+                    FontFamily="{StaticResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    IsChecked="{x:Bind ViewModel.ShowValue, Mode=TwoWay}" />
+            </Grid>
+
+            <Border
+                Grid.Row="1"
+                Padding="8,6"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+
+                <StackPanel Spacing="6">
+                    <TextBlock
+                        x:Uid="ItemDetailsPropertiesTextBlock"
+                        FontSize="11"
+                        FontWeight="SemiBold"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+                    <Grid RowSpacing="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            VerticalAlignment="Top"
+                            FontSize="11"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Name:" />
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            xml:space="preserve"
+                            FontFamily="Consolas"
+                            FontSize="11"
+                            IsTextSelectionEnabled="True"
+                            Text="{x:Bind ViewModel.OpenedItem.Name, Mode=OneWay}"
+                            TextWrapping="Wrap" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            VerticalAlignment="Top"
+                            FontSize="11"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Location:" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            xml:space="preserve"
+                            FontFamily="Consolas"
+                            FontSize="11"
+                            IsTextSelectionEnabled="True"
+                            Text="{x:Bind ViewModel.OpenedItem.VaultUri, Mode=OneWay}"
+                            TextWrapping="Wrap" />
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            VerticalAlignment="Top"
+                            FontSize="11"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Identifier:" />
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            xml:space="preserve"
+                            FontFamily="Consolas"
+                            FontSize="11"
+                            IsTextSelectionEnabled="True"
+                            Text="{x:Bind ViewModel.OpenedItem.Id, Mode=OneWay}"
+                            TextWrapping="Wrap" />
+
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            VerticalAlignment="Top"
+                            FontSize="11"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Activation:" />
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            xml:space="preserve"
+                            FontFamily="Consolas"
+                            FontSize="11"
+                            IsTextSelectionEnabled="True"
+                            Text="{x:Bind ViewModel.OpenedItem.NotBefore, Mode=OneWay}" />
+
+                        <TextBlock
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            VerticalAlignment="Top"
+                            FontSize="11"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Expiration:" />
+                        <TextBlock
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            xml:space="preserve"
+                            FontFamily="Consolas"
+                            FontSize="11"
+                            IsTextSelectionEnabled="True"
+                            Text="{x:Bind ViewModel.OpenedItem.ExpiresOn, Mode=OneWay}" />
+
+                        <TextBlock
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            VerticalAlignment="Top"
+                            FontSize="11"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Created:" />
+                        <TextBlock
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            xml:space="preserve"
+                            FontFamily="Consolas"
+                            FontSize="11"
+                            IsTextSelectionEnabled="True"
+                            Text="{x:Bind ViewModel.OpenedItem.UpdatedOn, Mode=OneWay, Converter={StaticResource DateTimeFormatConverter}, ConverterParameter='g'}" />
+
+                        <TextBlock
+                            Grid.Row="6"
+                            Grid.Column="0"
+                            VerticalAlignment="Top"
+                            FontSize="11"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Updated:" />
+                        <TextBlock
+                            Grid.Row="6"
+                            Grid.Column="1"
+                            xml:space="preserve"
+                            FontFamily="Consolas"
+                            FontSize="11"
+                            IsTextSelectionEnabled="True"
+                            Text="{x:Bind ViewModel.OpenedItem.UpdatedOn, Mode=OneWay}" />
+                    </Grid>
+
+                    <ItemsControl Margin="0,4,0,0" ItemsSource="{x:Bind ViewModel.OpenedItem.TagValues, Mode=OneWay}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="4" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Border
+                                    Height="18"
+                                    Padding="6,2"
+                                    Background="{ThemeResource SystemAccentColor}"
+                                    CornerRadius="2">
+                                    <TextBlock
+                                        FontSize="10"
+                                        Foreground="White"
+                                        IsTextSelectionEnabled="True"
+                                        Text="{x:Bind Mode=OneTime}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border
+                Grid.Row="2"
+                Padding="8,6"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        x:Uid="ItemDetailsVersionsTextBlock"
+                        Grid.Row="0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+                    <controls:DataGrid
+                        x:Name="VersionsDataGrid"
+                        Grid.Row="1"
+                        Margin="5,6,5,0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        x:DefaultBindMode="OneWay"
+                        AlternatingRowBackground="{ThemeResource LayerFillColorDefaultBrush}"
+                        AutoGenerateColumns="False"
+                        FrozenColumnCount="1"
+                        GridLinesVisibility="Horizontal"
+                        HorizontalGridLinesBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                        IsReadOnly="True"
+                        ItemsSource="{x:Bind ViewModel.ItemPropertiesList, Mode=OneWay}"
+                        SelectedItem="{x:Bind ViewModel.SelectedVersionRow, Mode=TwoWay}"
+                        Sorting="VersionsDataGrid_Sorting">
+
+                        <controls:DataGrid.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem
+                                    x:Name="VaultPageCopyButton"
+                                    x:Uid="VaultPageCopyButton"
+                                    Command="{x:Bind ViewModel.CopyCommand, Mode=OneWay}"
+                                    CommandParameter="{x:Bind ViewModel.SelectedVersionRow.Version, Mode=OneWay}"
+                                    Icon="Copy" />
+                                <MenuFlyoutItem
+                                    x:Name="VaultPageCopyVersionDetailsButton"
+                                    x:Uid="VaultPageCopyVersionDetailsButton"
+                                    Command="{x:Bind ViewModel.CopyVersionUrlCommand, Mode=OneWay}"
+                                    CommandParameter="{x:Bind ViewModel.SelectedVersionRow, Mode=OneWay}"
+                                    Icon="List" />
+                            </MenuFlyout>
+                        </controls:DataGrid.ContextFlyout>
+
+                        <controls:DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="primitives:DataGridColumnHeader">
+                                <Setter Property="MaxHeight" Value="25" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                                <Setter Property="Height" Value="25" />
+                                <Setter Property="MinHeight" Value="25" />
+                                <Setter Property="SeparatorBrush">
+                                    <Setter.Value>
+                                        <SolidColorBrush Opacity=".5" Color="{ThemeResource AccentAAFillColorDisabled}" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </controls:DataGrid.ColumnHeaderStyle>
+
+                        <controls:DataGrid.RowStyle>
+                            <Style TargetType="controls:DataGridRow">
+                                <Setter Property="Height" Value="25" />
+                            </Style>
+                        </controls:DataGrid.RowStyle>
+
+                        <controls:DataGrid.Columns>
+                            <controls:DataGridTextColumn
+                                x:Uid="DataGridTextColumnVersions"
+                                Width="*"
+                                Binding="{Binding Version}"
+                                CanUserSort="True"
+                                Tag="Version" />
+                            <controls:DataGridTextColumn
+                                x:Uid="DataGridTextColumnWhenLastModified"
+                                Width="*"
+                                Binding="{Binding WhenLastModified}"
+                                CanUserSort="True"
+                                Tag="UpdatedOn" />
+                            <controls:DataGridTextColumn
+                                x:Uid="DataGridTextColumnWhenExpires"
+                                Binding="{Binding WhenExpires}"
+                                Tag="WhenExpires" />
+                            <controls:DataGridTextColumn
+                                x:Uid="DataGridTextColumnContentType"
+                                Width="*"
+                                Binding="{Binding ContentType}"
+                                CanUserSort="True"
+                                Tag="ContentType" />
+                        </controls:DataGrid.Columns>
+                    </controls:DataGrid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

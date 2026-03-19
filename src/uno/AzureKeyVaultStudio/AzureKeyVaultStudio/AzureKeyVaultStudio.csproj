@@ -1,0 +1,125 @@
+﻿<Project Sdk="Uno.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0-windows10.0.26100;net10.0-desktop</TargetFrameworks>
+
+    <OutputType>Exe</OutputType>
+    <UnoSingleProject>true</UnoSingleProject>
+    <LangVersion>preview</LangVersion>
+
+    <ApplicationTitle>Key Vault Explorer</ApplicationTitle>
+    <AssemblyTitle>AzureKeyVaultStudio</AssemblyTitle>
+    <AssemblyName>AzureKeyVaultStudio</AssemblyName>
+    <ApplicationId>io.github.cricketthomas.AzureKeyVaultExplorer</ApplicationId>
+
+    <ApplicationDisplayVersion>2.0</ApplicationDisplayVersion>
+    <ApplicationVersion>2</ApplicationVersion>
+
+    <ApplicationPublisher>cricketthomas</ApplicationPublisher>
+
+    <Description>Azure Key Vault Explorer — a cross platform GUI desktop application for aggregating secrets (and keys and certificates) in Azure Key Vault</Description>
+
+    <SatelliteResourceLanguages>en;es;fr;pt-BR</SatelliteResourceLanguages>
+
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <BreakOnUnhandledExceptions Condition="'$(Configuration)' == 'Release'">false</BreakOnUnhandledExceptions>
+
+
+    <PredefinedCulturesOnly>true</PredefinedCulturesOnly>
+      
+    <UnoXamlResourcesTrimming>true</UnoXamlResourcesTrimming>
+
+
+    <UnoFeatures>
+        Toolkit;
+        Logging;
+        Storage;
+        Mvvm;
+        Configuration;
+        Localization;
+        Authentication;
+        Navigation;
+        ThemeService;
+        SkiaRenderer;
+    </UnoFeatures>
+
+    <PackageProjectUrl>https://github.com/cricketthomas/AzureKeyVaultExplorer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/cricketthomas/AzureKeyVaultExplorer</RepositoryUrl>
+    <!--<PackageCertificateThumbprint>E4195D2ADEDE635ECA12FE4B675B3399C8D3B74A</PackageCertificateThumbprint>-->
+    <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+    <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <AppxBundle>Never</AppxBundle>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-windows10.0.26100'">
+    <SelfContained>false</SelfContained>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <PublishAot>false</PublishAot>
+    <TieredCompilation Condition="'$(Configuration)' == 'Release'">true</TieredCompilation>
+    <TieredCompilationQuickJit Condition="'$(Configuration)' == 'Release'">true</TieredCompilationQuickJit>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <PublishTrimmed>false</PublishTrimmed>
+    <EnableILLink>false</EnableILLink>
+    <IsTrimmable>false</IsTrimmable>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+    <TrimMode>copy</TrimMode>
+
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+    <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
+    <NoWarn>$(NoWarn);IL2104</NoWarn>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Azure.ResourceManager.KeyVault" />
+    <PackageReference Include="Azure.Security.KeyVault.Certificates" />
+    <PackageReference Include="Azure.Security.KeyVault.Keys" />
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" />
+    <PackageReference Include="DeviceId" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+    <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" />
+    <PackageReference Include="Uno.WinUI.MSAL" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" />
+    <PackageReference Include="CommunityToolkit.WinUI.Converters" />
+    <PackageReference Include="CommunityToolkit.WinUI.Collections" />
+    <PackageReference Include="CommunityToolkit.WinUI.Behaviors" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UnoSupportedLanguage Include="en-US" />
+    <UnoSupportedLanguage Include="es" />
+    <UnoSupportedLanguage Include="fr" />
+    <UnoSupportedLanguage Include="pt-BR" />
+  </ItemGroup>
+
+
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'windows'">
+    <PackageReference Include="Uno.CommunityToolkit.WinUI.UI.Controls.DataGrid" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Update="Assets\Images\kv-gray-3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+    
+</Project>

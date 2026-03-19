@@ -1,0 +1,115 @@
+﻿<ContentDialog
+    x:Class="AzureKeyVaultStudio.UserControls.NewVersionDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AzureKeyVaultStudio.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    PrimaryButtonClick="OnPrimaryButtonClick"
+    RequestedTheme="Default"
+    Style="{ThemeResource DefaultContentDialogStyle}">
+    <ScrollViewer
+        MinWidth="400"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
+
+        <StackPanel
+            Margin="10"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Orientation="Vertical"
+            Spacing="4">
+
+            <StackPanel
+                Orientation="Vertical"
+                Spacing="4"
+                Visibility="{x:Bind ViewModel.IsNew, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Center"
+                    Text="Secret Name" />
+                <TextBox Text="{x:Bind ViewModel.SecretName, Mode=TwoWay}" />
+            </StackPanel>
+
+            <StackPanel
+                Orientation="Vertical"
+                Spacing="4"
+                Visibility="{x:Bind ViewModel.IsNew, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Center"
+                    Text="Vault Location" />
+                <TextBox IsEnabled="False" Text="{x:Bind ViewModel.VaultUri}" />
+            </StackPanel>
+
+            <StackPanel>
+                <CheckBox
+                    x:Name="SetActivationDateCheckbox"
+                    IsChecked="{x:Bind ViewModel.HasActivationDateChecked, Mode=TwoWay}"
+                    ToolTipService.ToolTip="Sets when this resource will become active. This sets the 'nbf' property on the resource. A new current but inactive version will still be created after this operation.">
+                    <CheckBox.Content>
+                        <TextBlock Text="Set Activation Date" />
+                    </CheckBox.Content>
+                </CheckBox>
+                <StackPanel
+                    Orientation="Vertical"
+                    Spacing="5"
+                    Visibility="{Binding ElementName=SetActivationDateCheckbox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <DatePicker
+                        MinWidth="400"
+                        HorizontalAlignment="Left"
+                        SelectedDate="{x:Bind ViewModel.ItemPropertiesModel.NotBefore, Mode=TwoWay}" />
+                    <TimePicker MinWidth="400" Time="{x:Bind ViewModel.NotBeforeTimespan, Mode=TwoWay}" />
+                </StackPanel>
+                <CheckBox
+                    x:Name="SetExpirationDateCheckbox"
+                    IsChecked="{x:Bind ViewModel.HasExpirationDateChecked, Mode=TwoWay}"
+                    ToolTipService.ToolTip="Sets when this resource will become inactive. This sets the 'exp' property on the resource.">
+                    <CheckBox.Content>
+                        <TextBlock Text="Set Expiration Date" />
+                    </CheckBox.Content>
+                </CheckBox>
+                <StackPanel
+                    Orientation="Vertical"
+                    Spacing="5"
+                    Visibility="{Binding ElementName=SetExpirationDateCheckbox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <DatePicker MinWidth="400" SelectedDate="{x:Bind ViewModel.ItemPropertiesModel.ExpiresOn, Mode=TwoWay}" />
+                    <TimePicker MinWidth="400" SelectedTime="{x:Bind ViewModel.ExpiresOnTimespan, Mode=TwoWay}" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock
+                    Margin="0,4,0,0"
+                    VerticalAlignment="Center"
+                    Text="Enabled" />
+                <ToggleSwitch
+                    IsOn="{x:Bind ViewModel.ItemPropertiesModel.Enabled, Mode=TwoWay}"
+                    OffContent="No"
+                    OnContent="Yes" />
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Spacing="5">
+                <TextBlock VerticalAlignment="Center" Text="Secret Content type (optional)" />
+                <TextBox Text="{x:Bind ViewModel.ItemPropertiesModel.ContentType, Mode=TwoWay}" />
+            </StackPanel>
+
+            <StackPanel
+                Orientation="Vertical"
+                Spacing="5"
+                Visibility="{x:Bind ViewModel.IsEdit, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}">
+                <TextBlock
+                    Margin="2"
+                    VerticalAlignment="Center"
+                    Text="Secret Value" />
+                <TextBox
+                    x:Name="SecretValueTextbox"
+                    Height="100"
+                    AcceptsReturn="True"
+                    IsEnabled="{x:Bind ViewModel.IsEdit, Converter={StaticResource EmptyStringToObjectConverter}}"
+                    PlaceholderText="Enter the secret"
+                    Text="{x:Bind ViewModel.SecretValue, Mode=TwoWay}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>

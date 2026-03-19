@@ -1,0 +1,221 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - release/**
+
+
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - master
+      - release/**
+
+env:
+  STEP_TIMEOUT_MINUTES: 60
+  CONFIGURATION: Release
+  dotnetVersion: 10.0.x
+jobs:
+  # smoke_test:
+    # name: Smoke Test (Debug Build of AzureKeyVaultStudio)
+    # runs-on: windows-latest
+    # steps:
+    #   - uses: actions/checkout@v3
+    #     with:
+    #       fetch-depth: 0
+
+    #   - name: Install Dependencies
+    #     timeout-minutes: ${{ fromJSON(env.STEP_TIMEOUT_MINUTES) }}
+    #     uses: "./.github/steps/install_dependencies"
+
+      # - name: Setup MSBuild
+      #   uses: microsoft/setup-msbuild@v1.3.1
+
+      # - name: Build AzureKeyVaultStudio (Debug)
+      #   shell: pwsh
+      #   run: msbuild ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio.csproj /r
+
+  build_windows_x64:
+    name: Build Windows x64
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.dotnetVersion }}
+      - uses: actions/cache@v3
+        with:
+            path: ~/.nuget/win-packages
+            key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+            restore-keys: |
+              win-nuget
+      - name: Publish Windows x64
+        shell: pwsh
+        run: |
+          cd ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio
+          dotnet publish -f net10.0-windows10.0.26100 -r win-x64 -p:SelfContained=true -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:Version=2.0.${{ github.run_number }} -c Release  -p:WindowsPackageType=None ./AzureKeyVaultStudio.csproj
+          New-Item -ItemType Directory -Path "win-x64" -Force
+          Move-Item -Path ".\bin\Release\net10.0-windows10.0.26100\win-x64\publish\*.exe" -Destination "$env:GITHUB_WORKSPACE\win-x64\" -Force
+      - name: Create Package
+        shell: pwsh
+        run: tar -cvf azurekeyvaultstudio.win-x64.tar win-x64
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: azurekeyvaultstudio.win-x64.tar
+          path: azurekeyvaultstudio.win-x64.tar
+
+  build_windows_arm64:
+    name: Build Windows ARM64
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.dotnetVersion }}
+      - uses: actions/cache@v3
+        with:
+            path: ~/.nuget/win-arm-packages
+            key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+            restore-keys: |
+              winarm-nuget
+      - name: Publish Windows ARM64
+        shell: pwsh
+        run: |
+          cd ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio
+          dotnet publish -f net10.0-windows10.0.26100 -r win-arm64 -p:Platform=arm64 -p:SelfContained=true -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:PublishTrimmed=false -p:Version=2.0.${{ github.run_number }} -c Release  -p:WindowsPackageType=None ./AzureKeyVaultStudio.csproj
+          New-Item -ItemType Directory -Path "win-arm64" -Force
+          Move-Item -Path ".\bin\Release\net10.0-windows10.0.26100\win-arm64\publish\*.exe" -Destination "$env:GITHUB_WORKSPACE\win-arm64\" -Force
+      - name: Create Package
+        shell: pwsh
+        run: tar -cvf azurekeyvaultstudio.win-arm64.tar win-arm64
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: azurekeyvaultstudio.win-arm64.tar
+          path: azurekeyvaultstudio.win-arm64.tar
+
+  build_macos_x64:
+    name: Build macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.dotnetVersion }}
+      - uses: actions/cache@v3
+        with:
+            path: ~/.nuget/macos-x64-packages
+            key: ${{ runner.os }}-x64nuget-${{ hashFiles('**/*.csproj') }}
+            restore-keys: |
+              mac-x64-nuget
+      - name: Publish macOS x64
+        shell: pwsh
+        run: |
+          dotnet workload restore
+          cd ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio
+          dotnet publish -f net10.0-desktop -p:UnoMacOSCustomInfoPlist=Info.plist -p:PackageFormat=app -p:SelfContained=true -p:PublishReadyToRun=true -r osx-x64 -p:Version=2.0.${{ github.run_number }} -c Release  ./AzureKeyVaultStudio.csproj
+          New-Item -ItemType Directory -Path "osx-x64" -Force
+          Move-Item -Path ".\bin\Release\net10.0-desktop\osx-x64\publish\*.app" -Destination "$env:GITHUB_WORKSPACE\osx-x64\" -Force
+      - name: Create Package
+        shell: pwsh
+        run: tar -cvf azurekeyvaultstudio.macos-x64.tar osx-x64
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: azurekeyvaultstudio.macos-x64.tar
+          path: azurekeyvaultstudio.macos-x64.tar
+  
+  build_macos_arm64:
+    name: Build macOS ARM64
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.dotnetVersion }}
+      - uses: actions/cache@v3
+        with:
+            path: ~/.nuget/macos-arm64-packages
+            key: ${{ runner.os }}-arm64nuget-${{ hashFiles('**/*.csproj') }}
+            restore-keys: |
+              mac-arm64-nuget
+      - name: Publish macOS ARM64
+        shell: pwsh
+        run: |
+          cd ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio
+          dotnet workload restore
+          dotnet publish -f net10.0-desktop -p:UnoMacOSCustomInfoPlist=Info.plist -p:PackageFormat=app -p:PublishReadyToRun=true -r osx-arm64 -p:Version=2.0.${{ github.run_number }} -c Release ./AzureKeyVaultStudio.csproj
+          New-Item -ItemType Directory -Path "osx-arm64" -Force
+          Move-Item -Path ".\bin\Release\net10.0-desktop\osx-arm64\publish\*.app" -Destination "$env:GITHUB_WORKSPACE\osx-arm64\" -Force
+      - name: Create Package
+        shell: pwsh
+        run: tar -cvf azurekeyvaultstudio.macos-arm64.tar osx-arm64
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: azurekeyvaultstudio.macos-arm64.tar
+          path: azurekeyvaultstudio.macos-arm64.tar
+
+  build_linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.dotnetVersion }}
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            linux-nuget
+      - name: Publish Linux x64
+        shell: pwsh
+        run: |
+          cd ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio
+          dotnet publish -f net10.0-desktop -r linux-x64 -p:SelfContained=true -p:PublishReadyToRun=true -p:Version=2.0.${{ github.run_number }} -c Release  ./AzureKeyVaultStudio.csproj
+          New-Item -ItemType Directory -Path "linux-x64" -Force
+          Move-Item -Path ".\bin\Release\net10.0-desktop\linux-x64\publish\*" -Destination "$env:GITHUB_WORKSPACE\linux-x64\" -Force
+      - name: Create Package
+        shell: pwsh
+        run: tar -cvf azurekeyvaultstudio.linux-x64.tar linux-x64
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: azurekeyvaultstudio.linux-x64.tar
+          path: azurekeyvaultstudio.linux-x64.tar
+
+
+  release:
+    name: Release Packages
+    needs: [build_windows_x64, build_windows_arm64, build_macos_x64, build_macos_arm64, build_linux]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: List artifacts
+        shell: pwsh
+        run: Get-ChildItem -Recurse artifacts
+      - name: Create Release
+        run: |
+          gh release create v2.0.${{ github.run_number }} --draft --title "AzureKeyVaultStudio v2.0.${{ github.run_number }}" || true
+          gh release upload v2.0.${{ github.run_number }} artifacts/**/*.tar artifacts/**/*.snap --clobber || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+
+        #  xattr -c './KeyVault Explorer.app/'

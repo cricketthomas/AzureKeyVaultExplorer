@@ -1,0 +1,203 @@
+﻿<Page
+    x:Class="AzureKeyVaultStudio.Presentation.SubscriptionsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:AzureKeyVaultStudio.Models"
+    xmlns:primitives="using:CommunityToolkit.WinUI.UI.Controls.Primitives"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
+    xmlns:uc="using:AzureKeyVaultStudio.UserControls"
+    Background="{ThemeResource BaseBackgroundBrush}"
+    NavigationCacheMode="Required"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <uc:OverrideTitlebar Grid.Row="0" IsBackButtonVisible="True" />
+
+        <StackPanel
+            Grid.Row="1"
+            Margin="10,5"
+            Orientation="Vertical"
+            Spacing="5">
+            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Subscriptions" />
+            <TextBlock Text="Select which subscriptions to show in the left sidebar." TextWrapping="Wrap" />
+            <Border
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource CornerRadiusValue}">
+
+                <CommandBar
+                    Margin="-10"
+                    HorizontalAlignment="Left"
+                    DefaultLabelPosition="Right">
+                    <AppBarButton
+                        x:Uid="BlankPage3ClearSelectedButton"
+                        Command="{x:Bind ViewModel.ClearSelectedSubscriptionsCommand, Mode=OneWay}"
+                        Icon="ClearSelection" />
+                    <AppBarButton
+                        x:Uid="BlankPage3SelectAllButton"
+                        Command="{x:Bind ViewModel.SelectAllSubscriptionsCommand, Mode=OneWay}"
+                        Icon="SelectAll" />
+                    <AppBarButton
+                        x:Uid="BlankPage3RefreshButton"
+                        Command="{x:Bind ViewModel.LoadSubscriptionCommand, Mode=OneWay}"
+                        Icon="Sync" />
+                    <AppBarButton
+                        x:Uid="BlankPage3LoadMoreButton"
+                        Command="{x:Bind ViewModel.LoadMoreSubscriptionsCommand, Mode=OneWay}"
+                        Icon="ImportAll"
+                        IsEnabled="{x:Bind ViewModel.ContinuationToken, Mode=OneWay, Converter={StaticResource EmptyStringToObjectConverter}}" />
+                    <AppBarButton
+                        x:Uid="BlankPage3SaveButton"
+                        Command="{x:Bind ViewModel.SaveSelectedSubscriptionsCommand, Mode=OneWay}"
+                        Icon="Save" />
+
+                </CommandBar>
+            </Border>
+        </StackPanel>
+        <toolkit:SwitchPresenter
+            Grid.Row="2"
+            TargetType="x:Boolean"
+            Value="{x:Bind ViewModel.IsBusy, Mode=OneWay}">
+            <toolkit:Case Value="False">
+                <controls:DataGrid
+                    x:Name="SubscriptionsDataGrid"
+                    Margin="10,5"
+                    AlternatingRowBackground="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
+                    AutoGenerateColumns="False"
+                    FontSize="12"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                    GridLinesVisibility="Horizontal"
+                    HorizontalGridLinesBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                    HorizontalScrollBarVisibility="Auto"
+                    IsReadOnly="True"
+                    ItemsSource="{x:Bind ViewModel.Subscriptions, Mode=OneWay}"
+                    Sorting="SubscriptionsDataGrid_Sorting">
+
+                    <controls:DataGrid.RowGroupHeaderStyles>
+                        <Style TargetType="controls:DataGridRowGroupHeader">
+                            <Setter Property="MaxHeight" Value="25" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                            <Setter Property="Height" Value="25" />
+                            <Setter Property="MinHeight" Value="25" />
+                        </Style>
+                    </controls:DataGrid.RowGroupHeaderStyles>
+                    <controls:DataGrid.Resources>
+                        <ResourceDictionary>
+                            <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
+                            <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="Transparent" />
+                            <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush" Color="Transparent" />
+                            <ResourceDictionary.ThemeDictionaries>
+                                <ResourceDictionary x:Key="Light">
+                                    <Color x:Key="DataGridColumnHeaderBackgroundColor">#eaeaea</Color>
+                                    <Color x:Key="DataGridColumnHeaderHoveredBackgroundColor">#4C3A3A3A</Color>
+                                    <Color x:Key="DataGridColumnHeaderPressedBackgroundColor">#eeeeee</Color>
+                                </ResourceDictionary>
+                                <ResourceDictionary x:Key="Dark">
+                                    <Color x:Key="DataGridColumnHeaderBackgroundColor">#202020</Color>
+                                    <Color x:Key="DataGridColumnHeaderHoveredBackgroundColor">#2D2D2D</Color>
+                                    <Color x:Key="DataGridColumnHeaderPressedBackgroundColor">#333333</Color>
+                                </ResourceDictionary>
+                            </ResourceDictionary.ThemeDictionaries>
+                        </ResourceDictionary>
+                    </controls:DataGrid.Resources>
+                    <controls:DataGrid.RowStyle>
+                        <Style TargetType="controls:DataGridRow">
+                            <Setter Property="Height" Value="25" />
+                        </Style>
+                    </controls:DataGrid.RowStyle>
+                    <controls:DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="primitives:DataGridColumnHeader">
+                            <Setter Property="MaxHeight" Value="25" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                            <Setter Property="Height" Value="25" />
+                            <Setter Property="MinHeight" Value="25" />
+                            <Setter Property="SeparatorBrush">
+                                <Setter.Value>
+                                    <SolidColorBrush Opacity=".5" Color="{ThemeResource AccentAAFillColorDisabled}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </controls:DataGrid.ColumnHeaderStyle>
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTemplateColumn Width="40">
+                            <controls:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="models:SubscriptionDataItemModel">
+                                    <Viewbox
+                                        Width="30"
+                                        Height="30"
+                                        HorizontalAlignment="Center"
+                                        Stretch="UniformToFill">
+                                        <CheckBox
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            IsChecked="{Binding IsPinned, Mode=TwoWay}" />
+                                    </Viewbox>
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellTemplate>
+                        </controls:DataGridTemplateColumn>
+
+                        <controls:DataGridTextColumn
+                            x:Uid="DataGridTextColumnName"
+                            Width="250"
+                            Binding="{Binding Data.DisplayName}"
+                            CanUserSort="True"
+                            Tag="Data.DisplayName" />
+
+                        <controls:DataGridTextColumn
+                            x:Uid="DataGridTextSubscriptionId"
+                            Width="250"
+                            Binding="{Binding Data.SubscriptionId}"
+                            CanUserSort="True"
+                            Header="Subscription Id"
+                            Tag="SubscriptionId" />
+
+                        <controls:DataGridTextColumn
+                            x:Uid="DataGridTextTenantId"
+                            Width="250"
+                            Binding="{Binding Data.TenantId}"
+                            CanUserSort="True"
+                            Tag="TenantId" />
+
+                        <controls:DataGridTextColumn
+                            x:Uid="DataGridTextState"
+                            Width="200"
+                            Binding="{Binding Data.State}"
+                            CanUserSort="True"
+                            Tag="State" />
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+            </toolkit:Case>
+            <toolkit:Case Value="True">
+                <StackPanel
+                    Width="200"
+                    Height="200"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <Button Command="{x:Bind ViewModel.LoadSubscriptionCancelCommand, Mode=OneWay}">
+                        <StackPanel Orientation="Horizontal" Spacing="7">
+                            <FontIcon Glyph="&#xE711;" />
+                            <TextBlock x:Uid="CancelButtonTextBlock" />
+                            <ProgressRing
+                                MaxWidth="16"
+                                MaxHeight="16"
+                                Foreground="{ThemeResource SystemFillColorAttentionBrush}" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </toolkit:Case>
+        </toolkit:SwitchPresenter>
+    </Grid>
+</Page>

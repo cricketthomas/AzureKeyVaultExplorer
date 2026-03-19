@@ -1,0 +1,215 @@
+﻿<UserControl
+    x:Class="AzureKeyVaultStudio.Presentation.TabsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:AzureKeyVaultStudio.Presentation"
+    xmlns:macos="http://uno.ui/macos"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:skia="http://uno.ui/skia"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
+    xmlns:triggers="using:CommunityToolkit.WinUI"
+    xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    x:Name="VaultTabsUserControl"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    mc:Ignorable="d skia">
+
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TabViewItem">
+                <Setter Property="CornerRadius">
+                    <Setter.Value>4,4,4,4</Setter.Value>
+                </Setter>
+                <Setter Property="HeaderTemplate">
+                    <Setter.Value>
+                        <DataTemplate x:DataType="local:TabContainerBase">
+                            <StackPanel
+                                Padding="0,0,0,-5"
+                                VerticalAlignment="Bottom"
+                                Orientation="Horizontal"
+                                Spacing="3">
+                                <SymbolIcon Symbol="{x:Bind Icon}">
+                                    <SymbolIcon.RenderTransform>
+                                        <ScaleTransform ScaleX="0.75" ScaleY="0.75" />
+                                    </SymbolIcon.RenderTransform>
+                                </SymbolIcon>
+                                <TextBlock Text="{x:Bind Header}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="TabView">
+                <Setter Property="TabItemTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <Grid Visibility="Collapsed" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Grid.Row="1" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TabView
+            x:Name="MainTabView"
+            Grid.Row="0"
+            Background="{ThemeResource LayerOnMicaBaseAltFillColorDefaultBrush}"
+            CanDragTabs="True"
+            CompositeMode="SourceOver"
+            IsAddTabButtonVisible="False"
+            SelectedItem="{x:Bind ViewModel.SelectedTab, Mode=TwoWay}"
+            SelectionChanged="MyTabs_SelectionChanged"
+            TabCloseRequested="TabView_TabCloseRequested"
+            TabItemsSource="{x:Bind ViewModel.Tabs}"
+            TabWidthMode="Equal">
+            <TabView.TabStripFooter>
+                <Grid
+                    MinHeight="32"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  TODO ADD TEACHING TIP WHEN EMPTY  -->
+                    <SplitButton
+                        x:Name="PaneToggleSplitButton"
+                        x:Uid="PaneToggleSplitButton"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="PaneToggleButton_Click">
+                        <FontIcon FontSize="14" Glyph="&#xEA49;" />
+                        <SplitButton.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="B" Modifiers="Control" />
+                        </SplitButton.KeyboardAccelerators>
+                        <SplitButton.Flyout>
+                            <MenuFlyout Placement="Bottom">
+                                <MenuFlyoutItem x:Uid="PasswordGeneratorMenuItem" Command="{x:Bind ViewModel.OpenPasswordGeneratorCommand}">
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon Glyph="&#xE8D7;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutItem x:Uid="OpenExternalItemByURLMenuItem" Click="OpenExternalItemByURLMenuItem_Click">
+                                    <MenuFlyoutItem.Icon>
+                                        <SymbolIcon Symbol="OpenWith" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutItem x:Uid="OpenExternalVaultButton" Click="OpenExternalVaultButton_Click">
+                                    <MenuFlyoutItem.Icon>
+                                        <SymbolIcon Symbol="OpenLocal" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutSeparator />
+                                <MenuFlyoutItem x:Uid="SubscriptionsMenuItem" Click="SubscriptionsButton_Click">
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon Glyph="&#xE9D5;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutItem x:Uid="SettingsMenuItem" Click="SettingsMenuItemButton_Click">
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon Glyph="&#xE713;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                            </MenuFlyout>
+                        </SplitButton.Flyout>
+                    </SplitButton>
+                    <TeachingTip
+                        x:Name="SplitButtonTeachingTip"
+                        x:Uid="SplitButtonTeachingTip"
+                        IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=TwoWay}"
+                        Target="{x:Bind PaneToggleSplitButton}">
+                        <TeachingTip.IconSource>
+                            <SymbolIconSource Symbol="Flag" />
+                        </TeachingTip.IconSource>
+                    </TeachingTip>
+                </Grid>
+            </TabView.TabStripFooter>
+            <!-- <TabView.TabStripHeader>
+                <Rectangle skia:Width="75" win:Width="0" />
+            </TabView.TabStripHeader>-->
+
+        </TabView>
+
+        <toolkit:SwitchPresenter
+            Grid.Row="1"
+            Background="{ThemeResource BaseBackgroundBrush}"
+            TargetType="x:Int32"
+            Value="{x:Bind ViewModel.Tabs.Count, Mode=OneWay}">
+            <toolkit:Case IsDefault="True">
+                <Grid x:Name="ContentGrid" Background="{ThemeResource TabViewItemHeaderBackgroundSelected}">
+                    <Grid x:Name="FrameContainer" />
+                </Grid>
+            </toolkit:Case>
+            <toolkit:Case Value="0">
+                <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                    <ImageIcon
+                        x:Name="BackgroundImg"
+                        Grid.Row="1"
+                        Width="200"
+                        CacheMode="BitmapCache"
+                        Opacity=".4"
+                        Source="/Assets/Images/kv-gray-3.png" />
+
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock
+                            x:Uid="TabsControlHelpText1"
+                            Margin="10,10"
+                            HorizontalAlignment="Center"
+                            TextWrapping="Wrap" />
+                        <TextBlock Margin="18,0,0,0" TextWrapping="Wrap">
+                            <Run x:Uid="TabsControlHelpText2" />
+                            <LineBreak />
+                            <Run x:Uid="TabsControlHelpText3" />
+                            <LineBreak />
+                        </TextBlock>
+                        <HyperlinkButton
+                            x:Uid="TabsControlHyperlinkButton"
+                            Padding="0,-1,0,0"
+                            HorizontalAlignment="Center"
+                            NavigateUri="https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide?tabs=azure-cli" />
+                    </StackPanel>
+                </StackPanel>
+            </toolkit:Case>
+        </toolkit:SwitchPresenter>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="TabViewStates">
+                <VisualState x:Name="TabViewNotEmptyState">
+                    <VisualState.StateTriggers>
+                        <!--<triggers:IsNullOrEmptyStateTrigger Value="{Binding TabItemsSource, ElementName=MainTabView, Mode=OneWay}" />-->
+                        <StateTrigger IsActive="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--<Setter Target="CustomDragRegion.MinWidth" Value="188" />-->
+                        <!--<Setter Target="SplitButtonTeachingTip.IsOpen" Value="False" />-->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="TabViewEmptyState">
+                    <VisualState.StateTriggers>
+                        <!--<triggers:IsNullOrEmptyStateTrigger Value="{Binding TabItemsSource, ElementName=MainTabView, Mode=OneWay}" />-->
+                        <StateTrigger IsActive="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--<Setter Target="SplitButtonTeachingTip.IsOpen" Value="True" />
+                        <Setter Target="SplitButtonTeachingTip.IsLightDismissEnabled" Value="False" />-->
+                        <!--<Setter Target="CustomDragRegion.BorderBrush" Value="Transparent" />
+                        <Setter Target="MainTabView.BorderThickness" Value="0" />
+                        <Setter Target="FooterPaneToggleSplitButton.Visibility" Value="Collapsed" />-->
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</UserControl>

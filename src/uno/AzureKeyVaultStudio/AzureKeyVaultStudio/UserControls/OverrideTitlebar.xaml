@@ -1,0 +1,57 @@
+﻿<UserControl
+    x:Class="AzureKeyVaultStudio.UserControls.OverrideTitlebar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:CommunityToolkit.WinUI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:AzureKeyVaultStudio.UserControls"
+    xmlns:macos="http://uno.ui/macos"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:skia="http://uno.ui/not_win"
+    xmlns:sys="using:System"
+    xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    mc:Ignorable="skia macos">
+
+
+    <Grid x:Name="DraggableRegion" Background="Transparent">
+        <!--  skia:Margin="75,8,0,10"  -->
+        <skia:StackPanel Orientation="Horizontal" Spacing="5">
+            <Button
+                x:Name="BackButton"
+                x:Uid="BackButton"
+                VerticalAlignment="Top"
+                Click="BackButton_Click"
+                Style="{StaticResource TransparentButton}"
+                Visibility="{x:Bind IsBackButtonVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=IsBackButtonVisible}">
+                <FontIcon FontSize="12" Glyph="&#xE72B;" />
+            </Button>
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="12"
+                Text="Key Vault Explorer for Azure"
+                Visibility="{x:Bind IsBackButtonVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=IsBackButtonVisible}" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="12"
+                Foreground="{ThemeResource AccentTextFillColorDisabledBrush}"
+                Text="{x:Bind SecondaryTitle, Mode=OneWay}" />
+        </skia:StackPanel>
+
+        <win:TitleBar
+            x:Name="DefaultTitleBar"
+            Title="Key Vault Explorer for Azure"
+            BackRequested="DefaultTitleBar_BackRequested"
+            IsBackButtonEnabled="True"
+            IsBackButtonVisible="{x:Bind IsBackButtonVisible}"
+            Subtitle="{x:Bind SecondaryTitle, Mode=OneWay}">
+            <win:TitleBar.IconSource>
+                <ImageIconSource ImageSource="/Assets/Images/AppIcon.png" />
+            </win:TitleBar.IconSource>
+        </win:TitleBar>
+
+    </Grid>
+
+</UserControl>
