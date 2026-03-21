@@ -522,6 +522,9 @@
   <data name="ItemDetailsOpenAppBarButton.Label" xml:space="preserve">
     <value>Abrir</value>
   </data>
+  <data name="ItemDetailsRefreshAppBarButton.Label" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
   <data name="ItemDetailsCopyAppBarButton.Label" xml:space="preserve">
     <value>Copiar</value>
   </data>

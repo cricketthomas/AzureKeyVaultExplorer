@@ -53,10 +53,12 @@ public sealed class KeyVaultItemProperties
           properties.Enabled,
           properties.RecoverableDays,
           properties.RecoveryLevel,
-          properties.Managed);
+          KeyVaultItemType.Secret,
+          properties.Managed
+          );
 
     public static IReadOnlyList<KeyVaultItemProperties> FromSecretProperties(IEnumerable<SecretProperties>? properties)
-        => properties is null ? Array.Empty<KeyVaultItemProperties>() : [.. properties.Select(FromSecretProperties)];
+        => properties is null ? [] : [.. properties.Select(FromSecretProperties)];
 
     public static KeyVaultItemProperties FromKeyProperties(KeyProperties properties)
         => Create(
@@ -73,10 +75,11 @@ public sealed class KeyVaultItemProperties
             properties.Enabled,
             properties.RecoverableDays,
             properties.RecoveryLevel,
+            KeyVaultItemType.Key,
             properties.Managed);
 
     public static IReadOnlyList<KeyVaultItemProperties> FromKeyProperties(IEnumerable<KeyProperties>? properties)
-        => properties is null ? Array.Empty<KeyVaultItemProperties>() : [.. properties.Select(FromKeyProperties)];
+        => properties is null ?[] : [.. properties.Select(FromKeyProperties)];
 
     public static KeyVaultItemProperties FromCertificateProperties(CertificateProperties properties)
         => Create(
@@ -92,10 +95,12 @@ public sealed class KeyVaultItemProperties
             properties.NotBefore,
             properties.Enabled,
             properties.RecoverableDays,
-            properties.RecoveryLevel);
+            properties.RecoveryLevel,
+            KeyVaultItemType.Certificate);
+
 
     public static IReadOnlyList<KeyVaultItemProperties> FromCertificateProperties(IEnumerable<CertificateProperties>? properties)
-        => properties is null ? Array.Empty<KeyVaultItemProperties>() : [.. properties.Select(FromCertificateProperties)];
+        => properties is null ? [] : [.. properties.Select(FromCertificateProperties)];
 
     public SecretProperties ToSecretProperties()
     {
@@ -134,12 +139,10 @@ public sealed class KeyVaultItemProperties
         return properties;
     }
 
-
     public CertificateProperties ToCertificateProperties()
     {
         var properties = new CertificateProperties(Id);
         properties.Enabled = Enabled;
-
         if (Tags != null && Tags.Count > 0)
         {
             foreach (var tag in Tags)
@@ -165,7 +168,9 @@ public sealed class KeyVaultItemProperties
         bool? enabled,
         int? recoverableDays,
         string? recoveryLevel,
-        bool? managed = null)
+        KeyVaultItemType type,
+        bool? managed = null
+        )
     {
         return new KeyVaultItemProperties
         {
@@ -183,7 +188,8 @@ public sealed class KeyVaultItemProperties
             RecoverableDays = recoverableDays,
             RecoveryLevel = recoveryLevel,
             Managed = managed,
-            Tags = tags is null ? new Dictionary<string, string>() : new Dictionary<string, string>(tags)
+            Tags = tags is null ? new Dictionary<string, string>() : new Dictionary<string, string>(tags),
+            Type = type
         };
     }
 

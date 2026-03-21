@@ -200,7 +200,6 @@ public partial class App : Application
                     new ("Main", View: views.FindByViewModel<MainViewModel>(), IsDefault:true),
                     new ("SettingsPage", View: views.FindByViewModel<SettingsViewModel>()),
                     new ("SubscriptionsPage", View: views.FindByViewModel<SubscriptionViewModel>()),
-                    //new ("Second", View: views.FindByViewModel<SecondViewModel>()),
                 ]
             )
         );
@@ -209,7 +208,7 @@ public partial class App : Application
     private static void EnsureEarlyWindow(Window window)
     {
 #if WINDOWS && !HAS_UNO
-        window.AppWindow.Resize(new SizeInt32 { Width = 1000, Height = 600 });
+        window.AppWindow.Resize(new SizeInt32 { Width = 1100, Height = 640 });
         window.AppWindow.Move(new PointInt32 { X = 150, Y = 150 });
 
         window.ExtendsContentIntoTitleBar = true;
@@ -218,9 +217,10 @@ public partial class App : Application
         window.AppWindow.TitleBar.PreferredTheme = theme.Theme switch
         {
             AppTheme.Light => TitleBarTheme.Light,
-            AppTheme.Dark => TitleBarTheme.Light,
+            AppTheme.Dark => TitleBarTheme.Dark,
             _ => TitleBarTheme.UseDefaultAppMode,
         };
+
 
         //window.AppWindow.TitleBar.ButtonBackgroundColor = Microsoft.UI.Colors.Transparent;
 

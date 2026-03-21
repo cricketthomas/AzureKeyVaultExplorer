@@ -722,7 +722,7 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
     }
 
     [RelayCommand]
-    private async void OpenInAzure(KeyVaultItemProperties keyVaultItem)
+    private async Task OpenInAzure(KeyVaultItemProperties keyVaultItem)
     {
         if (keyVaultItem is null) return;
 

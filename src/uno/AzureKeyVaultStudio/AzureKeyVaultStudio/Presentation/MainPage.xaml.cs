@@ -37,7 +37,9 @@ public sealed partial class MainPage : Page
 
         try
         {
-            currentWindow.SetTitleBar(DefaultOverrideTitleBar);
+            //currentWindow.SetTitleBar(DefaultOverrideTitleBar);
+            currentWindow.SetTitleBar(DefaultOverrideTitleBar.TitleBarElement);
+
         }
         catch (Exception ex)
         {

@@ -113,15 +113,16 @@ public class AuthService
             //.WithSystemWebViewOptions(options)
             //#endif
             authenticationResult = await authenticationClient.AcquireTokenInteractive(Constants.Scopes)
-                //.WithExtraScopesToConsent(Constants.AzureRMScope)
-                /*
-                 * Not including extra scopes allows personal accounts to sign in, however, this will be thrown.
-                 (Windows Azure Service Management API) is configured for use by Azure Active Directory users only.
-                    Please do not use the /consumers endpoint to serve this request. T
+                       //.WithExtraScopesToConsent(Constants.AzureRMScope)
+                       /*
+                        * Not including extra scopes allows personal accounts to sign in, however, this will be thrown.
+                        (Windows Azure Service Management API) is configured for use by Azure Active Directory users only.
+                           Please do not use the /consumers endpoint to serve this request. T
 
-                https://stackoverflow.com/questions/66470333/error-azure-key-vault-is-configured-for-use-by-azure-active-directory-users-on
-                 */
-
+                       https://stackoverflow.com/questions/66470333/error-azure-key-vault-is-configured-for-use-by-azure-active-directory-users-on
+                        */
+                .WithPrompt(Prompt.Consent)
+                .WithExtraScopesToConsent(Constants.AzureRMScope)
                 .ExecuteAsync(cancellationToken);
 
             IsAuthenticated = true;

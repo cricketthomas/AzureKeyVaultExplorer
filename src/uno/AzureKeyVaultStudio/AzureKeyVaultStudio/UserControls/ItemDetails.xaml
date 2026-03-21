@@ -57,6 +57,11 @@
                     x:Uid="ItemDetailsOpenAppBarButton"
                     Command="{x:Bind ViewModel.OpenInAzureCommand, Mode=OneWay}"
                     Icon="OpenFile" />
+
+                <AppBarButton
+                    x:Uid="ItemDetailsRefreshAppBarButton"
+                    Command="{x:Bind ViewModel.RefreshCommand, Mode=OneWay}"
+                    Icon="Refresh" />
                 <AppBarButton
                     x:Uid="ItemDetailsCopyAppBarButton"
                     Command="{x:Bind ViewModel.CopyCommand, Mode=OneWay}"
