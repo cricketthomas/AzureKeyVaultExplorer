@@ -221,7 +221,19 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
 
     async partial void OnSelectedIndexChanged(int value)
     {
-        await FilterAndLoadVaultValueTypeCommand.ExecuteAsync(new CancellationToken());
+        try
+        {
+            await FilterAndLoadVaultValueTypeCommand.ExecuteAsync(new CancellationToken());
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Failed to load selected vault tab: {ex}");
+            TryEnqueueOnDispatcher(() =>
+            {
+                HasAuthorizationError = true;
+                AuthorizationMessage = ex.Message;
+            });
+        }
     }
 
     public void Initialize(KeyVaultData keyVaultData)
@@ -388,6 +400,14 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
             Debug.WriteLine("Loading canceled.");
             return;
         }
+        catch (AuthenticationRequiredException ex)
+        {
+            TryEnqueueOnDispatcher(() =>
+            {
+                HasAuthorizationError = true;
+                AuthorizationMessage = ex.Message;
+            });
+        }
         catch (Exception ex) when (ex.Message.Contains("403", StringComparison.OrdinalIgnoreCase))
         {
             // we only show error when not on "All" tab, partial success is acceptable for "All"
@@ -399,6 +419,15 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
                     AuthorizationMessage = ex.Message;
                 });
             }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Unhandled vault loading error: {ex}");
+            TryEnqueueOnDispatcher(() =>
+            {
+                HasAuthorizationError = true;
+                AuthorizationMessage = ex.Message;
+            });
         }
         finally
         {
