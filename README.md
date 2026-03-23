@@ -63,7 +63,6 @@ The SQLite database is encrypted using DPAPI on windows, and on macOS the passwo
 
 <img width="1322" height="868" alt="image" src="https://github.com/user-attachments/assets/ad5d6b46-17ff-4e5b-b8b3-fc949681192f" />
 
-
 <img width="1527" height="1088" alt="Screenshot 2026-03-18 at 7 21 15 PM" src="https://github.com/user-attachments/assets/5a0024e3-7122-434a-938b-cc5a1cfa5542" />
 
 
@@ -83,9 +82,17 @@ Then move the app to your **Applications** folder. You may also need to go to **
 #### Windows
 After downloading the `.exe`, Windows may block it (unless you got it from winget or Microsoft Store). Right-click the file, select **Properties**, and check the **"Unblock"** checkbox at the bottom, then click **OK**.
 
+
+## Setting up the application:
 > [!WARNING]
 > After downloading for the first time you will need to follow the first time setup guide listed below:
 
+## Azure CLI
+> [!NOTE]
+> You can use a custom client ID that belongs to Microsoft Azure CLI. This is intended for testing only and is not recommended by the maintainers of this repository, as it may violate Microsoft’s Terms of Service.
+> Doing so can bypass the need for an IT administrator to grant permissions to the application, effectively circumventing the standard consent process. Once done, click save in the settings page and restart the application.
+> See this article for more details on the well-known client ID.  https://rakhesh.com/azure/well-known-client-ids/
+<img width="800"  alt="image" src="https://github.com/user-attachments/assets/fe6a970c-b0bc-455c-9775-5aa57b865fd1" />
 
 ## Documentation
 - [Building from source](docs/BUILDING.md)
