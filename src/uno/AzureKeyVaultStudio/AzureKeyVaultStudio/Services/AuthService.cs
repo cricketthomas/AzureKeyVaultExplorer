@@ -173,8 +173,8 @@ public class AuthService
 
                 https://stackoverflow.com/questions/66470333/error-azure-key-vault-is-configured-for-use-by-azure-active-directory-users-on
                  */
-                .WithPrompt(Prompt.Consent)
-                .WithExtraScopesToConsent(Constants.AzureRMScope)
+                //.WithPrompt(Prompt.Consent)
+                //.WithExtraScopesToConsent(Constants.AzureRMScope)
                 .ExecuteAsync(cancellationToken);
 
             IsAuthenticated = true;

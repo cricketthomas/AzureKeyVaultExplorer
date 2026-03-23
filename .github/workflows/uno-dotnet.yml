@@ -209,16 +209,16 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          pattern: azurekeyvaultstudio.*
       - name: List artifacts
         shell: pwsh
-        run: Get-ChildItem -Recurse artifacts
+        run: Get-ChildItem -Recurse
       - name: Create Release
         run: |
           gh release create v2.0.${{ github.run_number }} --draft --title "AzureKeyVaultStudio v2.0.${{ github.run_number }}" || true
-          gh release upload v2.0.${{ github.run_number }} artifacts/**/*.tar artifacts/**/*.snap --clobber || true
+          gh release upload v2.0.${{ github.run_number }} "./azurekeyvaultstudio.win-x64.tar/azurekeyvaultstudio.win-x64.tar" "./azurekeyvaultstudio.win-arm64.tar/azurekeyvaultstudio.win-arm64.tar" "./azurekeyvaultstudio.macos-x64.tar/azurekeyvaultstudio.macos-x64.tar" "./azurekeyvaultstudio.macos-arm64.tar/azurekeyvaultstudio.macos-arm64.tar" "./azurekeyvaultstudio.linux-x64.tar/azurekeyvaultstudio.linux-x64.tar" --clobber || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: pwsh
+        shell: bash
 
         #  xattr -c './KeyVault Explorer.app/'
