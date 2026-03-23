@@ -17,20 +17,20 @@
     <!--  Background=""  -->
     <Grid>
         <Grid.RowDefinitions>
-            <win:RowDefinition Height="32" />
-            <skia:RowDefinition Height="0" />
+            <!--<win:RowDefinition Height="32" />
+            <skia:RowDefinition Height="0" />-->
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <uc:OverrideTitlebar
+        <!--<uc:OverrideTitlebar
             x:Name="DefaultOverrideTitleBar"
             Grid.Row="0"
-            skia:Visibility="Collapsed" />
+            skia:Visibility="Collapsed" />-->
 
         <SplitView
             x:Name="MainSplitView"
-            Grid.Row="1"
+            Grid.Row="0"
             DisplayMode="{x:Bind ViewModel.SplitViewDisplay, Mode=TwoWay}"
             IsPaneOpen="{x:Bind ViewModel.IsPaneOpen, Mode=TwoWay}"
             OpenPaneLength="{x:Bind ViewModel.SplitViewWidth, Mode=TwoWay}"
@@ -132,7 +132,7 @@
 
         </SplitView>
 
-        <uc:StatusBarControl Grid.Row="2" />
+        <uc:StatusBarControl Grid.Row="1" />
     </Grid>
 
 </Page>

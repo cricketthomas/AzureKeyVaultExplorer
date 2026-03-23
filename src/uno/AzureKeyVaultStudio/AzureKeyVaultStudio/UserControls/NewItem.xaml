@@ -13,14 +13,12 @@
     mc:Ignorable="d skia">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <local:OverrideTitlebar skia:Visibility="Collapsed" SecondaryTitle="New Secret" />
 
-        <ScrollViewer Grid.Row="1" Padding="16,0">
+        <ScrollViewer Grid.Row="0" Padding="16,0">
             <StackPanel
                 x:Name="ContentPanel"
                 Orientation="Vertical"
@@ -151,7 +149,7 @@
 
 
         <Grid
-            Grid.Row="2"
+            Grid.Row="1"
             MinHeight="80"
             Padding="24,0"
             VerticalAlignment="Bottom"

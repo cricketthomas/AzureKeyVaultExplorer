@@ -126,6 +126,13 @@ public partial class ItemPropertiesViewModel : ObservableObject
         }
     }
 
+    [RelayCommand(AllowConcurrentExecutions = false)]
+    private async Task Refresh()
+    {
+        if (OpenedItem is null) return;
+
+        await GetPropertiesForKeyVaultValue(OpenedItem);
+    }
 
     [RelayCommand]
     private async Task Copy(string? version = null)
@@ -264,25 +271,31 @@ public partial class ItemPropertiesViewModel : ObservableObject
         {
             case KeyVaultItemType.Certificate:
                 var certificateProperties = await _vaultService.GetCertificateProperties(model.VaultUri, model.Name);
+                var latestCert = Enumerable.MaxBy(certificateProperties, x => x.UpdatedOn)!;
                 ItemPropertiesList = new ObservableCollection<KeyVaultItemProperties>(KeyVaultItemProperties.FromCertificateProperties(certificateProperties));
-                IsEnabled = certificateProperties.First().Enabled ?? false;
+                IsEnabled = latestCert.Enabled ?? false;
                 IsCertificate = true;
+                model = KeyVaultItemProperties.FromCertificateProperties(latestCert);
                 break;
 
             case KeyVaultItemType.Key:
                 var keyPropertiesList = await _vaultService.GetKeyProperties(model.VaultUri, model.Name);
-                IsManaged = keyPropertiesList.First().Managed;
-                IsEnabled = keyPropertiesList.First().Enabled ?? false;
+                var latestKey = Enumerable.MaxBy(keyPropertiesList, x => x.UpdatedOn)!;
+                IsManaged = latestKey.Managed;
+                IsEnabled = latestKey.Enabled ?? false;
                 ItemPropertiesList = new ObservableCollection<KeyVaultItemProperties>(KeyVaultItemProperties.FromKeyProperties(keyPropertiesList));
                 IsKey = true;
+                model = KeyVaultItemProperties.FromKeyProperties(latestKey);
                 break;
 
             case KeyVaultItemType.Secret:
                 var secretPropertiesList = await _vaultService.GetSecretProperties(model.VaultUri, model.Name);
-                IsManaged = secretPropertiesList.First().Managed;
-                IsEnabled = secretPropertiesList.First().Enabled ?? false;
+                var latestSecret = Enumerable.MaxBy(secretPropertiesList, x => x.UpdatedOn)!;
+                IsManaged = latestSecret.Managed;
+                IsEnabled = latestSecret.Enabled ?? false;
                 ItemPropertiesList = new ObservableCollection<KeyVaultItemProperties>(KeyVaultItemProperties.FromSecretProperties(secretPropertiesList));
                 IsSecret = true;
+                model = KeyVaultItemProperties.FromSecretProperties(latestSecret);
                 break;
 
             default:
@@ -291,7 +304,6 @@ public partial class ItemPropertiesViewModel : ObservableObject
                 IsKey = false;
                 break;
         }
-
         OpenedItem = model;
         UpdateVisibilityFlags();
 
@@ -299,7 +311,7 @@ public partial class ItemPropertiesViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void OpenInAzure()
+    private async Task OpenInAzure()
     {
         if (OpenedItem is null) return;
         var uri = new Uri($"https://portal.azure.com/#@{_authService.TenantName}/asset/Microsoft_Azure_KeyVault/{OpenedItem.Type}/{OpenedItem.Id}");

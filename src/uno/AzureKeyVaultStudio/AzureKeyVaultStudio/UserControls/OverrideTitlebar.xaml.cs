@@ -37,16 +37,24 @@ public sealed partial class OverrideTitlebar : UserControl
 
     private AppWindow? _appWindow;
 
+
+    //#if WINDOWS && !MACCATALYST && !HAS_UNO
+    //    public UIElement? TitleBarElement =>  DefaultTitleBar;
+    //#endif
+
     public OverrideTitlebar()
     {
         this.InitializeComponent();
         _appWindow = (Application.Current as App)?.MainWindow?.AppWindow;
-        _appWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
 
+        if (_appWindow is not null)
+        {
+            //_appWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
+            if (!string.IsNullOrWhiteSpace(SecondaryTitle))
+                _appWindow.Title = SecondaryTitle ;
 
+        }
     }
-
-
 
     private async void BackButton_Click(object sender, RoutedEventArgs e)
     {
@@ -75,7 +83,7 @@ public sealed partial class OverrideTitlebar : UserControl
         try
         {
             if (await navigator.CanGoBack())
-                 await navigator.NavigateBackAsync(this);
+                await navigator.NavigateBackAsync(this);
         }
         catch (Exception ex)
         {

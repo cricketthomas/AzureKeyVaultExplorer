@@ -17,16 +17,16 @@ public sealed partial class SharedWindow : Window
         this.InitializeComponent();
 #if WINDOWS && !HAS_UNO
         this.Activated += OnWindowActivated;
-#endif
 
         if (Microsoft.UI.Windowing.AppWindowTitleBar.IsCustomizationSupported())
         {
-            AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
+            //AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
             AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
+            this.SetWindowIcon();
         }
+#endif
 
 
-        AppWindow.SetIcon("Assets/AppIcon.png");
         if (Application.Current is App app && app.MainWindow is Window mainWindow && !ReferenceEquals(mainWindow, this))
         {
             _ownerWindow = mainWindow;

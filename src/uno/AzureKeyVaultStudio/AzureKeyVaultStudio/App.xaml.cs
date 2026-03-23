@@ -38,6 +38,7 @@ public partial class App : Application
 
     public Window? MainWindow { get; private set; }
     public IHost? Host { get; private set; }
+    public string AppTitle { get; init; } = "Key Vault Explorer";
 
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {
@@ -154,10 +155,10 @@ public partial class App : Application
                  services.AddSingleton<AzureSearchService>();
                  services.AddSingleton<KeyVaultTreeViewModel>();
                  services.AddTransient<ItemPropertiesViewModel>();
-             })
-                .UseNavigation(RegisterRoutes)
-            );
+             }).UseNavigation(RegisterRoutes));
+
         MainWindow = builder.Window;
+        MainWindow.Title = AppTitle;
         EnsureEarlyWindow(MainWindow);
         //builder.Build();
 #if DEBUG
@@ -200,7 +201,6 @@ public partial class App : Application
                     new ("Main", View: views.FindByViewModel<MainViewModel>(), IsDefault:true),
                     new ("SettingsPage", View: views.FindByViewModel<SettingsViewModel>()),
                     new ("SubscriptionsPage", View: views.FindByViewModel<SubscriptionViewModel>()),
-                    //new ("Second", View: views.FindByViewModel<SecondViewModel>()),
                 ]
             )
         );
@@ -209,18 +209,22 @@ public partial class App : Application
     private static void EnsureEarlyWindow(Window window)
     {
 #if WINDOWS && !HAS_UNO
-        window.AppWindow.Resize(new SizeInt32 { Width = 1000, Height = 600 });
-        window.AppWindow.Move(new PointInt32 { X = 150, Y = 150 });
+        window.AppWindow.Resize(new SizeInt32 { Width = 1100, Height = 640 });
+        window.AppWindow.Move(new PointInt32 { X = 250, Y = 250 });
+        window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
+        //if (Microsoft.UI.Windowing.AppWindowTitleBar.IsCustomizationSupported())
+        //{
+        //}
+        //window.ExtendsContentIntoTitleBar = true;
+        //var theme = window.GetThemeService();
+        //window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
+        //window.AppWindow.TitleBar.PreferredTheme = theme.Theme switch
+        //{
+        //    AppTheme.Light => TitleBarTheme.Light,
+        //    AppTheme.Dark => TitleBarTheme.Dark,
+        //    _ => TitleBarTheme.UseDefaultAppMode,
+        //};
 
-        window.ExtendsContentIntoTitleBar = true;
-        var theme = window.GetThemeService();
-
-        window.AppWindow.TitleBar.PreferredTheme = theme.Theme switch
-        {
-            AppTheme.Light => TitleBarTheme.Light,
-            AppTheme.Dark => TitleBarTheme.Light,
-            _ => TitleBarTheme.UseDefaultAppMode,
-        };
 
         //window.AppWindow.TitleBar.ButtonBackgroundColor = Microsoft.UI.Colors.Transparent;
 

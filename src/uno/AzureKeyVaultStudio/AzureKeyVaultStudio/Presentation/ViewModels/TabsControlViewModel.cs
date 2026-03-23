@@ -22,7 +22,7 @@ public partial class TabsControlViewModel : ObservableRecipient
   
 
     [ObservableProperty]
-    public partial bool IsTeachingTipOpen { get; set; } = true;
+    public partial bool IsTeachingTipOpen { get; set; } = false;
 
     [ObservableProperty]
     public partial VaultViewModel? CurrentVaultViewModel { get; set; }

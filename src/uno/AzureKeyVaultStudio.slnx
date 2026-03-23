@@ -6,7 +6,5 @@
     <File Path="Directory.Packages.props" />
     <File Path="global.json" />
   </Folder>
-  <Project Path="../../../AzureKeyVaultStudio/AzureKeyVaultStudio/AzureKeyVaultStudio.csproj">
-    <Deploy />
-  </Project>
+  <Project Path="AzureKeyVaultStudio/AzureKeyVaultStudio/AzureKeyVaultStudio.csproj" />
 </Solution>

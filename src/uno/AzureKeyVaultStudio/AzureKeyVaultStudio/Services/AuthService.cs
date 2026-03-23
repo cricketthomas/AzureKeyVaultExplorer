@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using AzureKeyVaultStudio.Exceptions;
 using AzureKeyVaultStudio.Messages;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Identity.Client;
@@ -13,6 +14,8 @@ public class AuthService
     public MsalCacheHelper msalCacheHelper;
     private readonly ILocalSettingsService _localSettings;
     private readonly ILogger<AuthService> _logger;
+    private readonly SemaphoreSlim _cacheInitLock = new(1, 1);
+    private bool _isCacheAttached;
     public AzureCloudInstance CloudInstance { get; private set; }
 
     public AuthService(ILocalSettingsService localSettings, ILogger<AuthService> logger)
@@ -42,7 +45,7 @@ public class AuthService
             builder = builder.WithAuthority(CloudInstance, AadAuthorityAudience.AzureAdMultipleOrgs);
 
         authenticationClient = builder.Build();
-        _ = AttachTokenCache();
+        _ = InitializeCache();
     }
 
     public IAccount? Account { get; private set; }
@@ -52,8 +55,47 @@ public class AuthService
     public string TenantName { get; private set; }
     public DateTimeOffset Expiry { get; private set; }
 
+
+
+    private async Task InitializeCache()
+    {
+        try
+        {
+            await EnsureCacheAttached();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Failed to initialize cache: {ex.Message}");
+        }
+    }
+    private async Task EnsureCacheAttached()
+    {
+        // attach token cache is not thread safe and can fail crashing the app.
+        if (_isCacheAttached)
+            return;
+
+        await _cacheInitLock.WaitAsync();
+        try
+        {
+            if (!_isCacheAttached)
+            {
+                await AttachTokenCache();
+                _isCacheAttached = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to attach MSAL token cache.");
+        }
+        finally
+        {
+            _cacheInitLock.Release();
+        }
+    }
+
     private async Task<IAccount?> GetPrimaryAccountAsync(CancellationToken cancellationToken = default)
     {
+        await EnsureCacheAttached();
         var accounts = await authenticationClient.GetAccountsAsync();
         var account = accounts.FirstOrDefault();
         if (account is not null)
@@ -76,9 +118,7 @@ public class AuthService
             return null;
         }
 
-        return await authenticationClient
-            .AcquireTokenSilent(Constants.AzureRMScope, account)
-            .ExecuteAsync();
+        return await TryAcquireTokenSilentAsync(Constants.AzureRMScope, account);
     }
 
     public async Task<AuthenticationResult?> GetAzureKeyVaultTokenSilent()
@@ -87,18 +127,34 @@ public class AuthService
         if (account is null)
         {
             _logger.LogInformationMessage("No logged-in accounts were found.");
-            return null;    
+            return null;
         }
 
-        return await authenticationClient
-            .AcquireTokenSilent(Constants.KvScope, account)
-            .ExecuteAsync();
+        return await TryAcquireTokenSilentAsync(Constants.KvScope, account);
     }
 
+    private async Task<AuthenticationResult?> TryAcquireTokenSilentAsync(string[] scopes, IAccount account, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await authenticationClient
+                .AcquireTokenSilent(scopes, account)
+                .ExecuteAsync(cancellationToken);
+        }
+        catch (MsalThrottledUiRequiredException ex)
+        {
+            _logger.LogWarning(ex, "Authentication is temporarily throttled by MSAL. Interactive sign-in is currently blocked.");
+            throw new AuthenticationRequiredException(ex.Message, ex);
+        }
+        catch (MsalUiRequiredException ex)
+        {
+            _logger.LogInformation(ex, "Silent authentication requires user interaction.");
+            throw new AuthenticationRequiredException(ex.Message, ex);
+        }
+    }
 
     public async Task<AuthenticationResult?> LoginAsync(CancellationToken cancellationToken)
     {
-        //await AttachTokenCache();
         AuthenticationResult authenticationResult;
         try
         {
@@ -107,11 +163,7 @@ public class AuthService
                 HtmlMessageError = "<p> An error occurred: {0}. Details {1}</p>",
                 BrowserRedirectSuccess = new Uri("https://www.microsoft.com")
             };
-            //.WithPrompt(Prompt.ForceLogin) //This is optional. If provided, on each execution, the username and the password must be entered.
-            //#if MACCATALYST
-            //.WithUseEmbeddedWebView(false)
-            //.WithSystemWebViewOptions(options)
-            //#endif
+
             authenticationResult = await authenticationClient.AcquireTokenInteractive(Constants.Scopes)
                 //.WithExtraScopesToConsent(Constants.AzureRMScope)
                 /*
@@ -121,7 +173,8 @@ public class AuthService
 
                 https://stackoverflow.com/questions/66470333/error-azure-key-vault-is-configured-for-use-by-azure-active-directory-users-on
                  */
-
+                .WithPrompt(Prompt.Consent)
+                .WithExtraScopesToConsent(Constants.AzureRMScope)
                 .ExecuteAsync(cancellationToken);
 
             IsAuthenticated = true;
@@ -143,6 +196,11 @@ public class AuthService
 
             return authenticationResult;
         }
+        catch (MsalThrottledUiRequiredException ex)
+        {
+            _logger.LogWarning(ex, "Interactive authentication is temporarily throttled by MSAL.");
+            return null;
+        }
         catch (MsalClientException ex)
         {
             Debug.WriteLine(ex);
@@ -152,14 +210,28 @@ public class AuthService
 
     public async Task<AuthenticationResult?> RefreshTokenAsync(CancellationToken cancellationToken)
     {
-        //await AttachTokenCache();
+        await EnsureCacheAttached();
         AuthenticationResult authenticationResult;
         var accounts = await authenticationClient.GetAccountsAsync();
         if (!accounts.Any())
             return null;
 
         Account = accounts.First();
-        authenticationResult = await authenticationClient.AcquireTokenSilent(Constants.Scopes, accounts.FirstOrDefault()).WithForceRefresh(true).ExecuteAsync(cancellationToken);
+        try
+        {
+            authenticationResult = await authenticationClient.AcquireTokenSilent(Constants.Scopes, accounts.FirstOrDefault()).ExecuteAsync(cancellationToken);
+        }
+        catch (MsalThrottledUiRequiredException ex)
+        {
+            _logger.LogWarning(ex, "Token refresh is temporarily throttled by MSAL.");
+            return null;
+        }
+        catch (MsalUiRequiredException ex)
+        {
+            _logger.LogInformation(ex, "Token refresh requires user interaction.");
+            return null;
+        }
+
         IsAuthenticated = true;
         TenantName = Account.Username.Split("@").TakeLast(1).Single();
         TenantId = authenticationResult.TenantId;
@@ -169,9 +241,8 @@ public class AuthService
 
         WeakReferenceMessenger.Default.Send(new AuthenticationStateChangedMessage(AuthenticatedUserClaims));
         return authenticationResult;
-
-       
     }
+
     private void TransformClaims(AuthenticationResult authenticationResult)
     {
         AuthenticatedUserClaims = new AuthenticatedUserClaims()
@@ -182,8 +253,10 @@ public class AuthService
             Email = authenticationResult.ClaimsPrincipal?.Identities?.FirstOrDefault()?.FindFirst("preferred_username")?.Value ?? string.Empty
         };
     }
+
     private async Task RemoveAccount()
     {
+        await EnsureCacheAttached();
         var accounts = await authenticationClient.GetAccountsAsync();
         Account = null;
         IsAuthenticated = false;
@@ -201,6 +274,9 @@ public class AuthService
         if (result is null)
         {
             result = await LoginAsync(cancellationToken);
+            if (result is null)
+                return false;
+
             TransformClaims(result);
             WeakReferenceMessenger.Default.Send(new AuthenticationStateChangedMessage(AuthenticatedUserClaims));
         }
