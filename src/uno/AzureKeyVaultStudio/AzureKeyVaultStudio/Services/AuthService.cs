@@ -45,7 +45,7 @@ public class AuthService
             builder = builder.WithAuthority(CloudInstance, AadAuthorityAudience.AzureAdMultipleOrgs);
 
         authenticationClient = builder.Build();
-        _ = EnsureCacheAttachedAsync();
+        _ = InitializeCache();
     }
 
     public IAccount? Account { get; private set; }
@@ -55,7 +55,20 @@ public class AuthService
     public string TenantName { get; private set; }
     public DateTimeOffset Expiry { get; private set; }
 
-    private async Task EnsureCacheAttachedAsync()
+
+
+    private async Task InitializeCache()
+    {
+        try
+        {
+            await EnsureCacheAttached();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Failed to initialize cache: {ex.Message}");
+        }
+    }
+    private async Task EnsureCacheAttached()
     {
         // attach token cache is not thread safe and can fail crashing the app.
         if (_isCacheAttached)
@@ -70,6 +83,10 @@ public class AuthService
                 _isCacheAttached = true;
             }
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to attach MSAL token cache.");
+        }
         finally
         {
             _cacheInitLock.Release();
@@ -78,7 +95,7 @@ public class AuthService
 
     private async Task<IAccount?> GetPrimaryAccountAsync(CancellationToken cancellationToken = default)
     {
-        await EnsureCacheAttachedAsync();
+        await EnsureCacheAttached();
         var accounts = await authenticationClient.GetAccountsAsync();
         var account = accounts.FirstOrDefault();
         if (account is not null)
@@ -110,7 +127,7 @@ public class AuthService
         if (account is null)
         {
             _logger.LogInformationMessage("No logged-in accounts were found.");
-            return null;    
+            return null;
         }
 
         return await TryAcquireTokenSilentAsync(Constants.KvScope, account);
@@ -136,7 +153,6 @@ public class AuthService
         }
     }
 
-
     public async Task<AuthenticationResult?> LoginAsync(CancellationToken cancellationToken)
     {
         AuthenticationResult authenticationResult;
@@ -147,16 +163,16 @@ public class AuthService
                 HtmlMessageError = "<p> An error occurred: {0}. Details {1}</p>",
                 BrowserRedirectSuccess = new Uri("https://www.microsoft.com")
             };
-           
-            authenticationResult = await authenticationClient.AcquireTokenInteractive(Constants.Scopes)
-                       //.WithExtraScopesToConsent(Constants.AzureRMScope)
-                       /*
-                        * Not including extra scopes allows personal accounts to sign in, however, this will be thrown.
-                        (Windows Azure Service Management API) is configured for use by Azure Active Directory users only.
-                           Please do not use the /consumers endpoint to serve this request. T
 
-                       https://stackoverflow.com/questions/66470333/error-azure-key-vault-is-configured-for-use-by-azure-active-directory-users-on
-                        */
+            authenticationResult = await authenticationClient.AcquireTokenInteractive(Constants.Scopes)
+                //.WithExtraScopesToConsent(Constants.AzureRMScope)
+                /*
+                 * Not including extra scopes allows personal accounts to sign in, however, this will be thrown.
+                 (Windows Azure Service Management API) is configured for use by Azure Active Directory users only.
+                    Please do not use the /consumers endpoint to serve this request. T
+
+                https://stackoverflow.com/questions/66470333/error-azure-key-vault-is-configured-for-use-by-azure-active-directory-users-on
+                 */
                 .WithPrompt(Prompt.Consent)
                 .WithExtraScopesToConsent(Constants.AzureRMScope)
                 .ExecuteAsync(cancellationToken);
@@ -194,7 +210,7 @@ public class AuthService
 
     public async Task<AuthenticationResult?> RefreshTokenAsync(CancellationToken cancellationToken)
     {
-        await EnsureCacheAttachedAsync();
+        await EnsureCacheAttached();
         AuthenticationResult authenticationResult;
         var accounts = await authenticationClient.GetAccountsAsync();
         if (!accounts.Any())
@@ -225,9 +241,8 @@ public class AuthService
 
         WeakReferenceMessenger.Default.Send(new AuthenticationStateChangedMessage(AuthenticatedUserClaims));
         return authenticationResult;
-
-       
     }
+
     private void TransformClaims(AuthenticationResult authenticationResult)
     {
         AuthenticatedUserClaims = new AuthenticatedUserClaims()
@@ -238,9 +253,10 @@ public class AuthService
             Email = authenticationResult.ClaimsPrincipal?.Identities?.FirstOrDefault()?.FindFirst("preferred_username")?.Value ?? string.Empty
         };
     }
+
     private async Task RemoveAccount()
     {
-        await EnsureCacheAttachedAsync();
+        await EnsureCacheAttached();
         var accounts = await authenticationClient.GetAccountsAsync();
         Account = null;
         IsAuthenticated = false;
