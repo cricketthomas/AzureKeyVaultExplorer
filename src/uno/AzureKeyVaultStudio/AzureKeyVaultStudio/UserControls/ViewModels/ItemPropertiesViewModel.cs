@@ -126,9 +126,11 @@ public partial class ItemPropertiesViewModel : ObservableObject
         }
     }
 
-    [RelayCommand]
+    [RelayCommand(AllowConcurrentExecutions = false)]
     private async Task Refresh()
     {
+        if (OpenedItem is null) return;
+
         await GetPropertiesForKeyVaultValue(OpenedItem);
     }
 
@@ -269,7 +271,7 @@ public partial class ItemPropertiesViewModel : ObservableObject
         {
             case KeyVaultItemType.Certificate:
                 var certificateProperties = await _vaultService.GetCertificateProperties(model.VaultUri, model.Name);
-                var latestCert = certificateProperties.OrderByDescending(x => x.UpdatedOn).First();
+                var latestCert = Enumerable.MaxBy(certificateProperties, x => x.UpdatedOn)!;
                 ItemPropertiesList = new ObservableCollection<KeyVaultItemProperties>(KeyVaultItemProperties.FromCertificateProperties(certificateProperties));
                 IsEnabled = latestCert.Enabled ?? false;
                 IsCertificate = true;
@@ -278,7 +280,7 @@ public partial class ItemPropertiesViewModel : ObservableObject
 
             case KeyVaultItemType.Key:
                 var keyPropertiesList = await _vaultService.GetKeyProperties(model.VaultUri, model.Name);
-                var latestKey = keyPropertiesList.OrderByDescending(x => x.UpdatedOn).First();
+                var latestKey = Enumerable.MaxBy(keyPropertiesList, x => x.UpdatedOn)!;
                 IsManaged = latestKey.Managed;
                 IsEnabled = latestKey.Enabled ?? false;
                 ItemPropertiesList = new ObservableCollection<KeyVaultItemProperties>(KeyVaultItemProperties.FromKeyProperties(keyPropertiesList));
@@ -288,7 +290,7 @@ public partial class ItemPropertiesViewModel : ObservableObject
 
             case KeyVaultItemType.Secret:
                 var secretPropertiesList = await _vaultService.GetSecretProperties(model.VaultUri, model.Name);
-                var latestSecret = secretPropertiesList.OrderByDescending(x => x.UpdatedOn).First();
+                var latestSecret = Enumerable.MaxBy(secretPropertiesList, x => x.UpdatedOn)!;
                 IsManaged = latestSecret.Managed;
                 IsEnabled = latestSecret.Enabled ?? false;
                 ItemPropertiesList = new ObservableCollection<KeyVaultItemProperties>(KeyVaultItemProperties.FromSecretProperties(secretPropertiesList));

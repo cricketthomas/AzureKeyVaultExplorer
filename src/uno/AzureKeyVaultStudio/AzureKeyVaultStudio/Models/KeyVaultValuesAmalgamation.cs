@@ -79,7 +79,7 @@ public sealed class KeyVaultItemProperties
             properties.Managed);
 
     public static IReadOnlyList<KeyVaultItemProperties> FromKeyProperties(IEnumerable<KeyProperties>? properties)
-        => properties is null ?[] : [.. properties.Select(FromKeyProperties)];
+        => properties is null ? [] : [.. properties.Select(FromKeyProperties)];
 
     public static KeyVaultItemProperties FromCertificateProperties(CertificateProperties properties)
         => Create(
@@ -97,7 +97,6 @@ public sealed class KeyVaultItemProperties
             properties.RecoverableDays,
             properties.RecoveryLevel,
             KeyVaultItemType.Certificate);
-
 
     public static IReadOnlyList<KeyVaultItemProperties> FromCertificateProperties(IEnumerable<CertificateProperties>? properties)
         => properties is null ? [] : [.. properties.Select(FromCertificateProperties)];
