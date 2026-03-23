@@ -15,7 +15,7 @@
 
     <Grid x:Name="DraggableRegion" Background="Transparent">
         <!--  skia:Margin="75,8,0,10"  -->
-        <skia:StackPanel Orientation="Horizontal" Spacing="5">
+        <StackPanel Orientation="Horizontal" Spacing="5">
             <Button
                 x:Name="BackButton"
                 x:Uid="BackButton"
@@ -38,19 +38,20 @@
                 FontSize="12"
                 Foreground="{ThemeResource AccentTextFillColorDisabledBrush}"
                 Text="{x:Bind SecondaryTitle, Mode=OneWay}" />
-        </skia:StackPanel>
+        </StackPanel>
 
-        <win:TitleBar
+        <!--<win:TitleBar
             x:Name="DefaultTitleBar"
             Title="Key Vault Explorer for Azure"
             BackRequested="DefaultTitleBar_BackRequested"
             IsBackButtonEnabled="True"
             IsBackButtonVisible="{x:Bind IsBackButtonVisible}"
+            RequestedTheme="Default"
             Subtitle="{x:Bind SecondaryTitle, Mode=OneWay}">
             <win:TitleBar.IconSource>
                 <ImageIconSource ImageSource="/Assets/Images/AppIcon.png" />
             </win:TitleBar.IconSource>
-        </win:TitleBar>
+        </win:TitleBar>-->
 
     </Grid>
 

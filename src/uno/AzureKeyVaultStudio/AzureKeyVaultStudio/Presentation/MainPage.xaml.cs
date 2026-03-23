@@ -14,7 +14,7 @@ public sealed partial class MainPage : Page
     public MainPage()
     {
         this.InitializeComponent();
-        Loaded += MainPage_Loaded;
+        //Loaded += MainPage_Loaded;
         _appWindow = (Application.Current as App)?.MainWindow?.AppWindow;
         if (_appWindow is not null)
             _appWindow.Closing += _appWindow_Closing;
@@ -28,26 +28,26 @@ public sealed partial class MainPage : Page
         }
     }
 
-    private void MainPage_Loaded(object sender, RoutedEventArgs e)
-    {
-#if !MACCATALYST && !HAS_UNO
-        var currentWindow = (Application.Current as App)?.MainWindow;
-        if (currentWindow is null)
-            return;
+//    private void MainPage_Loaded(object sender, RoutedEventArgs e)
+//    {
+//#if !MACCATALYST && !HAS_UNO
+//        var currentWindow = (Application.Current as App)?.MainWindow;
+//        if (currentWindow is null)
+//            return;
 
-        try
-        {
-            //currentWindow.SetTitleBar(DefaultOverrideTitleBar);
-            currentWindow.SetTitleBar(DefaultOverrideTitleBar.TitleBarElement);
+//        try
+//        {
+//            //currentWindow.SetTitleBar(DefaultOverrideTitleBar);
+//            currentWindow.SetTitleBar(DefaultOverrideTitleBar.TitleBarElement);
 
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Failed to set title bar: {ex.Message}");
-        }
+//        }
+//        catch (Exception ex)
+//        {
+//            Debug.WriteLine($"Failed to set title bar: {ex.Message}");
+//        }
 
-#endif
-    }
+//#endif
+//    }
 
    
 

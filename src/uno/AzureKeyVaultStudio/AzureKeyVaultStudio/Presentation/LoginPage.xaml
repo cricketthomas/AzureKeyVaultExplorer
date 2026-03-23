@@ -15,12 +15,12 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <!--<RowDefinition Height="Auto" />-->
             <RowDefinition />
         </Grid.RowDefinitions>
-        <uc:OverrideTitlebar Grid.Row="0" />
+        <!--<uc:OverrideTitlebar Grid.Row="0" />-->
 
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="0">
             <StackPanel
                 Margin="50"
                 HorizontalAlignment="Left"

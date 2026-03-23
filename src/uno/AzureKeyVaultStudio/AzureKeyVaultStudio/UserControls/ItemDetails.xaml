@@ -36,18 +36,17 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <local:OverrideTitlebar
+        <!--<local:OverrideTitlebar
             Name="OverrideTitlebar"
             Grid.Row="0"
             skia:Visibility="Collapsed"
-            SecondaryTitle="{x:Bind ViewModel.OpenedItem.Name, Mode=OneWay}" />
+            SecondaryTitle="{x:Bind ViewModel.OpenedItem.Name, Mode=OneWay}" />-->
 
         <CommandBar
-            Grid.Row="1"
+            Grid.Row="0"
             Padding="4,0"
             HorizontalAlignment="Left"
             DefaultLabelPosition="Right"
@@ -102,7 +101,7 @@
         </CommandBar>
 
         <Grid
-            Grid.Row="2"
+            Grid.Row="1"
             Margin="10,5"
             RowSpacing="6">
             <Grid.RowDefinitions>
