@@ -324,6 +324,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
             _dispatcher.TryEnqueue(() =>
             {
                 SelectedItem = null;
+                TreeDataSource = [];
                 TreeDataSource = new ObservableCollection<KvSubscriptionModel>(TreeDataSourceReadOnly);
             });
             return Task.CompletedTask;
