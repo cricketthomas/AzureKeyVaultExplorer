@@ -66,9 +66,11 @@ public partial class KeyVaultTreeViewModel : ObservableObject
     [RelayCommand]
     public void ExpandAll() => _ = Task.Run(() => _dispatcher.TryEnqueue(() => TreeDataSource.ForEach(item => item.IsExpanded = true)));
 
-    [RelayCommand]
+    [RelayCommand(FlowExceptionsToTaskScheduler = true)]
     public async Task PinVaultToQuickAccess(KeyVaultResource model)
     {
+        if (model is null)
+            return;
         var exists = await DbContext.QuickAccessItemByKeyVaultIdExists(model.Id);
         if (exists) return;
         var qa = new QuickAccess
@@ -98,13 +100,16 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 #if DEBUG
         //await Task.Delay(4000, token);
 #endif
-        await ClearAndResetTreeAsync();
+        await ClearAndResetTree();
         await InitializeTreeDataSource(token);
     }
 
     [RelayCommand]
     private async Task RemovePinVaultToQuickAccess(KeyVaultResource model)
     {
+        if (model is null)
+            return;
+
         var exists = await DbContext.QuickAccessItemByKeyVaultIdExists(model.Id);
         if (!exists) return;
 
@@ -232,31 +237,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
             if (e.PropertyName == nameof(KvResourceGroupModel.IsSelected))
                 kvResourceModel.IsExpanded = true;
 
-            var hasPlaceholder = kvResourceModel.KeyVaultResources.Any(k => k.GetType().Name == nameof(KeyVaultResourcePlaceholder));
-            // if its being expanded and there are no items in the array reach out to azure
-            if (kvResourceModel.IsExpanded && hasPlaceholder)
-            {
-                kvResourceModel.KeyVaultResources.Clear();
-
-                await Task.Run(async () =>
-                {
-                    var vaults = _vaultService.GetKeyVaultsByResourceGroup(kvResourceModel.ResourceGroupResource);
-                    var vaultsList = new List<KeyVaultResource>();
-
-                    await foreach (var vault in vaults)
-                    {
-                        vaultsList.Add(vault);
-                    }
-
-                    _dispatcher.TryEnqueue(() =>
-                    {
-                        foreach (var vault in vaultsList)
-                        {
-                            kvResourceModel.KeyVaultResources.Add(vault);
-                        }
-                    });
-                });
-            }
+            await LoadResourceGroupVaults(kvResourceModel);
         }
     }
 
@@ -332,8 +313,6 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         }
     }
 
-
-
     [RelayCommand(IncludeCancelCommand = true, AllowConcurrentExecutions = false)]
     private Task ExecuteSearch(CancellationToken token)
     {
@@ -406,6 +385,9 @@ public partial class KeyVaultTreeViewModel : ObservableObject
             foreach (KvResourceGroupModel newItem in e.NewItems)
             {
                 newItem.PropertyChanged += KvResourceGroupNode_PropertyChanged;
+
+                if (newItem.IsExpanded)
+                    _ = LoadResourceGroupVaults(newItem);
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -422,7 +404,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         _dispatcher = dispatcher;
     }
 
-    private Task ClearAndResetTreeAsync()
+    private Task ClearAndResetTree()
     {
         if (_dispatcher is null)
             return Task.CompletedTask;
@@ -479,7 +461,48 @@ public partial class KeyVaultTreeViewModel : ObservableObject
             {
                 rg.PropertyChanged -= KvResourceGroupNode_PropertyChanged;
                 rg.PropertyChanged += KvResourceGroupNode_PropertyChanged;
+
+                if (rg.IsExpanded)
+                    _ = LoadResourceGroupVaults(rg);
             }
+        }
+    }
+
+    private async Task LoadResourceGroupVaults(KvResourceGroupModel kvResourceModel)
+    {
+        var hasPlaceholder = kvResourceModel.KeyVaultResources.Any(k => k.GetType().Name == nameof(KeyVaultResourcePlaceholder));
+        if (!kvResourceModel.IsExpanded || !hasPlaceholder)
+            return;
+
+        kvResourceModel.KeyVaultResources.Clear();
+
+        try
+        {
+            await Task.Run(async () =>
+            {
+                var vaults = _vaultService.GetKeyVaultsByResourceGroup(kvResourceModel.ResourceGroupResource);
+                var vaultsList = new List<KeyVaultResource>();
+
+                await foreach (var vault in vaults)
+                {
+                    vaultsList.Add(vault);
+                }
+
+                _dispatcher.TryEnqueue(() =>
+                {
+                    foreach (var vault in vaultsList)
+                    {
+                        kvResourceModel.KeyVaultResources.Add(vault);
+                    }
+                });
+            });
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error loading vaults for resource group {kvResourceModel.DisplayName}: {ex.Message}");
         }
     }
 }

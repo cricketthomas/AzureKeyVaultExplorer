@@ -24,6 +24,14 @@ public partial class App : Application
             Debug.WriteLine(e.Exception.StackTrace);
         };
 
+        TaskScheduler.UnobservedTaskException += (sender, e) =>
+        {
+            Console.WriteLine("Unobserved exception caught!");
+            foreach (var ex in e.Exception.Flatten().InnerExceptions)
+                Console.WriteLine(ex);
+            e.SetObserved();
+        };
+
         UnhandledException += (sender, args) =>
         {
             Debug.WriteLine($"[Unhandled] {args.Exception}");
