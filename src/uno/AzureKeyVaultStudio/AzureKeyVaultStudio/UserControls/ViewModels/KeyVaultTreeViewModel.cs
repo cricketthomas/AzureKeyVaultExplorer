@@ -100,6 +100,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 #if DEBUG
         //await Task.Delay(4000, token);
 #endif
+        SearchQuery = string.Empty;
         await ClearAndResetTree();
         await InitializeTreeDataSource(token);
     }
@@ -414,6 +415,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 
         _dispatcher.TryEnqueue(() =>
         {
+            SearchQuery = "";
             SelectedItem = null;
             TreeDataSource = [];
             TreeDataSourceReadOnly = [];
