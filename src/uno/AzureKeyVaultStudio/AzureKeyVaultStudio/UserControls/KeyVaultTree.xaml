@@ -246,6 +246,7 @@
             <TreeView
                 Name="KeyVaultTreeView"
                 Background="Transparent"
+                DragItemsStarting="KeyVaultTreeView_DragItemsStarting"
                 ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}"
                 ItemsSource="{x:Bind ViewModel.TreeDataSource, Mode=TwoWay}"
                 SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}" />

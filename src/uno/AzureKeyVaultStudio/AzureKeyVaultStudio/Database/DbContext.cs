@@ -18,6 +18,9 @@ public partial class DbContext : IDisposable
 
     public static async Task<bool> DeleteQuickAccessItemByKeyVaultId(string keyVaultId)
     {
+        if (keyVaultId is null)
+            return true;
+
         using var connection = await TryCreateDatabaseAndOpenConnection();
         await connection.OpenAsync();
         using var command = connection.CreateCommand();
@@ -94,6 +97,8 @@ public partial class DbContext : IDisposable
 
     public static async Task InsertQuickAccessItemAsync(QuickAccess item)
     {
+        if (item is null)
+            return;
         using var connection = await TryCreateDatabaseAndOpenConnection();
         await connection.OpenAsync();
         using var command = connection.CreateCommand();
@@ -131,6 +136,9 @@ public partial class DbContext : IDisposable
 
     public static async Task<bool> QuickAccessItemByKeyVaultIdExists(string? keyVaultId)
     {
+        if (keyVaultId is null) 
+            return true;
+
         using var connection = await TryCreateDatabaseAndOpenConnection();
         await connection.OpenAsync();
         using var command = connection.CreateCommand();

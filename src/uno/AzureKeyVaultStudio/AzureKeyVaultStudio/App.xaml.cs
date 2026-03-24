@@ -152,7 +152,6 @@ public partial class App : Application
                  services.AddSingleton<ILocalSettingsService>(_ => LocalSettingsServiceFactory.Create());
                  services.AddSingleton<AuthService>();
                  services.AddSingleton<VaultService>();
-                 services.AddSingleton<AzureSearchService>();
                  services.AddSingleton<KeyVaultTreeViewModel>();
                  services.AddTransient<ItemPropertiesViewModel>();
              }).UseNavigation(RegisterRoutes));

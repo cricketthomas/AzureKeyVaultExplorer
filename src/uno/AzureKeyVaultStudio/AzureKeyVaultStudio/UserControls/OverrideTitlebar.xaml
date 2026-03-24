@@ -19,7 +19,7 @@
             <Button
                 x:Name="BackButton"
                 x:Uid="BackButton"
-                VerticalAlignment="Top"
+                VerticalAlignment="Center"
                 Click="BackButton_Click"
                 Style="{StaticResource TransparentButton}"
                 Visibility="{x:Bind IsBackButtonVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=IsBackButtonVisible}">
@@ -27,9 +27,7 @@
             </Button>
 
             <TextBlock
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="12"
+                VerticalAlignment="Top"
                 Text="Key Vault Explorer for Azure"
                 Visibility="{x:Bind IsBackButtonVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=IsBackButtonVisible}" />
             <TextBlock

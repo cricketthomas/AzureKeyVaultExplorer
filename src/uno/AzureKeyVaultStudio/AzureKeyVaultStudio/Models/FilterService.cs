@@ -39,6 +39,13 @@ public static class FilterService
 
         foreach (var subscription in allSubscriptions)
         {
+            if (subscription.Type == KvSubscriptionModel.ExplorerItemType.QuickAccess)
+            {
+                SetSubscriptionExpanded(subscription, true);
+                results.Add(subscription);
+                continue;
+            }
+
             bool isMatch = false;
 
             if (ContainsQuery(subscription.DisplayName, querySpan))

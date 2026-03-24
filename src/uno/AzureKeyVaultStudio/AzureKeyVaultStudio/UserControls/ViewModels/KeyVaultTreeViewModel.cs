@@ -20,17 +20,15 @@ public partial class KeyVaultTreeViewModel : ObservableObject
     private readonly AuthService _authService;
     private IDispatcher _dispatcher;
     private readonly VaultService _vaultService;
-    private readonly AzureSearchService _searchService;
     private readonly IStringLocalizer _localizer;
     private readonly string[] WatchedNameOfProps = [nameof(KvSubscriptionModel.IsExpanded), nameof(KvSubscriptionModel.IsSelected)];
     private readonly ConcurrentDictionary<string, byte> _subscriptionsLoadingSubNodes = new();
 
-    public KeyVaultTreeViewModel(AuthService authService, VaultService vaultService, IDispatcher dispatcher, AzureSearchService searchService, IStringLocalizer localizer)
+    public KeyVaultTreeViewModel(AuthService authService, VaultService vaultService, IDispatcher dispatcher, IStringLocalizer localizer)
     {
         _authService = authService;
         _vaultService = vaultService;
         _dispatcher = dispatcher;
-        _searchService = searchService;
         _localizer = localizer;
 
         TreeDataSource.CollectionChanged += TreeViewList_CollectionChanged;
@@ -100,7 +98,8 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 #if DEBUG
         //await Task.Delay(4000, token);
 #endif
-        _ = Task.Run(() => InitializeTreeDataSource(token), token);
+        await ClearAndResetTreeAsync();
+        await InitializeTreeDataSource(token);
     }
 
     [RelayCommand]
@@ -124,9 +123,9 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 
     private async Task InitializeTreeDataSource(CancellationToken token)
     {
-        var items = await Task.Run(async () =>
+        IsBusy = true;
+        try
         {
-            IsBusy = true;
             var subscriptionModel = new ObservableCollection<KvSubscriptionModel>();
 
             var resource = _vaultService.GetKeyVaultResourceBySubscription();
@@ -154,8 +153,8 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 
                 var savedItems = DbContext.GetQuickAccessItemsAsyncEnumerable(_authService.TenantId ?? null);
                 var tokenString = await _authService.GetAzureArmTokenSilent();
-                var token = new CustomTokenCredential(tokenString);
-                var armClient = new ArmClient(token);
+                var tokenCredential = new CustomTokenCredential(tokenString);
+                var armClient = new ArmClient(tokenCredential);
 
                 await foreach (var item in savedItems)
                 {
@@ -175,12 +174,6 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                     }
                 }
 
-                // assign to subscriptionModel[0] if there are items in the collection, since wee need to show pinned at al times.
-                if (subscriptionModel.Count > 0)
-                {
-                    subscriptionModel[0].PinnedItems = new ObservableCollection<KeyVaultResource>(quickAccess.PinnedItems);
-                }
-
                 subscriptionModel.Insert(0, quickAccess);
 
                 foreach (var sub in subscriptionModel)
@@ -196,19 +189,22 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                 Debug.WriteLine($"Error in InitializeTreeDataSource: {ex}");
             }
 
-            return subscriptionModel;
-        }, cancellationToken: token);
-
-        if (_dispatcher != null)
-        {
-            _dispatcher.TryEnqueue(() =>
+            if (_dispatcher != null)
             {
-                TreeDataSource = new ObservableCollection<KvSubscriptionModel>(items);
-            });
-        }
+                _dispatcher.TryEnqueue(() =>
+                {
+                    SelectedItem = null;
+                    TreeDataSource = [];
+                    TreeDataSource = new ObservableCollection<KvSubscriptionModel>(subscriptionModel);
+                });
+            }
 
-        TreeDataSourceReadOnly = items.ToImmutableList();
-        IsBusy = false;
+            TreeDataSourceReadOnly = [.. subscriptionModel];
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private void KvPinnedModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -315,7 +311,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 
                         _dispatcher.TryEnqueue(() =>
                         {
-                            foreach (var rgModel in rgList)
+                            foreach (var rgModel in rgList.OrderBy(x => x.DisplayName))
                             {
                                 kvSubModel.ResourceGroups.Add(rgModel);
                             }
@@ -339,21 +335,33 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 
 
     [RelayCommand(IncludeCancelCommand = true, AllowConcurrentExecutions = false)]
-    private async Task ExecuteSearch(CancellationToken token)
+    private Task ExecuteSearch(CancellationToken token)
     {
+        if (token.IsCancellationRequested)
+            return Task.CompletedTask;
+
         if (string.IsNullOrWhiteSpace(SearchQuery))
         {
-            _dispatcher.TryEnqueue(() => TreeDataSource = new ObservableCollection<KvSubscriptionModel>(TreeDataSourceReadOnly));
-            return;
+            _dispatcher.TryEnqueue(() =>
+            {
+                SelectedItem = null;
+                TreeDataSource = new ObservableCollection<KvSubscriptionModel>(TreeDataSourceReadOnly);
+            });
+            return Task.CompletedTask;
         }
-        var quickAccessNode = TreeDataSource.FirstOrDefault(s => s.Type == KvSubscriptionModel.ExplorerItemType.QuickAccess);
-        var results = await _searchService.SearchAsync(SearchQuery, quickAccessNode, token);
+
+        var source = TreeDataSourceReadOnly.Count > 0
+            ? TreeDataSourceReadOnly
+            : [.. TreeDataSource];
+
+        var results = FilterService.Filter(source, SearchQuery);
         _dispatcher.TryEnqueue(() =>
         {
+            SelectedItem = null;
             TreeDataSource = new ObservableCollection<KvSubscriptionModel>(results);
         });
 
-
+        return Task.CompletedTask;
     }
 
     [RelayCommand]
@@ -412,5 +420,66 @@ public partial class KeyVaultTreeViewModel : ObservableObject
     internal void SetDispatcher(IDispatcher dispatcher)
     {
         _dispatcher = dispatcher;
+    }
+
+    private Task ClearAndResetTreeAsync()
+    {
+        if (_dispatcher is null)
+            return Task.CompletedTask;
+
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        _dispatcher.TryEnqueue(() =>
+        {
+            SelectedItem = null;
+            TreeDataSource = [];
+            TreeDataSourceReadOnly = [];
+            tcs.TrySetResult();
+        });
+
+        return tcs.Task;
+    }
+
+    partial void OnTreeDataSourceChanging(ObservableCollection<KvSubscriptionModel>? oldValue, ObservableCollection<KvSubscriptionModel>? newValue)
+    {
+        if (oldValue is null)
+            return;
+
+        oldValue.CollectionChanged -= TreeViewList_CollectionChanged;
+
+        foreach (var sub in oldValue)
+        {
+            sub.PropertyChanged -= KvSubscriptionModel_PropertyChanged;
+            sub.ResourceGroups.CollectionChanged -= TreeViewSubNode_CollectionChanged;
+
+            foreach (var rg in sub.ResourceGroups)
+            {
+                rg.PropertyChanged -= KvResourceGroupNode_PropertyChanged;
+            }
+        }
+    }
+
+    partial void OnTreeDataSourceChanged(ObservableCollection<KvSubscriptionModel>? value)
+    {
+        if (value is null)
+            return;
+
+        value.CollectionChanged -= TreeViewList_CollectionChanged;
+        value.CollectionChanged += TreeViewList_CollectionChanged;
+
+        foreach (var sub in value)
+        {
+            sub.PropertyChanged -= KvSubscriptionModel_PropertyChanged;
+            sub.PropertyChanged += KvSubscriptionModel_PropertyChanged;
+
+            sub.ResourceGroups.CollectionChanged -= TreeViewSubNode_CollectionChanged;
+            sub.ResourceGroups.CollectionChanged += TreeViewSubNode_CollectionChanged;
+
+            foreach (var rg in sub.ResourceGroups)
+            {
+                rg.PropertyChanged -= KvResourceGroupNode_PropertyChanged;
+                rg.PropertyChanged += KvResourceGroupNode_PropertyChanged;
+            }
+        }
     }
 }

@@ -38,6 +38,13 @@
                         x:Uid="LoginPageGettingStartedMessage"
                         Opacity="0.8"
                         TextWrapping="Wrap" />
+
+                    <HyperlinkButton
+                        x:Uid="DocumenationHyperlinkButton"
+                        Margin="-8,10"
+                        HorizontalAlignment="Left"
+                        FontWeight="SemiBold"
+                        NavigateUri="https://github.com/cricketthomas/AzureKeyVaultExplorer?tab=readme-ov-file#setting-up-the-application" />
                 </StackPanel>
 
                 <StackPanel Margin="0,16" Spacing="16">
