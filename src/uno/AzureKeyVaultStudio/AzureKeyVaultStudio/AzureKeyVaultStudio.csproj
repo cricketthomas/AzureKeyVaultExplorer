@@ -46,7 +46,6 @@
 
     <PackageProjectUrl>https://github.com/cricketthomas/AzureKeyVaultExplorer</PackageProjectUrl>
     <RepositoryUrl>https://github.com/cricketthomas/AzureKeyVaultExplorer</RepositoryUrl>
-    <!--<PackageCertificateThumbprint>E4195D2ADEDE635ECA12FE4B675B3399C8D3B74A</PackageCertificateThumbprint>-->
     <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>

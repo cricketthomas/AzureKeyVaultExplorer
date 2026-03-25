@@ -27,9 +27,9 @@ public abstract partial class KvTreeNodeModel : ObservableObject
     internal static readonly Brush GrayBrush = new SolidColorBrush(ColorHelper.FromArgb(0xFF, 0x8A, 0x8A, 0x8A));
     internal static readonly Brush OrangeBrush = new SolidColorBrush(ColorHelper.FromArgb(0xFF, 0xFF, 0x66, 0x00));
 
-    public virtual Brush? IconForeground => ResolveThemeBrush("TextFillColorSecondaryBrush");
+    public virtual Brush? IconForeground => GetThemeBrush("TextFillColorSecondaryBrush");
 
-    protected static Brush? ResolveThemeBrush(string key)
+    protected static Brush? GetThemeBrush(string key)
     {
         if (Application.Current?.Resources.TryGetValue(key, out var value) == true)
         {
@@ -42,17 +42,16 @@ public abstract partial class KvTreeNodeModel : ObservableObject
             return secondaryValue as Brush;
         }
 
-        return null;
+        return GrayBrush;
     }
 
-    //    protected static Brush CreateThemeContrastBrush()
-    //    {
-    //        var isDark = Application.Current?.RequestedTheme == ApplicationTheme.Dark;
-    //        return new SolidColorBrush(isDark ? Colors.White : Colors.Black);
-    //    }
-    //}
+    protected static Brush CreateThemeContrastBrush()
+    {
+        var isDark = Application.Current?.RequestedTheme == ApplicationTheme.Dark;
+        return new SolidColorBrush(isDark ? Colors.White : Colors.Black);
+    }
 
-    public partial class KvSubscriptionModel : KvTreeNodeModel
+public partial class KvSubscriptionModel : KvTreeNodeModel
     {
         public enum ExplorerItemType
         { QuickAccess, ResourceGroup };
@@ -65,7 +64,7 @@ public abstract partial class KvTreeNodeModel : ObservableObject
 
         public override Brush? IconForeground => Type == ExplorerItemType.QuickAccess
             ? GrayBrush
-            : ResolveThemeBrush("IconForegroundColorBrush");
+            : GetThemeBrush("IconForegroundColorBrush");
     }
 
     public partial class KvResourceGroupModel : KvTreeNodeModel
@@ -87,7 +86,7 @@ public abstract partial class KvTreeNodeModel : ObservableObject
 
         public override string Glyph => "\uEC19";
 
-        public override Brush? IconForeground => OrangeBrush;
+        public override Brush? IconForeground => GetThemeBrush("IconForegroundSecondaryColorBrush");
 
         public static KvKeyVaultResourceModel CreatePlaceholder() => new()
         {

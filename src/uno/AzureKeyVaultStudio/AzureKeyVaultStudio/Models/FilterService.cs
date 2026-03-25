@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using static AzureKeyVaultStudio.Models.KvTreeNodeModel;
 
 namespace AzureKeyVaultStudio.Models;
 

@@ -6,6 +6,7 @@ using AzureKeyVaultStudio.UserControls.ViewModels;
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml.Input;
+using static AzureKeyVaultStudio.Models.KvTreeNodeModel;
 
 namespace AzureKeyVaultStudio.UserControls;
 

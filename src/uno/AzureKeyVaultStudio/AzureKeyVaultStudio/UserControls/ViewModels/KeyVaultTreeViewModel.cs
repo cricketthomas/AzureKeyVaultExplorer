@@ -12,6 +12,7 @@ using AzureKeyVaultStudio.Messages;
 using AzureKeyVaultStudio.Services;
 using CommunityToolkit.Mvvm.Messaging;
 using Windows.System;
+using static AzureKeyVaultStudio.Models.KvTreeNodeModel;
 
 namespace AzureKeyVaultStudio.UserControls.ViewModels;
 
@@ -105,7 +106,6 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         //await Task.Delay(4000, token);
 #endif
         SearchQuery = string.Empty;
-        await ClearAndResetTree();
         await InitializeTreeDataSource(token);
     }
 
@@ -401,25 +401,6 @@ public partial class KeyVaultTreeViewModel : ObservableObject
     internal void SetDispatcher(IDispatcher dispatcher)
     {
         _dispatcher = dispatcher;
-    }
-
-    private Task ClearAndResetTree()
-    {
-        if (_dispatcher is null)
-            return Task.CompletedTask;
-
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-
-        _dispatcher.TryEnqueue(() =>
-        {
-            SearchQuery = "";
-            SelectedItem = null;
-            TreeDataSource = [];
-            TreeDataSourceReadOnly = [];
-            tcs.TrySetResult();
-        });
-
-        return tcs.Task;
     }
 
     partial void OnTreeDataSourceChanging(ObservableCollection<KvSubscriptionModel>? oldValue, ObservableCollection<KvSubscriptionModel>? newValue)
