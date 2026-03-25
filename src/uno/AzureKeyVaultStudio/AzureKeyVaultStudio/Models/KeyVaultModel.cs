@@ -1,97 +1,98 @@
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using Azure.ResourceManager.KeyVault;
 using Azure.ResourceManager.Resources;
+using Microsoft.UI;
 
 namespace AzureKeyVaultStudio.Models;
 
-public partial class PinnedItemModel : ObservableObject
+public abstract partial class KvTreeNodeModel : ObservableObject
 {
     [ObservableProperty]
-    public partial bool HasSubNodeDataBeenFetched { get; set; } = false;
-
-    [ObservableProperty]
-    public partial bool IsExpanded { get; set; }
+    public partial bool HasSubNodeDataBeenFetched { get; set; }
 
     [ObservableProperty]
     public partial bool IsSelected { get; set; }
 
-    public string DisplayName { get; set; } = null!;
-
-    public virtual ObservableCollection<KeyVaultResource> KeyVaultResources { get; set; } = [];
-}
-
-public partial class KvSubscriptionModel : ObservableObject
-{
-
-    [ObservableProperty]
-    public partial bool HasSubNodeDataBeenFetched { get; set; } = false;
-
     [ObservableProperty]
     public partial bool IsExpanded { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsSelected { get; set; }
-
-    public enum ExplorerItemType
-    { QuickAccess, ResourceGroup };
-
-    public ExplorerItemType Type { get; set; } = ExplorerItemType.ResourceGroup;
-
-    public ObservableCollection<KvResourceGroupModel> ResourceGroups { get; set; } = [];
-    public virtual ObservableCollection<KeyVaultResource> PinnedItems { get; set; } = [];
-    //adding this to avoid crashing the application.
-    public virtual ObservableCollection<KeyVaultResource> KeyVaultResources { get; set; } = [];
-    public SubscriptionResource Subscription { get; set; } = null!;
-    public string DisplayName { get; set; } = null!;
-    public string? SubscriptionId { get; set; }
-}
-
-public partial class KvResourceGroupModel : ObservableObject
-{
-    [ObservableProperty]
-    public partial bool IsExpanded { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsSelected { get; set; }
-
-    public ObservableCollection<KeyVaultResource> KeyVaultResources { get; set; } = [];
     public string DisplayName { get; set; } = null!;
 
-    public ResourceGroupResource ResourceGroupResource { get; set; } = null!;
-}
+    public ObservableCollection<KvTreeNodeModel> Children { get; } = [];
 
-internal partial class ExplorerItemTemplateSelector : DataTemplateSelector
-{
-    public DataTemplate SubscriptionTemplate { get; set; }
-    public DataTemplate ResourceGroupTemplate { get; set; }
-    public DataTemplate KeyVaultResourceTemplate { get; set; }
-    public DataTemplate PinnedItemTemplate { get; set; }
+    public virtual KeyVaultResource? VaultResource => null;
 
-    protected override DataTemplate SelectTemplateCore(object item)
+    public abstract string Glyph { get; }
+
+    internal static readonly Brush GrayBrush = new SolidColorBrush(ColorHelper.FromArgb(0xFF, 0x8A, 0x8A, 0x8A));
+    internal static readonly Brush OrangeBrush = new SolidColorBrush(ColorHelper.FromArgb(0xFF, 0xFF, 0x66, 0x00));
+
+    public virtual Brush? IconForeground => ResolveThemeBrush("TextFillColorSecondaryBrush");
+
+    protected static Brush? ResolveThemeBrush(string key)
     {
-        try
+        if (Application.Current?.Resources.TryGetValue(key, out var value) == true)
         {
-            if (item is KvSubscriptionModel model)
-            {
-                if (model.Type == KvSubscriptionModel.ExplorerItemType.QuickAccess)
-                    return PinnedItemTemplate;
-                else return SubscriptionTemplate;
-            }
-
-            if (item is KvResourceGroupModel)
-                return ResourceGroupTemplate;
-
-            if (item is KeyVaultResource)
-                return KeyVaultResourceTemplate;
-
-            return base.SelectTemplateCore(item);
+            return value as Brush;
         }
-        catch (Exception ex)
+
+        if (key != "TextFillColorSecondaryBrush"
+            && Application.Current?.Resources.TryGetValue("TextFillColorSecondaryBrush", out var secondaryValue) == true)
         {
-            Debug.WriteLine($"Error selecting template for item: {item}");
-            return base.SelectTemplateCore(item);
-
+            return secondaryValue as Brush;
         }
+
+        return null;
+    }
+
+    //    protected static Brush CreateThemeContrastBrush()
+    //    {
+    //        var isDark = Application.Current?.RequestedTheme == ApplicationTheme.Dark;
+    //        return new SolidColorBrush(isDark ? Colors.White : Colors.Black);
+    //    }
+    //}
+
+    public partial class KvSubscriptionModel : KvTreeNodeModel
+    {
+        public enum ExplorerItemType
+        { QuickAccess, ResourceGroup };
+
+        public ExplorerItemType Type { get; set; } = ExplorerItemType.ResourceGroup;
+        public SubscriptionResource Subscription { get; set; } = null!;
+        public string? SubscriptionId { get; set; }
+
+        public override string Glyph => Type == ExplorerItemType.QuickAccess ? "\uE840" : "\uE774";
+
+        public override Brush? IconForeground => Type == ExplorerItemType.QuickAccess
+            ? GrayBrush
+            : ResolveThemeBrush("IconForegroundColorBrush");
+    }
+
+    public partial class KvResourceGroupModel : KvTreeNodeModel
+    {
+        public ResourceGroupResource ResourceGroupResource { get; set; } = null!;
+
+        public override string Glyph => "\uE8B7";
+
+        public override Brush? IconForeground => new SolidColorBrush(ColorHelper.FromArgb(0xFF, 0x99, 0x6F, 0x00));
+    }
+
+    public partial class KvKeyVaultResourceModel : KvTreeNodeModel
+    {
+        public KeyVaultResource Resource { get; set; } = null!;
+
+        public bool IsPlaceholder { get; set; }
+
+        public override KeyVaultResource? VaultResource => IsPlaceholder ? null : Resource;
+
+        public override string Glyph => "\uEC19";
+
+        public override Brush? IconForeground => OrangeBrush;
+
+        public static KvKeyVaultResourceModel CreatePlaceholder() => new()
+        {
+            IsPlaceholder = true,
+            DisplayName = string.Empty,
+        };
     }
 }

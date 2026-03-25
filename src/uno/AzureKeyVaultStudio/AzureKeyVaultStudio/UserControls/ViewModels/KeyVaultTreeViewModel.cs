@@ -85,12 +85,16 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         await DbContext.InsertQuickAccessItemAsync(qa);
         _dispatcher.TryEnqueue(() =>
         {
-            var items = new ObservableCollection<KeyVaultResource>(TreeDataSource[0].PinnedItems)
+            var items = new ObservableCollection<KvKeyVaultResourceModel>(TreeDataSource[0].Children.OfType<KvKeyVaultResourceModel>())
             {
-                model
+                new KvKeyVaultResourceModel
+                {
+                    DisplayName = model.Data.Name,
+                    Resource = model,
+                }
             };
-            TreeDataSource[0].PinnedItems.Clear();
-            TreeDataSource[0].PinnedItems.AddRange(items);
+            TreeDataSource[0].Children.Clear();
+            TreeDataSource[0].Children.AddRange(items);
         });
     }
 
@@ -118,9 +122,12 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 
         _dispatcher.TryEnqueue(() =>
         {
-            var items = new ObservableCollection<KeyVaultResource>(TreeDataSource[0].PinnedItems.Where(s => s.Data.Id != model.Id));
-            TreeDataSource[0].PinnedItems.Clear();
-            TreeDataSource[0].PinnedItems.AddRange(items);
+            var items = new ObservableCollection<KvKeyVaultResourceModel>(
+                TreeDataSource[0].Children
+                    .OfType<KvKeyVaultResourceModel>()
+                    .Where(s => s.VaultResource?.Data.Id != model.Id));
+            TreeDataSource[0].Children.Clear();
+            TreeDataSource[0].Children.AddRange(items);
         });
     }
 
@@ -153,7 +160,6 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                 {
                     IsExpanded = true,
                     DisplayName = _localizer["QuickAccessText"] ?? "Quick Access",
-                    PinnedItems = [],
                     Type = KvSubscriptionModel.ExplorerItemType.QuickAccess
                 };
 
@@ -170,8 +176,11 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                         {
                             var kvr = armClient.GetKeyVaultResource(new ResourceIdentifier(item.KeyVaultId));
                             var kvrResponse = await kvr.GetAsync();
-                            quickAccess.PinnedItems.Add(kvrResponse);
-                            quickAccess.PropertyChanged += KvPinnedModel_PropertyChanged;
+                            quickAccess.Children.Add(new KvKeyVaultResourceModel
+                            {
+                                DisplayName = kvrResponse.Value.Data.Name,
+                                Resource = kvrResponse.Value,
+                            });
                         }
                         catch (Exception ex)
                         {
@@ -184,9 +193,9 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 
                 foreach (var sub in subscriptionModel)
                 {
-                    if (sub?.ResourceGroups != null)
+                    if (sub is not null)
                     {
-                        sub.ResourceGroups.CollectionChanged += TreeViewSubNode_CollectionChanged;
+                        sub.Children.CollectionChanged += TreeViewSubNode_CollectionChanged;
                     }
                 }
             }
@@ -210,18 +219,6 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         finally
         {
             IsBusy = false;
-        }
-    }
-
-    private void KvPinnedModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        if (WatchedNameOfProps.Contains(e.PropertyName))
-        {
-            var kvSubModel = (KvSubscriptionModel)sender;
-
-            // if they are selecting the list item, expand it as a courtesy
-            if (e.PropertyName == nameof(PinnedItemModel.IsSelected))
-                kvSubModel.IsExpanded = true;
         }
     }
 
@@ -257,8 +254,6 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                 kvSubModel.IsExpanded = true;
 
             bool isExpanded = kvSubModel.IsExpanded;
-            var placeholder = new KeyVaultResourcePlaceholder();
-
             if (isExpanded
                 && !kvSubModel.HasSubNodeDataBeenFetched
                 && _subscriptionsLoadingSubNodes.TryAdd(subscriptionId, 0))
@@ -267,13 +262,15 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                 {
                     // Remove the first placeholder item that is used to keep the chevron, and also make sure not to raise the event. Not pretty.
                     // Remove the first item if it doesn't have a name
-                    var hasPlaceholder = kvSubModel.ResourceGroups.Any() && kvSubModel.ResourceGroups[0].KeyVaultResources.Any(k => k.GetType().Name == nameof(KeyVaultResourcePlaceholder));
+                    var hasPlaceholder = kvSubModel.Children.Any()
+                        && kvSubModel.Children[0] is KvResourceGroupModel firstResourceGroup
+                        && firstResourceGroup.Children.OfType<KvKeyVaultResourceModel>().Any(k => k.IsPlaceholder);
 
                     if (hasPlaceholder)
                     {
-                        kvSubModel.ResourceGroups.CollectionChanged -= TreeViewSubNode_CollectionChanged;
-                        kvSubModel.ResourceGroups.RemoveAt(0);
-                        kvSubModel.ResourceGroups.CollectionChanged += TreeViewSubNode_CollectionChanged;
+                        kvSubModel.Children.CollectionChanged -= TreeViewSubNode_CollectionChanged;
+                        kvSubModel.Children.RemoveAt(0);
+                        kvSubModel.Children.CollectionChanged += TreeViewSubNode_CollectionChanged;
                     }
 
                     await Task.Run(async () =>
@@ -287,7 +284,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                             {
                                 DisplayName = rg.Data.Name,
                                 ResourceGroupResource = rg,
-                                KeyVaultResources = [placeholder],
+                                Children = { KvKeyVaultResourceModel.CreatePlaceholder() },
                             });
                         }
 
@@ -295,11 +292,11 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                         {
                             foreach (var rgModel in rgList.OrderBy(x => x.DisplayName))
                             {
-                                kvSubModel.ResourceGroups.Add(rgModel);
+                                kvSubModel.Children.Add(rgModel);
                             }
 
                             kvSubModel.HasSubNodeDataBeenFetched = true;
-                            kvSubModel.ResourceGroups.CollectionChanged += TreeViewSubNode_CollectionChanged;
+                            kvSubModel.Children.CollectionChanged += TreeViewSubNode_CollectionChanged;
                             kvSubModel.IsExpanded = true;
                             _subscriptionsLoadingSubNodes.TryRemove(subscriptionId, out _);
                         });
@@ -346,7 +343,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void OpenInAzure(KeyVaultResource model)
+    private async Task OpenInAzure(KeyVaultResource model)
     {
         if (model is null) return;
         var uri = new Uri($"https://portal.azure.com/#@{_authService.TenantName}/resource{model.Id}");
@@ -384,7 +381,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
     {
         if (e.Action == NotifyCollectionChangedAction.Add && sender is not null)
         {
-            foreach (KvResourceGroupModel newItem in e.NewItems)
+            foreach (var newItem in e.NewItems.OfType<KvResourceGroupModel>())
             {
                 newItem.PropertyChanged += KvResourceGroupNode_PropertyChanged;
 
@@ -394,7 +391,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
         {
-            foreach (KvResourceGroupModel oldItem in e.OldItems)
+            foreach (var oldItem in e.OldItems.OfType<KvResourceGroupModel>())
             {
                 oldItem.PropertyChanged -= KvResourceGroupNode_PropertyChanged;
             }
@@ -435,9 +432,9 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         foreach (var sub in oldValue)
         {
             sub.PropertyChanged -= KvSubscriptionModel_PropertyChanged;
-            sub.ResourceGroups.CollectionChanged -= TreeViewSubNode_CollectionChanged;
+            sub.Children.CollectionChanged -= TreeViewSubNode_CollectionChanged;
 
-            foreach (var rg in sub.ResourceGroups)
+            foreach (var rg in sub.Children.OfType<KvResourceGroupModel>())
             {
                 rg.PropertyChanged -= KvResourceGroupNode_PropertyChanged;
             }
@@ -457,10 +454,10 @@ public partial class KeyVaultTreeViewModel : ObservableObject
             sub.PropertyChanged -= KvSubscriptionModel_PropertyChanged;
             sub.PropertyChanged += KvSubscriptionModel_PropertyChanged;
 
-            sub.ResourceGroups.CollectionChanged -= TreeViewSubNode_CollectionChanged;
-            sub.ResourceGroups.CollectionChanged += TreeViewSubNode_CollectionChanged;
+            sub.Children.CollectionChanged -= TreeViewSubNode_CollectionChanged;
+            sub.Children.CollectionChanged += TreeViewSubNode_CollectionChanged;
 
-            foreach (var rg in sub.ResourceGroups)
+            foreach (var rg in sub.Children.OfType<KvResourceGroupModel>())
             {
                 rg.PropertyChanged -= KvResourceGroupNode_PropertyChanged;
                 rg.PropertyChanged += KvResourceGroupNode_PropertyChanged;
@@ -473,11 +470,11 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 
     private async Task LoadResourceGroupVaults(KvResourceGroupModel kvResourceModel)
     {
-        var hasPlaceholder = kvResourceModel.KeyVaultResources.Any(k => k.GetType().Name == nameof(KeyVaultResourcePlaceholder));
+        var hasPlaceholder = kvResourceModel.Children.OfType<KvKeyVaultResourceModel>().Any(k => k.IsPlaceholder);
         if (!kvResourceModel.IsExpanded || !hasPlaceholder)
             return;
 
-        kvResourceModel.KeyVaultResources.Clear();
+        kvResourceModel.Children.Clear();
 
         try
         {
@@ -495,7 +492,11 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                 {
                     foreach (var vault in vaultsList)
                     {
-                        kvResourceModel.KeyVaultResources.Add(vault);
+                        kvResourceModel.Children.Add(new KvKeyVaultResourceModel
+                        {
+                            DisplayName = vault.Data.Name,
+                            Resource = vault,
+                        });
                     }
                 });
             });

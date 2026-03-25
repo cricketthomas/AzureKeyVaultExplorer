@@ -9,6 +9,7 @@ using Azure.Security.KeyVault.Secrets;
 using AzureKeyVaultStudio.Database;
 using AzureKeyVaultStudio.Exceptions;
 using Microsoft.Extensions.Caching.Memory;
+using static AzureKeyVaultStudio.Models.KvTreeNodeModel;
 
 namespace AzureKeyVaultStudio.Services;
 public partial class VaultService
@@ -205,7 +206,7 @@ public partial class VaultService
         {
             var rgPlaceholder = new KvResourceGroupModel() //needed to show chevron
             {
-                KeyVaultResources = [new KeyVaultResourcePlaceholder()],
+                Children = { KvKeyVaultResourceModel.CreatePlaceholder() },
             };
 
             var resource = new KvSubscriptionModel
@@ -213,7 +214,7 @@ public partial class VaultService
                 DisplayName = subscription.Data.DisplayName,
                 SubscriptionId = subscription.Data.Id,
                 Subscription = subscription,
-                ResourceGroups = [rgPlaceholder]
+                Children = { rgPlaceholder }
             };
             yield return resource;
         }

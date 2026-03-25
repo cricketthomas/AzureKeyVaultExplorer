@@ -29,7 +29,9 @@ public sealed partial class KeyVaultTree : UserControl
         {
             if (DataContext is KeyVaultTreeViewModel viewModel)
             {
-                flyout.DataContext = viewModel.SelectedItem;
+                var node = (flyout.Target as FrameworkElement)?.DataContext as KvTreeNodeModel
+                    ?? viewModel.SelectedItem as KvTreeNodeModel;
+                flyout.DataContext = node;
             }
         };
 #endif
@@ -67,7 +69,9 @@ public sealed partial class KeyVaultTree : UserControl
 
     private void TreeViewItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
     {
-        if (sender is TreeViewItem treeViewItem && treeViewItem.DataContext is KeyVaultResource model)
+        if (sender is TreeViewItem treeViewItem
+            && treeViewItem.DataContext is KvTreeNodeModel node
+            && node.VaultResource is KeyVaultResource model)
         {
             ViewModel?.OpenInNewTabCommand?.Execute(model);
         }
@@ -97,12 +101,12 @@ public sealed partial class KeyVaultTree : UserControl
         if (args.Item is KvSubscriptionModel sub)
         {
             sub.IsExpanded = true;
-            sub.IsSelected = true;
+            //sub.IsSelected = true;
         }
         else if (args.Item is KvResourceGroupModel rg)
         {
             rg.IsExpanded = true;
-            rg.IsSelected = true;
+            //rg.IsSelected = true;
         }
     }
 
