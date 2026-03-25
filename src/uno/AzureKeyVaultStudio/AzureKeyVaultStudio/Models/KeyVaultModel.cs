@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Azure.ResourceManager.KeyVault;
 using Azure.ResourceManager.Resources;
 
@@ -22,6 +23,7 @@ public partial class PinnedItemModel : ObservableObject
 
 public partial class KvSubscriptionModel : ObservableObject
 {
+
     [ObservableProperty]
     public partial bool HasSubNodeDataBeenFetched { get; set; } = false;
 
@@ -38,7 +40,8 @@ public partial class KvSubscriptionModel : ObservableObject
 
     public ObservableCollection<KvResourceGroupModel> ResourceGroups { get; set; } = [];
     public virtual ObservableCollection<KeyVaultResource> PinnedItems { get; set; } = [];
-
+    //adding this to avoid crashing the application.
+    public virtual ObservableCollection<KeyVaultResource> KeyVaultResources { get; set; } = [];
     public SubscriptionResource Subscription { get; set; } = null!;
     public string DisplayName { get; set; } = null!;
     public string? SubscriptionId { get; set; }
@@ -67,19 +70,28 @@ internal partial class ExplorerItemTemplateSelector : DataTemplateSelector
 
     protected override DataTemplate SelectTemplateCore(object item)
     {
-        if (item is KvSubscriptionModel model)
+        try
         {
-            if (model.Type == KvSubscriptionModel.ExplorerItemType.QuickAccess)
-                return PinnedItemTemplate;
-            else return SubscriptionTemplate;
+            if (item is KvSubscriptionModel model)
+            {
+                if (model.Type == KvSubscriptionModel.ExplorerItemType.QuickAccess)
+                    return PinnedItemTemplate;
+                else return SubscriptionTemplate;
+            }
+
+            if (item is KvResourceGroupModel)
+                return ResourceGroupTemplate;
+
+            if (item is KeyVaultResource)
+                return KeyVaultResourceTemplate;
+
+            return base.SelectTemplateCore(item);
         }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error selecting template for item: {item}");
+            return base.SelectTemplateCore(item);
 
-        if (item is KvResourceGroupModel)
-            return ResourceGroupTemplate;
-
-        if (item is KeyVaultResource)
-            return KeyVaultResourceTemplate;
-
-        return base.SelectTemplateCore(item);
+        }
     }
 }

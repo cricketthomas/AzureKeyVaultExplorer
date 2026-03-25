@@ -666,4 +666,7 @@
   <data name="SavedChangesMessage" xml:space="preserve">
     <value>Sus cambios han sido guardados.</value>
   </data>
+  <data name="DocumenationHyperlinkButton.Content" xml:space="preserve">
+    <value>Documentación: Guía de configuración del tenant</value>
+  </data>
 </root>

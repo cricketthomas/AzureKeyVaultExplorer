@@ -6,15 +6,20 @@ namespace AzureKeyVaultStudio.Models;
 
 public class KeyVaultResourcePlaceholder : KeyVaultResource
 {
-    public override ResourceIdentifier Id => base.Id;
-    public override KeyVaultData? Data
+    private static readonly ResourceIdentifier PlaceholderId =
+        new("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/loading/providers/Microsoft.KeyVault/vaults/loading");
+
+    private static KeyVaultData CreatePlaceholderData()
     {
-        get
-        {
-            KeyVaultData? keyVaultData = base.Data ?? null;
-            return keyVaultData;
-        }
+        var properties = new KeyVaultProperties(Guid.Empty, new KeyVaultSku(KeyVaultSkuFamily.A, KeyVaultSkuName.Standard));
+        return new KeyVaultDataPlaceholder(AzureLocation.EastUS2, properties);
     }
+
+    private readonly KeyVaultData _placeholderData = CreatePlaceholderData();
+
+    public override ResourceIdentifier Id => PlaceholderId;
+
+    public override KeyVaultData? Data => _placeholderData;
 }
 
 public class KeyVaultDataPlaceholder : KeyVaultData

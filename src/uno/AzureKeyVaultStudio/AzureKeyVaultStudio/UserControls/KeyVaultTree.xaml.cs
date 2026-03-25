@@ -1,6 +1,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Azure.ResourceManager.KeyVault;
+using AzureKeyVaultStudio.Models;
 using AzureKeyVaultStudio.UserControls.ViewModels;
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Dispatching;
@@ -39,7 +40,7 @@ public sealed partial class KeyVaultTree : UserControl
         if (ViewModel?.RefreshCommand is not null)
         {
             Bindings.Update();
-            ViewModel.RefreshCommand.Execute(CancellationToken.None);
+            ViewModel.RefreshCommand.Execute(null);
         }
     }
 
@@ -91,4 +92,25 @@ public sealed partial class KeyVaultTree : UserControl
     private void ResourceGroupNodePropertyChanged(object? sender, PropertyChangedEventArgs e)
     { }
 
+    private void KeyVaultTreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
+    {
+        if (args.Item is KvSubscriptionModel sub)
+            sub.IsExpanded = true;
+        else if (args.Item is KvResourceGroupModel rg)
+            rg.IsExpanded = true;
+    }
+
+    private void KeyVaultTreeView_Collapsed(TreeView sender, TreeViewCollapsedEventArgs args)
+    {
+        if (args.Item is KvSubscriptionModel sub)
+            sub.IsExpanded = false;
+        else if (args.Item is KvResourceGroupModel rg)
+            rg.IsExpanded = false;
+    }
+
+    private void KeyVaultTreeView_DragItemsStarting(TreeView sender, TreeViewDragItemsStartingEventArgs args)
+    {
+        args.Cancel = true;
+        return;
+    }
 }

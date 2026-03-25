@@ -143,7 +143,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     private const double PaneMinWidth = 100;
-    private const double PaneMaxWidth = 700;
+    private const double PaneMaxWidth = 1000;
 
     public double InvertedSplitViewWidth
     {

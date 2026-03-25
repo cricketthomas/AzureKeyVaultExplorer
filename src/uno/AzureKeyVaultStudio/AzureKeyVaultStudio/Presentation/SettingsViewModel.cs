@@ -54,6 +54,7 @@ public partial class SettingsViewModel : ObservableRecipient
 
     [ObservableProperty]
     public partial AuthenticatedUserClaims? Claims { get; set; }
+
     public string? GitHubRepoistoryBaseUrl => _appConfig.Value.GitHubRepoistoryBaseUrl;
     public string? LicenseUrl => _appConfig.Value.LicenseUrl;
     public string? NewIssueUrl => _appConfig.Value.NewIssueUrl;
@@ -146,26 +147,24 @@ public partial class SettingsViewModel : ObservableRecipient
     private async Task SaveSettings()
     {
         var selectedCloud = SelectedCloudEnvironmentIndex >= 0 && SelectedCloudEnvironmentIndex < AzureCloudInstances.Length
-            ? AzureCloudInstances[SelectedCloudEnvironmentIndex]
-            : AzureCloudInstance.None;
+                 ? AzureCloudInstances[SelectedCloudEnvironmentIndex]
+                 : AzureCloudInstance.None;
         Save(Constants.SelectedCloudEnvironmentName, (int)selectedCloud);
         Save(nameof(SettingsPageClientIdCheckbox), SettingsPageClientIdCheckbox);
         Save(nameof(SettingsPageTenantIdCheckbox), SettingsPageTenantIdCheckbox);
         Save(nameof(ClearClipboardTimeout), ClearClipboardTimeout < 0 ? 10 : ClearClipboardTimeout);
         Save(nameof(CustomClientId), CustomClientId?.Trim() ?? string.Empty);
         Save(nameof(CustomTenantId), CustomTenantId?.Trim() ?? string.Empty);
-        await _localizationService.SetCurrentCultureAsync(Language);
 
+        _ = _localizationService.SetCurrentCultureAsync(Language);
         WeakReferenceMessenger.Default.Send(new SendInAppNotificationMessage(new Notification
         {
             Severity = InfoBarSeverity.Informational,
-            Title = _localizer["SavedTitle"] ?? "Saved.",
-            Message = _localizer["SavedChangesMessage"] ?? "Your changes have been saved.",
+            Title = _localizer?["SavedTitle"] ?? "Saved.",
+            Message = _localizer?["SavedChangesMessage"] ?? "Your changes have been saved.",
             Duration = TimeSpan.FromSeconds(5)
         }));
-
     }
-
 
     [RelayCommand]
     private async Task SignInOrRefreshTokenAsync()
@@ -200,7 +199,7 @@ public partial class SettingsViewModel : ObservableRecipient
         WeakReferenceMessenger.Default.Send(new SendInAppNotificationMessage(new Notification
         {
             Severity = InfoBarSeverity.Warning,
-            Message = _localizer["DatabseDeletedMessage"] ?? "Database deleted. Restart the app to recreate the database.",
+            Message = _localizer?["DatabseDeletedMessage"] ?? "Database deleted. Restart the app to recreate the database.",
             Title = "Info"
         }));
     }
@@ -219,7 +218,7 @@ public partial class SettingsViewModel : ObservableRecipient
         WeakReferenceMessenger.Default.Send(new SendInAppNotificationMessage(new Notification
         {
             Severity = InfoBarSeverity.Warning,
-            Message = _localizer["ApplicationResetMessage"] ?? "Application has been reset. Please exit the app.",
+            Message = _localizer?["ApplicationResetMessage"] ?? "Application has been reset. Please exit the app.",
             Title = "Danger"
         }));
     }
@@ -237,6 +236,4 @@ public partial class SettingsViewModel : ObservableRecipient
         var version = assembly.GetName().Version;
         return version == null ? "(Unknown)" : $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
     }
-
-    //NotificationQueue.Show(notification);
 }

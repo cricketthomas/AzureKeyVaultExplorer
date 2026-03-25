@@ -24,6 +24,14 @@ public partial class App : Application
             Debug.WriteLine(e.Exception.StackTrace);
         };
 
+        TaskScheduler.UnobservedTaskException += (sender, e) =>
+        {
+            Console.WriteLine("Unobserved exception caught!");
+            foreach (var ex in e.Exception.Flatten().InnerExceptions)
+                Console.WriteLine(ex);
+            e.SetObserved();
+        };
+
         UnhandledException += (sender, args) =>
         {
             Debug.WriteLine($"[Unhandled] {args.Exception}");
@@ -152,7 +160,6 @@ public partial class App : Application
                  services.AddSingleton<ILocalSettingsService>(_ => LocalSettingsServiceFactory.Create());
                  services.AddSingleton<AuthService>();
                  services.AddSingleton<VaultService>();
-                 services.AddSingleton<AzureSearchService>();
                  services.AddSingleton<KeyVaultTreeViewModel>();
                  services.AddTransient<ItemPropertiesViewModel>();
              }).UseNavigation(RegisterRoutes));
