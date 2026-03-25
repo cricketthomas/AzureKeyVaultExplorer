@@ -23,6 +23,7 @@ public partial class PinnedItemModel : ObservableObject
 
 public partial class KvSubscriptionModel : ObservableObject
 {
+
     [ObservableProperty]
     public partial bool HasSubNodeDataBeenFetched { get; set; } = false;
 
@@ -39,7 +40,8 @@ public partial class KvSubscriptionModel : ObservableObject
 
     public ObservableCollection<KvResourceGroupModel> ResourceGroups { get; set; } = [];
     public virtual ObservableCollection<KeyVaultResource> PinnedItems { get; set; } = [];
-
+    //adding this to avoid crashing the application.
+    public virtual ObservableCollection<KeyVaultResource> KeyVaultResources { get; set; } = [];
     public SubscriptionResource Subscription { get; set; } = null!;
     public string DisplayName { get; set; } = null!;
     public string? SubscriptionId { get; set; }
