@@ -60,58 +60,58 @@
 
             </MenuFlyout>
 
-            <!--  x:DataType="models:KvSubscriptionModel"  -->
-            <DataTemplate x:Key="PinnedItemTemplate">
+            <!--    -->
+            <DataTemplate x:Key="PinnedItemTemplate" x:DataType="models:KvSubscriptionModel">
                 <TreeViewItem
-                    AutomationProperties.Name="{Binding DisplayName}"
-                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
-                    IsSelected="{Binding IsSelected, Mode=TwoWay}"
-                    ItemsSource="{Binding PinnedItems, Mode=OneWay}">
+                    AutomationProperties.Name="{x:Bind DisplayName}"
+                    IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}"
+                    IsSelected="{x:Bind IsSelected, Mode=TwoWay}"
+                    ItemsSource="{x:Bind PinnedItems, Mode=OneWay}">
 
                     <StackPanel IsHitTestVisible="False" Orientation="Horizontal">
                         <FontIcon
                             Margin="0,0,6,2"
                             FontSize="15"
                             Glyph="&#xE840;" />
-                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{Binding DisplayName, FallbackValue='Failed to fetch'}" />
+                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind DisplayName, FallbackValue='Failed to fetch'}" />
                     </StackPanel>
                 </TreeViewItem>
             </DataTemplate>
-            <!--  x:DataType="models:KvSubscriptionModel"  -->
+            <!--    -->
 
-            <DataTemplate x:Key="SubscriptionTemplate">
+            <DataTemplate x:Key="SubscriptionTemplate" x:DataType="models:KvSubscriptionModel">
                 <TreeViewItem
-                    AutomationProperties.Name="{Binding DisplayName}"
-                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
-                    IsSelected="{Binding IsSelected, Mode=TwoWay}"
-                    ItemsSource="{Binding ResourceGroups, Mode=OneWay}">
+                    AutomationProperties.Name="{x:Bind DisplayName}"
+                    IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}"
+                    IsSelected="{x:Bind IsSelected, Mode=TwoWay}"
+                    ItemsSource="{x:Bind ResourceGroups, Mode=OneWay}">
                     <StackPanel IsHitTestVisible="False" Orientation="Horizontal">
                         <FontIcon
                             Margin="0,0,6,2"
                             FontSize="15"
                             Foreground="{ThemeResource IconForegroundColorBrush}"
                             Glyph="&#xE774;" />
-                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{Binding DisplayName, FallbackValue='Failed to fetch'}" />
+                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind DisplayName, FallbackValue='Failed to fetch'}" />
                     </StackPanel>
                 </TreeViewItem>
             </DataTemplate>
 
 
-            <!--  x:DataType="models:KvResourceGroupModel"  -->
+            <!--    -->
 
-            <DataTemplate x:Key="ResourceGroupTemplate">
+            <DataTemplate x:Key="ResourceGroupTemplate" x:DataType="models:KvResourceGroupModel">
                 <TreeViewItem
-                    AutomationProperties.Name="{Binding DisplayName}"
-                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
-                    IsSelected="{Binding IsSelected, Mode=TwoWay}"
-                    ItemsSource="{Binding KeyVaultResources, Mode=OneWay}">
+                    AutomationProperties.Name="{x:Bind DisplayName}"
+                    IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}"
+                    IsSelected="{x:Bind IsSelected, Mode=TwoWay}"
+                    ItemsSource="{x:Bind KeyVaultResources, Mode=OneWay}">
                     <StackPanel IsHitTestVisible="False" Orientation="Horizontal">
                         <FontIcon
                             Margin="0,0,6,2"
                             FontSize="15"
                             Foreground="#996f00"
                             Glyph="&#xE8B7;" />
-                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{Binding DisplayName, FallbackValue='Failed to fetch'}" />
+                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind DisplayName, FallbackValue='Failed to fetch'}" />
                     </StackPanel>
                 </TreeViewItem>
             </DataTemplate>
@@ -227,6 +227,7 @@
             Grid.Row="2"
             HorizontalScrollBarVisibility="Auto"
             VerticalScrollBarVisibility="Auto">
+
             <TreeView
                 Name="KeyVaultTreeView"
                 Background="Transparent"
