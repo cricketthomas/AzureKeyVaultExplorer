@@ -187,7 +187,7 @@ public partial class SettingsViewModel : ObservableRecipient
             Severity = InfoBarSeverity.Informational,
             Message = _localizer?["SignOutMessage"] ?? "You have been signed out.",
             Title = "Info",
-            Duration = TimeSpan.FromSeconds(10),
+            Duration = TimeSpan.FromSeconds(5),
         }));
         await _navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.ClearBackStack);
     }

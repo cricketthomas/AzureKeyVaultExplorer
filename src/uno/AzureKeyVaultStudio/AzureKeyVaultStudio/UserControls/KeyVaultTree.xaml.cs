@@ -95,9 +95,15 @@ public sealed partial class KeyVaultTree : UserControl
     private void KeyVaultTreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
     {
         if (args.Item is KvSubscriptionModel sub)
+        {
             sub.IsExpanded = true;
+            sub.IsSelected = true;
+        }
         else if (args.Item is KvResourceGroupModel rg)
+        {
             rg.IsExpanded = true;
+            rg.IsSelected = true;
+        }
     }
 
     private void KeyVaultTreeView_Collapsed(TreeView sender, TreeViewCollapsedEventArgs args)
