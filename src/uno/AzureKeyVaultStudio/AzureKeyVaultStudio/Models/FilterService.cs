@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using System.Linq;
+using static AzureKeyVaultStudio.Models.KvTreeNodeModel;
 
 namespace AzureKeyVaultStudio.Models;
 
@@ -58,7 +60,7 @@ public static class FilterService
                 SetSubscriptionExpanded(subscription, true);
             }
 
-            foreach (var resourceGroup in subscription.ResourceGroups)
+            foreach (var resourceGroup in subscription.Children.OfType<KvResourceGroupModel>())
             {
                 bool resourceGroupMatch = false;
 
@@ -76,9 +78,9 @@ public static class FilterService
 
                 if (!resourceGroupMatch)
                 {
-                    foreach (var keyVault in resourceGroup.KeyVaultResources)
+                    foreach (var keyVault in resourceGroup.Children.OfType<KvKeyVaultResourceModel>())
                     {
-                        if (keyVault.HasData && ContainsQuery(keyVault.Data.Name, querySpan))
+                        if (keyVault.VaultResource?.HasData == true && ContainsQuery(keyVault.VaultResource.Data.Name, querySpan))
                         {
                             SetResourceGroupExpanded(resourceGroup, true);
                             SetSubscriptionExpanded(subscription, true);
@@ -90,19 +92,6 @@ public static class FilterService
                 }
 
                 SetResourceGroupExpanded(resourceGroup, true);
-            }
-
-            if (!isMatch)
-            {
-                foreach (var pinnedItem in subscription.PinnedItems)
-                {
-                    if (pinnedItem.HasData && ContainsQuery(pinnedItem.Data.Name, querySpan))
-                    {
-                        SetSubscriptionExpanded(subscription, true);
-                        isMatch = true;
-                        break;
-                    }
-                }
             }
 
             if (isMatch)

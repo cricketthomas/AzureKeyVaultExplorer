@@ -12,7 +12,7 @@
     <AssemblyName>AzureKeyVaultStudio</AssemblyName>
     <ApplicationId>io.github.cricketthomas.AzureKeyVaultExplorer</ApplicationId>
 
-    <ApplicationDisplayVersion>2.0.2.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>2.0.4.0</ApplicationDisplayVersion>
     <ApplicationVersion>2</ApplicationVersion>
 
     <ApplicationPublisher>cricketthomas</ApplicationPublisher>
@@ -46,7 +46,6 @@
 
     <PackageProjectUrl>https://github.com/cricketthomas/AzureKeyVaultExplorer</PackageProjectUrl>
     <RepositoryUrl>https://github.com/cricketthomas/AzureKeyVaultExplorer</RepositoryUrl>
-    <!--<PackageCertificateThumbprint>E4195D2ADEDE635ECA12FE4B675B3399C8D3B74A</PackageCertificateThumbprint>-->
     <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>

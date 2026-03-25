@@ -7,7 +7,6 @@ public sealed partial class SettingsPage : Page
     public SettingsPage()
     {
         this.InitializeComponent();
-        //DataContextChanged += (s, e) => Bindings.Update();
     }
 
 }
