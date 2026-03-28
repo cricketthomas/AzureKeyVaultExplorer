@@ -6,6 +6,14 @@ namespace AzureKeyVaultStudio.Models;
 
 public static class FilterService
 {
+    public static void ResetVisibility(IEnumerable<KvTreeNodeModel> nodes, bool isVisible = true)
+    {
+        foreach (var node in nodes)
+        {
+            node.IsVisible = isVisible;
+            ResetVisibility(node.Children, isVisible);
+        }
+    }
     public static IList<KvSubscriptionModel> Filter(IList<KvSubscriptionModel> allSubscriptions, string query)
     {
         if (allSubscriptions == null || allSubscriptions.Count == 0)
@@ -14,6 +22,7 @@ public static class FilterService
         }
         if (string.IsNullOrWhiteSpace(query))
         {
+            ResetVisibility(allSubscriptions);
             return allSubscriptions;
         }
 
@@ -30,7 +39,14 @@ public static class FilterService
                 model.IsExpanded = value;
             }
         }
+        static void SetResourceGroupVisible(KvResourceGroupModel model, bool value)
+        {
+            if (model.IsVisible != value)
+            {
+                model.IsVisible = value;
+            }
 
+        }
         static void SetResourceGroupExpanded(KvResourceGroupModel model, bool value)
         {
             if (model.IsExpanded != value)
@@ -59,7 +75,6 @@ public static class FilterService
             {
                 SetSubscriptionExpanded(subscription, true);
             }
-
             foreach (var resourceGroup in subscription.Children.OfType<KvResourceGroupModel>())
             {
                 bool resourceGroupMatch = false;
@@ -70,6 +85,7 @@ public static class FilterService
                     SetSubscriptionExpanded(subscription, true);
                     resourceGroupMatch = true;
                     isMatch = true;
+                    resourceGroup.Children.ForEach(x => x.IsVisible = true);
                 }
                 else
                 {
@@ -84,14 +100,22 @@ public static class FilterService
                         {
                             SetResourceGroupExpanded(resourceGroup, true);
                             SetSubscriptionExpanded(subscription, true);
+                            SetResourceGroupVisible(resourceGroup, true);
                             resourceGroupMatch = true;
                             isMatch = true;
+                            keyVault.IsVisible = true;
                             break;
+                        }
+                        else
+                        {
+                            SetResourceGroupVisible(resourceGroup, value: false);
+                            keyVault.IsVisible = false;
                         }
                     }
                 }
 
-                SetResourceGroupExpanded(resourceGroup, true);
+                SetResourceGroupExpanded(resourceGroup, resourceGroupMatch);
+                SetResourceGroupVisible(resourceGroup, value: resourceGroupMatch);
             }
 
             if (isMatch)
@@ -101,6 +125,7 @@ public static class FilterService
             else
             {
                 SetSubscriptionExpanded(subscription, true);
+                ResetVisibility(subscription.Children, true);
             }
         }
 

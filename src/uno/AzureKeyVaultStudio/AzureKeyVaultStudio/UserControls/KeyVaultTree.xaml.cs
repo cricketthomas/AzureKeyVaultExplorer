@@ -63,8 +63,7 @@ public sealed partial class KeyVaultTree : UserControl
             {
                 ViewModel.SearchQuery = model.Text;
                 ViewModel.ExecuteSearchCommand.ExecuteAsync(null);
-            },
-            interval: TimeSpan.FromMilliseconds(120));
+            }, interval: TimeSpan.FromMilliseconds(200));
         }
     }
 
