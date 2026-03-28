@@ -70,12 +70,12 @@
                     x:Uid="ItemDetailsEditAppBarButton"
                     Click="OnEditVersionClick"
                     Icon="Edit"
-                    Visibility="{x:Bind ViewModel.ShowEditVersionButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=ViewModel.ShowEditVersionButton}" />
+                    Visibility="{x:Bind ViewModel.ShowEditVersionButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                 <AppBarButton
                     x:Uid="ItemDetailsNewVersionAppBarButton"
                     Click="OnNewVersionClick"
                     Icon="Add"
-                    Visibility="{x:Bind ViewModel.ShowNewVersionButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=ViewModel.ShowNewVersionButton}" />
+                    Visibility="{x:Bind ViewModel.ShowNewVersionButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                 <AppBarSeparator />
                 <AppBarButton

@@ -106,7 +106,7 @@ public partial class ItemPropertiesViewModel : ObservableObject
     private void UpdateVisibilityFlags()
     {
         ShowCopyButton = (IsKey || IsSecret) && !IsCertificate;
-        ShowEditVersionButton = IsSecret;
+        ShowEditVersionButton = IsSecret && !IsManaged;
         ShowNewVersionButton = IsSecret;
         EditEnabled = !IsManaged;
         ShowDownloadKeyButton = IsKey;
