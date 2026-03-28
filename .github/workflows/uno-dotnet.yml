@@ -5,15 +5,13 @@ on:
   push:
     branches:
       - master
-      - release/**
 
 
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
       - master
-      - release/**
-  
+
 permissions:
   contents: write
 
@@ -22,25 +20,6 @@ env:
   CONFIGURATION: Release
   dotnetVersion: 10.0.x
 jobs:
-  # smoke_test:
-    # name: Smoke Test (Debug Build of AzureKeyVaultStudio)
-    # runs-on: windows-latest
-    # steps:
-    #   - uses: actions/checkout@v3
-    #     with:
-    #       fetch-depth: 0
-
-    #   - name: Install Dependencies
-    #     timeout-minutes: ${{ fromJSON(env.STEP_TIMEOUT_MINUTES) }}
-    #     uses: "./.github/steps/install_dependencies"
-
-      # - name: Setup MSBuild
-      #   uses: microsoft/setup-msbuild@v1.3.1
-
-      # - name: Build AzureKeyVaultStudio (Debug)
-      #   shell: pwsh
-      #   run: msbuild ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio.csproj /r
-
   build_windows_x64:
     name: Build Windows x64
     runs-on: windows-latest
@@ -203,7 +182,7 @@ jobs:
     name: Release Packages
     needs: [build_windows_x64, build_windows_arm64, build_macos_x64, build_macos_arm64, build_linux]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v4
       - name: Download all artifacts
