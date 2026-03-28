@@ -55,12 +55,20 @@
                 <AppBarButton
                     x:Uid="ItemDetailsOpenAppBarButton"
                     Command="{x:Bind ViewModel.OpenInAzureCommand, Mode=OneWay}"
-                    Icon="OpenFile" />
+                    Icon="OpenFile">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="O" Modifiers="Control" />
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
 
                 <AppBarButton
                     x:Uid="ItemDetailsRefreshAppBarButton"
                     Command="{x:Bind ViewModel.RefreshCommand, Mode=OneWay}"
-                    Icon="Refresh" />
+                    Icon="Refresh">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="F5" />
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
                 <AppBarButton
                     x:Uid="ItemDetailsCopyAppBarButton"
                     Command="{x:Bind ViewModel.CopyCommand, Mode=OneWay}"

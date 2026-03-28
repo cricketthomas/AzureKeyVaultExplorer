@@ -112,15 +112,7 @@ public sealed class KeyVaultItemProperties
         properties.Enabled = Enabled;
         properties.NotBefore = NotBefore;
         properties.ExpiresOn = ExpiresOn;
-
-        if (EditableTags != null)
-        {
-            foreach (var tag in EditableTags)
-            {
-                properties.Tags[tag.Key] = tag.Value;
-            }
-        }
-
+        ApplyEditableTags(properties.Tags);
         return properties;
     }
 
@@ -130,15 +122,7 @@ public sealed class KeyVaultItemProperties
         properties.Enabled = Enabled;
         properties.NotBefore = NotBefore;
         properties.ExpiresOn = ExpiresOn;
-
-        if (EditableTags != null)
-        {
-            foreach (var tag in EditableTags)
-            {
-                properties.Tags[tag.Key] = tag.Value;
-            }
-        }
-
+        ApplyEditableTags(properties.Tags);
         return properties;
     }
 
@@ -146,14 +130,7 @@ public sealed class KeyVaultItemProperties
     {
         var properties = new CertificateProperties(Id);
         properties.Enabled = Enabled;
-        if (EditableTags != null)
-        {
-            foreach (var tag in EditableTags)
-            {
-                properties.Tags[tag.Key] = tag.Value;
-            }
-        }
-
+        ApplyEditableTags(properties.Tags);
         return properties;
     }
 
@@ -235,15 +212,17 @@ public sealed class KeyVaultItemProperties
         
     }
 
-    internal  ObservableCollection<TagItem> FromTagsToEditableTags()
+    private void ApplyEditableTags(IDictionary<string, string> targetTags)
     {
-        var editableTags = new ObservableCollection<TagItem>();
-        if (Tags?.Count > 0)
-            foreach (var item in Tags)
-            {
-                editableTags.Add(new TagItem { Key = item.Key, Value = item.Value });
-            }
-        return editableTags;
+        targetTags.Clear();
+
+        if (EditableTags is null || EditableTags.Count == 0)
+            return;
+
+        foreach (var tag in EditableTags)
+        {
+            targetTags[tag.Key] = tag.Value;
+        }
     }
 }
 
