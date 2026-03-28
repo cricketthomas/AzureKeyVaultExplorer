@@ -5,7 +5,6 @@
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:AzureKeyVaultStudio.UserControls"
-    xmlns:localx="AzureKeyVaultStudio.UserControls.NewItem"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:skia="http://uno.ui/skia"
     d:DesignHeight="300"
@@ -144,7 +143,8 @@
                 </StackPanel>
 
 
-                <local:TagsEditor Tag="{x:Bind ViewModel.ItemPropertiesModel.Tags, Mode=TwoWay}" />
+                <local:TagsEditor EditableTags="{x:Bind ViewModel.ItemPropertiesModel.EditableTags, Mode=TwoWay}" />
+
             </StackPanel>
         </ScrollViewer>
 

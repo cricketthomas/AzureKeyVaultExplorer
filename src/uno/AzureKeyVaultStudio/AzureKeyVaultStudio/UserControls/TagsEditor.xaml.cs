@@ -21,50 +21,28 @@ namespace AzureKeyVaultStudio.UserControls;
 public sealed partial class TagsEditor : UserControl
 {
 
-    
-    public ObservableCollection<TagItem> EditableTags { get; } = new();
-
     public TagsEditor()
     {
         this.InitializeComponent();
-        TranformTagsToTagItems();
-
-        EditableTags.CollectionChanged += EditableTagsUpdateBindingTags_CollectionChanged;
-    }
-
-    private void EditableTagsUpdateBindingTags_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-    {
-        Dictionary<string, string>? dictTags = [];
-        foreach(var tag in EditableTags)
+        if(EditableTags is null)
         {
-            dictTags.Add(tag.Key, tag.Value);
+            EditableTags = [];
         }
     }
 
-    //public static readonly DependencyProperty RemoveTagCommandProperty = DependencyProperty.Register(
-    // nameof(RemoveTagCommand),
-    // typeof(ICommand),
-    // typeof(TagsEditor),
-    // new PropertyMetadata(default));
+  
 
-    //public ICommand RemoveTagCommand
-    //{
-    //    get => (ICommand)GetValue(RemoveTagCommandProperty);
-    //    set => SetValue(RemoveTagCommandProperty, value);
-    //}
-
-
-    public static readonly DependencyProperty TagsProperty =
+    public static readonly DependencyProperty EditableTagsProperty =
         DependencyProperty.Register(
-            nameof(Tags),
-            typeof(Dictionary<string, string>),
+            nameof(EditableTags),
+            typeof(ObservableCollection<TagItem>),
             typeof(TagsEditor),
             new PropertyMetadata(default(TagsEditor)));
 
-    public Dictionary<string, string> Tags
+    public ObservableCollection<TagItem> EditableTags
     {
-        get => (Dictionary<string, string>)GetValue(TagsProperty);
-        set => SetValue(TagsProperty, value);
+        get => (ObservableCollection<TagItem>)GetValue(EditableTagsProperty);
+        set => SetValue(EditableTagsProperty, value);
     }
 
     private void RemoveTagButton_Click(object sender, RoutedEventArgs e)
@@ -75,31 +53,12 @@ public sealed partial class TagsEditor : UserControl
         }
     }
 
-    private void Button_Click(object sender, RoutedEventArgs e)
+    private void AddTagButton_Click(object sender, RoutedEventArgs e)
     {
         var count = EditableTags is null ? 0 : EditableTags.Count;
-        EditableTags.Add(new TagItem
-        {
-            Key = $"Key{count}",
-            Value = $"Value{count}"
-        });
+        EditableTags.Add(new TagItem { Key = string.Empty, Value = string.Empty });
     }
-
-    private void TranformTagsToTagItems()
-    {
-        foreach(var item in Tags)
-        {
-            EditableTags.Add(new TagItem { Key = item.Key, Value = item.Value });
-        }
-    }
+ 
 
 }
 
-public partial class TagItem : ObservableObject
-{
-    [ObservableProperty]
-    public partial string Key { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial string Value { get; set; } = string.Empty;
-}

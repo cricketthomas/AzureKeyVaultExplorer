@@ -110,6 +110,8 @@
                     Text="{x:Bind ViewModel.SecretValue, Mode=TwoWay}"
                     TextWrapping="Wrap" />
             </StackPanel>
+
+            <local:TagsEditor EditableTags="{x:Bind ViewModel.ItemPropertiesModel.EditableTags, Mode=TwoWay}" />
         </StackPanel>
     </ScrollViewer>
 </ContentDialog>

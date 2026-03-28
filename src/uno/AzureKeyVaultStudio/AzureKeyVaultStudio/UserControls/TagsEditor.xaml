@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:AzureKeyVaultStudio.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:AzureKeyVaultStudio.Models"
     xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     d:DesignHeight="300"
     d:DesignWidth="400"
@@ -21,7 +22,7 @@
                 Orientation="Vertical"
                 Spacing="8" />
 
-            <DataTemplate x:Key="TagsTemplateBase" x:DataType="local:TagItem">
+            <DataTemplate x:Key="TagsTemplateBase" x:DataType="models:TagItem">
                 <Grid ColumnSpacing="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200" />
@@ -30,23 +31,25 @@
                     </Grid.ColumnDefinitions>
                     <TextBox
                         HorizontalAlignment="Stretch"
+                        AcceptsReturn="False"
                         MaxLength="512"
                         PlaceholderText="Key"
                         Text="{x:Bind Key, Mode=TwoWay}" />
                     <TextBox
                         Grid.Column="1"
                         HorizontalAlignment="Stretch"
+                        AcceptsReturn="False"
                         MaxLength="256"
                         PlaceholderText="Value"
                         Text="{x:Bind Value, Mode=TwoWay}" />
                 </Grid>
             </DataTemplate>
 
-            <DataTemplate x:Key="TagsTemplate" x:DataType="local:TagItem">
-                <Grid ColumnSpacing="10">
+            <DataTemplate x:Key="TagsTemplate" x:DataType="models:TagItem">
+                <Grid ColumnSpacing="4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
@@ -66,14 +69,16 @@
                         CommandParameter="{x:Bind}"
                     -->
                     <Button
+                        x:Uid="RemoveTagButton"
                         Grid.Column="2"
                         Margin="8,0,0,0"
                         VerticalAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
                         Click="RemoveTagButton_Click"
                         CommandParameter="{x:Bind}"
                         Content="&#xE74D;"
-                        FontFamily="Segoe Fluent Icons"
-                        Foreground="{ThemeResource SystemFillColorCriticalBrush}" />
+                        FontFamily="Segoe Fluent Icons" />
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>
@@ -84,16 +89,24 @@
         HorizontalScrollBarVisibility="Auto"
         HorizontalScrollMode="Auto"
         IsVerticalScrollChainingEnabled="False">
-        <Grid>
+        <Grid RowSpacing="4">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Button
+
+            <TextBlock
+                x:Uid="TagsHeader"
                 Grid.Row="0"
+                Margin="0,0,0,8"
+                FontSize="14" />
+            <Button
+                x:Uid="AddTagButton"
+                Grid.Row="0"
+                Padding="8,3"
                 HorizontalAlignment="Right"
-                Click="Button_Click"
-                Content="Add Tags" />
+                Click="AddTagButton_Click" />
 
             <ItemsRepeater
                 Grid.Row="1"
