@@ -11,6 +11,7 @@ using AzureKeyVaultStudio.Database;
 using AzureKeyVaultStudio.Messages;
 using AzureKeyVaultStudio.Services;
 using CommunityToolkit.Mvvm.Messaging;
+using Uno.Extensions.Specialized;
 using Windows.System;
 using static AzureKeyVaultStudio.Models.KvTreeNodeModel;
 
@@ -139,7 +140,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         IsBusy = true;
         try
         {
-            var subscriptionModel = new ObservableCollection<KvSubscriptionModel>();
+            var subscriptionModel = new List<KvSubscriptionModel>();
 
             var resource = _vaultService.GetKeyVaultResourceBySubscription();
             try
@@ -164,8 +165,8 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                 };
 
                 var savedItems = DbContext.GetQuickAccessItemsAsyncEnumerable(_authService.TenantId ?? null);
-                var tokenString = await _authService.GetAzureArmTokenSilent();
-                var tokenCredential = new CustomTokenCredential(tokenString);
+                var tokenResult = await _authService.GetAzureArmTokenSilent();
+                var tokenCredential = new CustomTokenCredential(tokenResult);
                 var armClient = new ArmClient(tokenCredential);
 
                 await foreach (var item in savedItems)
@@ -213,7 +214,6 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                     TreeDataSource = new ObservableCollection<KvSubscriptionModel>(subscriptionModel);
                 });
             }
-
             TreeDataSourceReadOnly = [.. subscriptionModel];
         }
         finally
@@ -321,21 +321,15 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         {
             _dispatcher.TryEnqueue(() =>
             {
-                SelectedItem = null;
-                TreeDataSource = [];
+                FilterService.ResetVisibility(TreeDataSourceReadOnly, true);
                 TreeDataSource = new ObservableCollection<KvSubscriptionModel>(TreeDataSourceReadOnly);
             });
             return Task.CompletedTask;
         }
 
-        var source = TreeDataSourceReadOnly.Count > 0
-            ? TreeDataSourceReadOnly
-            : [.. TreeDataSource];
-
-        var results = FilterService.Filter(source, SearchQuery);
+        var results = FilterService.Filter(TreeDataSourceReadOnly, SearchQuery);
         _dispatcher.TryEnqueue(() =>
         {
-            SelectedItem = null;
             TreeDataSource = new ObservableCollection<KvSubscriptionModel>(results);
         });
 
@@ -351,7 +345,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void OpenInNewTab(KeyVaultResource model)
+    private static void OpenInNewTab(KeyVaultResource model)
     {
         if (model is KeyVaultResource)
         {

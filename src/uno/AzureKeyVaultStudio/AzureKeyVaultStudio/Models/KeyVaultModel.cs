@@ -16,6 +16,9 @@ public abstract partial class KvTreeNodeModel : ObservableObject
     [ObservableProperty]
     public partial bool IsExpanded { get; set; }
 
+    [ObservableProperty]
+    public partial bool IsVisible { get; set; } = true;
+
     public string DisplayName { get; set; } = null!;
 
     public ObservableCollection<KvTreeNodeModel> Children { get; } = [];

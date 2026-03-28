@@ -66,7 +66,8 @@
                     DoubleTapped="TreeViewItem_DoubleTapped"
                     IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}"
                     IsSelected="{x:Bind IsSelected, Mode=TwoWay}"
-                    ItemsSource="{x:Bind Children, Mode=OneWay}">
+                    ItemsSource="{x:Bind Children, Mode=OneWay}"
+                    Visibility="{x:Bind IsVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel IsHitTestVisible="False" Orientation="Horizontal">
                         <FontIcon
                             Margin="0,0,6,2"
@@ -154,9 +155,9 @@
                 </TextBox.KeyboardAccelerators>
             </TextBox>
             <ProgressBar
+                x:Name="ProgressbarRefresh"
                 Grid.Row="0"
                 Padding="0"
-                x:Name="ProgressbarRefresh"
                 VerticalAlignment="Top"
                 x:Load="{x:Bind ViewModel.RefreshCommand.IsRunning, Mode=OneWay}"
                 IsHitTestVisible="False"
