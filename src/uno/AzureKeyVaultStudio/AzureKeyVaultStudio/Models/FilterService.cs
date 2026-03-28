@@ -11,7 +11,7 @@ public static class FilterService
         foreach (var node in nodes)
         {
             node.IsVisible = isVisible;
-            ResetVisibility(node.Children);
+            ResetVisibility(node.Children, isVisible);
         }
     }
     public static IList<KvSubscriptionModel> Filter(IList<KvSubscriptionModel> allSubscriptions, string query)
@@ -114,7 +114,7 @@ public static class FilterService
                     }
                 }
 
-                SetResourceGroupExpanded(resourceGroup, false);
+                SetResourceGroupExpanded(resourceGroup, resourceGroupMatch);
                 SetResourceGroupVisible(resourceGroup, value: resourceGroupMatch);
             }
 
