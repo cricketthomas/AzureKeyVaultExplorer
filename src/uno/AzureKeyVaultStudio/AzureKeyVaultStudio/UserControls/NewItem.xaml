@@ -121,7 +121,6 @@
                 <StackPanel Orientation="Vertical" Spacing="4">
                     <TextBlock x:Uid="SecretValueTextBlock" />
 
-
                     <Grid ColumnSpacing="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -144,6 +143,8 @@
 
                 </StackPanel>
 
+
+                <local:TagsEditor Tag="{x:Bind ViewModel.ItemPropertiesModel.Tags, Mode=TwoWay}" />
             </StackPanel>
         </ScrollViewer>
 

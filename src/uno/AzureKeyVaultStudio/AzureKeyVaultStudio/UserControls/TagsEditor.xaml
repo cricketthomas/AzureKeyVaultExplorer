@@ -1,0 +1,106 @@
+﻿<UserControl
+    x:Class="AzureKeyVaultStudio.UserControls.TagsEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:AzureKeyVaultStudio.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <win:ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <StackLayout
+                x:Key="VerticalStackLayout"
+                x:Name="VerticalStackLayout"
+                Orientation="Vertical"
+                Spacing="8" />
+
+            <DataTemplate x:Key="TagsTemplateBase" x:DataType="local:TagItem">
+                <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        HorizontalAlignment="Stretch"
+                        MaxLength="512"
+                        PlaceholderText="Key"
+                        Text="{x:Bind Key, Mode=TwoWay}" />
+                    <TextBox
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        MaxLength="256"
+                        PlaceholderText="Value"
+                        Text="{x:Bind Value, Mode=TwoWay}" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="TagsTemplate" x:DataType="local:TagItem">
+                <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox
+                        HorizontalAlignment="Stretch"
+                        PlaceholderText="Key"
+                        Text="{x:Bind Key, Mode=TwoWay}" />
+
+                    <TextBox
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        PlaceholderText="Value"
+                        Text="{x:Bind Value, Mode=TwoWay}" />
+
+                    <!--
+                        Command="{Binding DataContext.RemoveTagCommand, ElementName=TagsEditorRoot}"
+                        CommandParameter="{x:Bind}"
+                    -->
+                    <Button
+                        Grid.Column="2"
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        Click="RemoveTagButton_Click"
+                        CommandParameter="{x:Bind}"
+                        Content="&#xE74D;"
+                        FontFamily="Segoe Fluent Icons"
+                        Foreground="{ThemeResource SystemFillColorCriticalBrush}" />
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Auto"
+        HorizontalScrollMode="Auto"
+        IsVerticalScrollChainingEnabled="False">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button
+                Grid.Row="0"
+                HorizontalAlignment="Right"
+                Click="Button_Click"
+                Content="Add Tags" />
+
+            <ItemsRepeater
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                ItemTemplate="{StaticResource TagsTemplate}"
+                ItemsSource="{x:Bind EditableTags, Mode=OneWay}"
+                Layout="{StaticResource VerticalStackLayout}" />
+        </Grid>
+    </ScrollViewer>
+</UserControl>
