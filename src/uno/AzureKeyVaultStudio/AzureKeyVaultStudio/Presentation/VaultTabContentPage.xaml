@@ -278,12 +278,11 @@
                                                         Height="20"
                                                         MaxWidth="80"
                                                         Padding="5,2"
-                                                        Background="{ThemeResource SystemAccentColor}"
+                                                        Background="{ThemeResource AccentAcrylicBackgroundFillColorDefaultBrush}"
                                                         CornerRadius="2">
                                                         <TextBlock
                                                             VerticalAlignment="Center"
                                                             FontSize="11"
-                                                            Foreground="White"
                                                             IsTextSelectionEnabled="False"
                                                             Text="{x:Bind Mode=OneTime}"
                                                             TextTrimming="CharacterEllipsis" />

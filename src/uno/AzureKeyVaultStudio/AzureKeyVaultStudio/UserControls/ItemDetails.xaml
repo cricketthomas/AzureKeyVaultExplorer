@@ -332,12 +332,11 @@
                                 <Border
                                     Height="18"
                                     Padding="6,2"
-                                    Background="{ThemeResource AccentAcrylicBackgroundFillColorBaseBrush}"
+                                    Background="{ThemeResource AccentAcrylicBackgroundFillColorDefaultBrush}"
                                     CornerRadius="2">
                                     <TextBlock
                                         x:Name="textBlock"
                                         FontSize="10"
-                                        Foreground="White"
                                         IsTextSelectionEnabled="True"
                                         Text="{x:Bind sys:String.Format(x:Null, '{0}: {1}', Key, Value)}"
                                         TextTrimming="CharacterEllipsis" />
