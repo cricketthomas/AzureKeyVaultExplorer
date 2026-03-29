@@ -77,10 +77,6 @@
   </PropertyGroup>
 
 
-  <ItemGroup>
-    <None Remove="UserControls\TagsEditor.xaml" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Azure.ResourceManager.KeyVault" />
@@ -120,10 +116,5 @@
   </ItemGroup>
 
 
-  <ItemGroup>
-    <Content Update="Assets\Images\kv-gray-3.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
     
 </Project>

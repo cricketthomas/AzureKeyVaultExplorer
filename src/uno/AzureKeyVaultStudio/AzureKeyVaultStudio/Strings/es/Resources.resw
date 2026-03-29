@@ -678,4 +678,7 @@
   <data name="AddTagButton.Content" xml:space="preserve">
     <value>Agregar etiqueta</value>
   </data>
+  <data name="CloseButtonText" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
 </root>

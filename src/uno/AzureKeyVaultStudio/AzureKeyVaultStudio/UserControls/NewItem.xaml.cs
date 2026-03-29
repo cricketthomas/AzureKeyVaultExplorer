@@ -31,7 +31,7 @@ public sealed partial class NewItem : UserControl
     {
         WeakReferenceMessenger.Default.Register<ShowValidationErrorMessage, Guid>(this, ViewModel.MessengerToken, async (r, m) =>
         {
-            ShowDialogMessage(_localizer["NewItemErrorTitle"], m.Data, _localizer["NewItemDismissButtonText"]);
+            ShowDialogMessage(_localizer["NewItemErrorTitle"], m.Data, _localizer["NewItemDismissButtonText"], true);
         });
         WeakReferenceMessenger.Default.Register<ShowSuccessOperationMessage, Guid>(this, ViewModel.MessengerToken, async (r, m) =>
         {
@@ -41,7 +41,7 @@ public sealed partial class NewItem : UserControl
         });
     }
 
-    private void ShowDialogMessage(string title, string message, string dismissButtonText)
+    private void ShowDialogMessage(string title, string message, string dismissMessageButtonText, bool isError = false)
     {
         _ = DispatcherQueue.TryEnqueue(async () =>
         {
@@ -62,10 +62,16 @@ public sealed partial class NewItem : UserControl
                     HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
                     MaxHeight = 300
                 },
-                CloseButtonText = "OK",
+               
+                CloseButtonText = _localizer?["CloseButtonText"] ?? "Close",
                 XamlRoot = this.XamlRoot,
                 RequestedTheme = this.ActualTheme,
             };
+
+            if (isError)
+            {
+                contentDialog.PrimaryButtonText = dismissMessageButtonText ?? "OK";
+            }
             contentDialog.CloseButtonClick += ContentDialog_CloseButtonClick;
             await contentDialog.ShowAsync();
         });

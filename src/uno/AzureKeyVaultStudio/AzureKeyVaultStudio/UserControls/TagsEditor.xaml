@@ -6,24 +6,25 @@
     xmlns:local="using:AzureKeyVaultStudio.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:AzureKeyVaultStudio.Models"
+    xmlns:skia="http://uno.ui/not_win"
     xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     d:DesignHeight="300"
     d:DesignWidth="400"
-    mc:Ignorable="d">
+    mc:Ignorable="d skia">
     <UserControl.Resources>
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <win:ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <StackLayout
+            <win:StackLayout
                 x:Key="VerticalStackLayout"
                 x:Name="VerticalStackLayout"
                 Orientation="Vertical"
                 Spacing="8" />
 
             <DataTemplate x:Key="TagsTemplate" x:DataType="models:TagItem">
-                <Grid ColumnSpacing="4">
+                <Grid skia:Margin="0,4,0,4" ColumnSpacing="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -92,9 +93,9 @@
             <ItemsRepeater
                 Grid.Row="2"
                 HorizontalAlignment="Stretch"
+                win:Layout="{StaticResource VerticalStackLayout}"
                 ItemTemplate="{StaticResource TagsTemplate}"
-                ItemsSource="{x:Bind EditableTags, Mode=OneWay}"
-                Layout="{StaticResource VerticalStackLayout}" />
+                ItemsSource="{x:Bind EditableTags, Mode=OneWay}" />
         </Grid>
     </ScrollViewer>
 </UserControl>
