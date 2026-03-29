@@ -20,6 +20,15 @@
     d:DesignWidth="400"
     mc:Ignorable="d skia">
 
+    <UserControl.Resources>
+        <UniformGridLayout
+            x:Key="UniformGridLayout2"
+            MinColumnSpacing="12"
+            MinItemHeight="108"
+            MinItemWidth="108"
+            MinRowSpacing="12" />
+
+    </UserControl.Resources>
 
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -313,29 +322,29 @@
                             Text="{x:Bind ViewModel.OpenedItem.UpdatedOn, Mode=OneWay}" />
                     </Grid>
 
-                    <ItemsControl Margin="0,4,0,0" ItemsSource="{x:Bind ViewModel.OpenedItem.TagValues, Mode=OneWay}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" Spacing="4" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="x:String">
+                    <ItemsRepeater Margin="0,4,0,0" ItemsSource="{x:Bind ViewModel.OpenedItem.EditableTags, Mode=OneWay}">
+                        <ItemsRepeater.Layout>
+                            <toolkit:WrapLayout HorizontalSpacing="5" VerticalSpacing="5" />
+                        </ItemsRepeater.Layout>
+
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate x:DataType="models:TagItem">
                                 <Border
                                     Height="18"
                                     Padding="6,2"
-                                    Background="{ThemeResource SystemAccentColor}"
+                                    Background="{ThemeResource AccentAcrylicBackgroundFillColorBaseBrush}"
                                     CornerRadius="2">
                                     <TextBlock
+                                        x:Name="textBlock"
                                         FontSize="10"
                                         Foreground="White"
                                         IsTextSelectionEnabled="True"
-                                        Text="{x:Bind Mode=OneTime}"
+                                        Text="{x:Bind sys:String.Format(x:Null, '{0}: {1}', Key, Value)}"
                                         TextTrimming="CharacterEllipsis" />
                                 </Border>
                             </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
                 </StackPanel>
             </Border>
 
