@@ -21,7 +21,7 @@
                 x:Key="VerticalStackLayout"
                 x:Name="VerticalStackLayout"
                 Orientation="Vertical"
-                Spacing="8" />
+                Spacing="6" />
 
             <DataTemplate x:Key="TagsTemplate" x:DataType="models:TagItem">
                 <Grid skia:Margin="0,4,0,4" ColumnSpacing="4">
@@ -42,6 +42,7 @@
                         Grid.Column="1"
                         HorizontalAlignment="Stretch"
                         AcceptsReturn="False"
+                        IsTabStop="True"
                         MaxLength="256"
                         PlaceholderText="Value"
                         Text="{x:Bind Value, Mode=TwoWay}" />
@@ -49,8 +50,7 @@
                     <Button
                         x:Uid="RemoveTagButton"
                         Grid.Column="2"
-                        Margin="8,0,0,0"
-                        VerticalAlignment="Center"
+                        VerticalAlignment="Bottom"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Click="RemoveTagButton_Click"
@@ -62,6 +62,7 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
+
 
 
     <ScrollViewer
@@ -80,14 +81,14 @@
 
             <TextBlock
                 x:Uid="TagsHeader"
-                Grid.Row="1"
+                Grid.Row="0"
                 Margin="0,0,0,8"
                 FontSize="14" />
             <Button
                 x:Uid="AddTagButton"
                 Grid.Row="1"
                 Padding="8,3"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Left"
                 Click="AddTagButton_Click" />
 
             <ItemsRepeater
@@ -95,7 +96,8 @@
                 HorizontalAlignment="Stretch"
                 win:Layout="{StaticResource VerticalStackLayout}"
                 ItemTemplate="{StaticResource TagsTemplate}"
-                ItemsSource="{x:Bind EditableTags, Mode=OneWay}" />
+                ItemsSource="{x:Bind EditableTags, Mode=OneWay}"
+                TabFocusNavigation="Local" />
         </Grid>
     </ScrollViewer>
 </UserControl>
