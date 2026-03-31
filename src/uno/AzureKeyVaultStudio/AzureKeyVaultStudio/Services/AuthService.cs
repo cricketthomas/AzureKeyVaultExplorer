@@ -16,6 +16,8 @@ public class AuthService
     private readonly ILogger<AuthService> _logger;
     private readonly SemaphoreSlim _cacheInitLock = new(1, 1);
     private bool _isCacheAttached;
+    public string AzurePortalBaseUri { get; init; } = "https://portal.azure.com";
+
     public AzureCloudInstance CloudInstance { get; private set; }
 
     public AuthService(ILocalSettingsService localSettings, ILogger<AuthService> logger)
@@ -45,6 +47,15 @@ public class AuthService
             builder = builder.WithAuthority(CloudInstance, AadAuthorityAudience.AzureAdMultipleOrgs);
 
         authenticationClient = builder.Build();
+
+        AzurePortalBaseUri = CloudInstance switch
+        {
+            AzureCloudInstance.AzureChina => "https://portal.azure.cn",
+            AzureCloudInstance.AzureGermany => "https://portal.microsoftazure.de",
+            AzureCloudInstance.AzureUsGovernment => "https://portal.azure.us",
+            _ => "https://portal.azure.com"
+        };
+
         _ = InitializeCache();
     }
 
