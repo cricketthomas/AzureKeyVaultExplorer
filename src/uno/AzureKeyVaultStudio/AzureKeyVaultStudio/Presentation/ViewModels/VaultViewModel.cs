@@ -756,7 +756,8 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
         if (keyVaultItem is null) return;
 
         string tenantId = _authService!.TenantId;
-        var uri = new Uri($"https://portal.azure.com/#@{tenantId}/asset/Microsoft_Azure_KeyVault/{keyVaultItem.Type}/{keyVaultItem.Id}");
+        string portalBaseUri = _authService!.AzurePortalBaseUri;
+        var uri = new Uri($"{portalBaseUri}/#@{tenantId}/asset/Microsoft_Azure_KeyVault/{keyVaultItem.Type}/{keyVaultItem.Id}");
         await Windows.System.Launcher.LaunchUriAsync(uri);
     }
 

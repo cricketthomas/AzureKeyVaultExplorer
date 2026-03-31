@@ -340,7 +340,9 @@ public partial class KeyVaultTreeViewModel : ObservableObject
     private async Task OpenInAzure(KeyVaultResource model)
     {
         if (model is null) return;
-        var uri = new Uri($"https://portal.azure.com/#@{_authService.TenantName}/resource{model.Id}");
+        string tenantName = _authService.TenantName;
+        string portalBaseUri = _authService.AzurePortalBaseUri;
+        var uri = new Uri($"{portalBaseUri}/#@{tenantName}/resource{model.Id}");
         await Launcher.LaunchUriAsync(uri);
     }
 
