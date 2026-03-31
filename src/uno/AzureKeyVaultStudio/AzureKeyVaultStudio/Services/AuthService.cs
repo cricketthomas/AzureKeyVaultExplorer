@@ -16,7 +16,7 @@ public class AuthService
     private readonly ILogger<AuthService> _logger;
     private readonly SemaphoreSlim _cacheInitLock = new(1, 1);
     private bool _isCacheAttached;
-    public string AzurePortalBaseUri { get; init; } = "https://portal.azure.com";
+    public string AzurePortalBaseUri { get; private set; } = "https://portal.azure.com";
 
     public AzureCloudInstance CloudInstance { get; private set; }
 

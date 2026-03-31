@@ -314,8 +314,8 @@ public partial class ItemPropertiesViewModel : ObservableObject
     private async Task OpenInAzure()
     {
         if (OpenedItem is null) return;
-        string tenantName = _authService!.TenantName;
-        string portalBaseUri = _authService!.AzurePortalBaseUri;
+        string tenantName = _authService.TenantName;
+        string portalBaseUri = _authService.AzurePortalBaseUri;
         var uri = new Uri($"{portalBaseUri}/#@{tenantName}/asset/Microsoft_Azure_KeyVault/{OpenedItem.Type}/{OpenedItem.Id}");
         await Windows.System.Launcher.LaunchUriAsync(uri);
     }
