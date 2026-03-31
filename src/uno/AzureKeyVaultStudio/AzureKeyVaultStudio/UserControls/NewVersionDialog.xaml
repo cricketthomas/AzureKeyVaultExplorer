@@ -8,7 +8,7 @@
     RequestedTheme="Default"
     Style="{ThemeResource DefaultContentDialogStyle}">
     <ScrollViewer
-        MinWidth="400"
+        MinWidth="500"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
 

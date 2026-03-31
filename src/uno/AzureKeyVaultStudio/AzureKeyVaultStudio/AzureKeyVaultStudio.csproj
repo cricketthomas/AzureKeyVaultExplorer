@@ -12,7 +12,7 @@
     <AssemblyName>AzureKeyVaultStudio</AssemblyName>
     <ApplicationId>io.github.cricketthomas.AzureKeyVaultExplorer</ApplicationId>
 
-    <ApplicationDisplayVersion>2.0.5.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>2.1.0.0</ApplicationDisplayVersion>
     <ApplicationVersion>2</ApplicationVersion>
 
     <ApplicationPublisher>cricketthomas</ApplicationPublisher>
@@ -115,6 +115,4 @@
     <PackageReference Include="Uno.CommunityToolkit.WinUI.UI.Controls.DataGrid" />
   </ItemGroup>
 
-
-    
 </Project>

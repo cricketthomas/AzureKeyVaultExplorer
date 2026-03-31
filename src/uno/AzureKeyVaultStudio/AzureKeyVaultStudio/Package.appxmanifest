@@ -6,7 +6,7 @@
   xmlns:uap18="http://schemas.microsoft.com/appx/manifest/uap/windows10/18"
   IgnorableNamespaces="uap rescap uap18">
 
-  <Identity Version="2.0.5.0" Publisher="CN=FE9032D7-9FA7-4DED-9087-469BC45B4D99" Name="ArthurThomasIV.AzureKeyVaultExplorer-forAzure"/>
+  <Identity Version="2.1.0.0" Publisher="CN=FE9032D7-9FA7-4DED-9087-469BC45B4D99" Name="ArthurThomasIV.AzureKeyVaultExplorer-forAzure"/>
   <Properties>
     <DisplayName>Key Vault Explorer</DisplayName>
     <PublisherDisplayName>Arthur Thomas IV</PublisherDisplayName>
