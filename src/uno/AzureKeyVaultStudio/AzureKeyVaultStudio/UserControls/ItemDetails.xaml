@@ -20,16 +20,6 @@
     d:DesignWidth="400"
     mc:Ignorable="d skia">
 
-    <UserControl.Resources>
-        <UniformGridLayout
-            x:Key="UniformGridLayout2"
-            MinColumnSpacing="12"
-            MinItemHeight="108"
-            MinItemWidth="108"
-            MinRowSpacing="12" />
-
-    </UserControl.Resources>
-
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.Resources>
@@ -47,12 +37,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-        <!--<local:OverrideTitlebar
-            Name="OverrideTitlebar"
-            Grid.Row="0"
-            skia:Visibility="Collapsed"
-            SecondaryTitle="{x:Bind ViewModel.OpenedItem.Name, Mode=OneWay}" />-->
 
         <CommandBar
             Grid.Row="0"

@@ -19,7 +19,7 @@
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="10.0.5" />
     <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.11" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.83.1" />
+    <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.83.3" />
     <PackageVersion Include="DeviceId" Version="6.11.0" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.251219" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.2.251219" />

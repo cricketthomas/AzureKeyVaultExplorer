@@ -22,8 +22,7 @@ public sealed partial class TagsEditor : UserControl
             nameof(EditableTags),
             typeof(ObservableCollection<TagItem>),
             typeof(TagsEditor),
-            new PropertyMetadata(default(TagsEditor)));
-
+            new PropertyMetadata(null));
     public ObservableCollection<TagItem> EditableTags
     {
         get => (ObservableCollection<TagItem>)GetValue(EditableTagsProperty);
@@ -32,6 +31,9 @@ public sealed partial class TagsEditor : UserControl
 
     private void RemoveTagButton_Click(object sender, RoutedEventArgs e)
     {
+        if (EditableTags is null)
+            return;
+
         if (sender is Button button && button.CommandParameter is TagItem tagItem)
         {
             EditableTags.Remove(tagItem);
@@ -40,6 +42,9 @@ public sealed partial class TagsEditor : UserControl
 
     private void AddTagButton_Click(object sender, RoutedEventArgs e)
     {
+        if (EditableTags is null)
+            EditableTags = [];
+
         EditableTags.Add(new TagItem { Key = string.Empty, Value = string.Empty });
     }
  

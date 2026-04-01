@@ -128,7 +128,8 @@
                         <TextBox
                             x:Name="SecretValueTextbox"
                             x:Uid="SecretValueTextbox"
-                            Height="100"
+                            MinHeight="100"
+                            MaxHeight="250"
                             AcceptsReturn="True"
                             Text="{x:Bind ViewModel.SecretValue, Mode=TwoWay}"
                             TextWrapping="Wrap" />

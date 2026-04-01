@@ -19,7 +19,6 @@
             </ResourceDictionary.MergedDictionaries>
             <win:StackLayout
                 x:Key="VerticalStackLayout"
-                x:Name="VerticalStackLayout"
                 Orientation="Vertical"
                 Spacing="6" />
 

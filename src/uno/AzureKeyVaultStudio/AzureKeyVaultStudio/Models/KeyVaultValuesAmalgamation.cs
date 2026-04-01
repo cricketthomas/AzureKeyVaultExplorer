@@ -1,10 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using Azure.ResourceManager.Resources.Models;
 using Azure.Security.KeyVault.Certificates;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Secrets;
-using Microsoft.UI.Xaml.XamlTypeInfo;
 
 namespace AzureKeyVaultStudio.Models;
 
@@ -219,9 +217,19 @@ public sealed class KeyVaultItemProperties
         if (EditableTags is null || EditableTags.Count == 0)
             return;
 
+        var seenKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
         foreach (var tag in EditableTags)
         {
-            targetTags[tag.Key] = tag.Value;
+            var key = tag.Key?.Trim();
+
+            if (string.IsNullOrWhiteSpace(key))
+                continue;
+
+            if (!seenKeys.Add(key))
+                throw new InvalidOperationException("Duplicate tag keys are not allowed.");
+
+            targetTags[key] = tag.Value;
         }
     }
 }
