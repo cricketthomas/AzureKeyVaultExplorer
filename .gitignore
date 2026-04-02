@@ -457,3 +457,4 @@ $RECYCLE.BIN/
 /KeyVaultExplorer.Desktop/mac
 /mpdev
 .DS_Store
+/src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio/msbuild.ps1

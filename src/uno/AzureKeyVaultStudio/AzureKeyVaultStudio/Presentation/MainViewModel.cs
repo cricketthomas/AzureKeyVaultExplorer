@@ -67,7 +67,6 @@ public partial class MainViewModel : ObservableObject
             if (SplitViewWidth != newActual)
             {
                 SplitViewWidth = newActual;
-                OnPropertyChanged(nameof(SplitViewWidth));
             }
         }
     }

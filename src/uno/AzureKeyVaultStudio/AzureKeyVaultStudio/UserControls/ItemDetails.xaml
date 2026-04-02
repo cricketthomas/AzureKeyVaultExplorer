@@ -119,7 +119,7 @@
 
                 <Border
                     Grid.Column="0"
-                    MaxHeight="120"
+                    MaxHeight="150"
                     Padding="8,6"
                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                     BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"

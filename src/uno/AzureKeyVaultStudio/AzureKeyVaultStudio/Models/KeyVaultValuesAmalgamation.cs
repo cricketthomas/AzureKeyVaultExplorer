@@ -210,7 +210,7 @@ public sealed class KeyVaultItemProperties
         
     }
 
-    private void ApplyEditableTags(IDictionary<string, string> targetTags)
+    public void ApplyEditableTags(IDictionary<string, string> targetTags)
     {
         targetTags.Clear();
 

@@ -139,8 +139,8 @@ public partial class NewVersionViewModel : ObservableValidator
 
             newSecret.Properties.ContentType = ItemPropertiesModel.ContentType;
 
-            foreach (var tag in ItemPropertiesModel.EditableTags)
-                newSecret.Properties.Tags.Add(tag.Key, tag.Value);
+
+            ItemPropertiesModel.ApplyEditableTags(newSecret.Properties.Tags);
 
             token.ThrowIfCancellationRequested();
 

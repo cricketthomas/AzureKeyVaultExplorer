@@ -63,16 +63,22 @@ public sealed partial class NewItem : UserControl
                     MaxHeight = 300
                 },
                
-                CloseButtonText = _localizer?["CloseButtonText"] ?? "Close",
                 XamlRoot = this.XamlRoot,
                 RequestedTheme = this.ActualTheme,
             };
 
+
+            // allow users to dismiss only if its an error alert, they can still close the window via parent. 
+            // otherwise, show just the close button since users are done with the window and we dont support creating multiple secrets aat a time, yet
             if (isError)
             {
                 contentDialog.PrimaryButtonText = dismissMessageButtonText ?? "OK";
             }
-            contentDialog.CloseButtonClick += ContentDialog_CloseButtonClick;
+            else
+            {
+                contentDialog.CloseButtonText = _localizer?["CloseButtonText"] ?? "Close";
+                contentDialog.CloseButtonClick += ContentDialog_CloseButtonClick;
+            }
             await contentDialog.ShowAsync();
         });
     }
