@@ -5,7 +5,6 @@
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:AzureKeyVaultStudio.UserControls"
-    xmlns:localx="AzureKeyVaultStudio.UserControls.NewItem"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:skia="http://uno.ui/skia"
     d:DesignHeight="300"
@@ -121,7 +120,6 @@
                 <StackPanel Orientation="Vertical" Spacing="4">
                     <TextBlock x:Uid="SecretValueTextBlock" />
 
-
                     <Grid ColumnSpacing="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -130,7 +128,8 @@
                         <TextBox
                             x:Name="SecretValueTextbox"
                             x:Uid="SecretValueTextbox"
-                            Height="100"
+                            MinHeight="100"
+                            MaxHeight="250"
                             AcceptsReturn="True"
                             Text="{x:Bind ViewModel.SecretValue, Mode=TwoWay}"
                             TextWrapping="Wrap" />
@@ -143,6 +142,9 @@
                     </Grid>
 
                 </StackPanel>
+
+
+                <local:TagsEditor EditableTags="{x:Bind ViewModel.ItemPropertiesModel.EditableTags, Mode=TwoWay}" />
 
             </StackPanel>
         </ScrollViewer>

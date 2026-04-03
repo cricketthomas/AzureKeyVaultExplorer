@@ -1,0 +1,102 @@
+﻿<UserControl
+    x:Class="AzureKeyVaultStudio.UserControls.TagsEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:AzureKeyVaultStudio.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:AzureKeyVaultStudio.Models"
+    xmlns:skia="http://uno.ui/not_win"
+    xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    mc:Ignorable="d skia">
+    <UserControl.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <win:ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <win:StackLayout
+                x:Key="VerticalStackLayout"
+                Orientation="Vertical"
+                Spacing="6" />
+
+            <DataTemplate x:Key="TagsTemplate" x:DataType="models:TagItem">
+                <Grid skia:Margin="0,4,0,4" ColumnSpacing="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox
+                        HorizontalAlignment="Stretch"
+                        AcceptsReturn="False"
+                        MaxLength="256"
+                        PlaceholderText="Key"
+                        Text="{x:Bind Key, Mode=TwoWay}" />
+
+                    <TextBox
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        AcceptsReturn="False"
+                        IsTabStop="True"
+                        MaxLength="256"
+                        PlaceholderText="Value"
+                        Text="{x:Bind Value, Mode=TwoWay}" />
+
+                    <Button
+                        x:Uid="RemoveTagButton"
+                        Grid.Column="2"
+                        VerticalAlignment="Bottom"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="RemoveTagButton_Click"
+                        CommandParameter="{x:Bind}"
+                        Content="&#xE74D;"
+                        FontFamily="Segoe Fluent Icons" />
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
+
+
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Auto"
+        HorizontalScrollMode="Auto"
+        IsVerticalScrollChainingEnabled="False">
+
+        <Grid RowSpacing="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Border BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" />
+
+            <TextBlock
+                x:Uid="TagsHeader"
+                Grid.Row="0"
+                Margin="0,0,0,8"
+                FontSize="14" />
+            <Button
+                x:Uid="AddTagButton"
+                Grid.Row="1"
+                Padding="8,3"
+                HorizontalAlignment="Left"
+                Click="AddTagButton_Click" />
+
+            <ItemsRepeater
+                Grid.Row="2"
+                HorizontalAlignment="Stretch"
+                win:Layout="{StaticResource VerticalStackLayout}"
+                ItemTemplate="{StaticResource TagsTemplate}"
+                ItemsSource="{x:Bind EditableTags, Mode=OneWay}"
+                TabFocusNavigation="Local" />
+        </Grid>
+    </ScrollViewer>
+</UserControl>

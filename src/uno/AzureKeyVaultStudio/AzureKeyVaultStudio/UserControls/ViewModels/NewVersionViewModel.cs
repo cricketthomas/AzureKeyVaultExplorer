@@ -16,7 +16,6 @@ public partial class NewVersionViewModel : ObservableValidator
     private readonly IStringLocalizer _localizer;
     public Guid MessengerToken { get; } = Guid.NewGuid();
 
-
     [ObservableProperty]
     public partial TimeSpan ExpiresOnTimespan { get; set; } = TimeSpan.Zero;
 
@@ -61,7 +60,6 @@ public partial class NewVersionViewModel : ObservableValidator
         _authService = services.GetRequiredService<AuthService>();
         _vaultService = services.GetRequiredService<VaultService>();
         _localizer = services.GetRequiredService<IStringLocalizer>();
-
     }
 
     [ObservableProperty]
@@ -97,7 +95,6 @@ public partial class NewVersionViewModel : ObservableValidator
         await dialog.ShowAsync();
     }
 
-
     [RelayCommand]
     public async Task SaveSecretDetailsChanges()
     {
@@ -111,10 +108,17 @@ public partial class NewVersionViewModel : ObservableValidator
         else
             ItemPropertiesModel.ExpiresOn = null;
 
-        var updatedProps = await _vaultService.UpdateSecret(ItemPropertiesModel.ToSecretProperties(), ItemPropertiesModel.VaultUri);
-        ItemPropertiesModel = KeyVaultItemProperties.FromSecretProperties(updatedProps);
+        try
+        {
+            var updatedProps = await _vaultService.UpdateSecret(ItemPropertiesModel.ToSecretProperties(), ItemPropertiesModel.VaultUri);
+            ItemPropertiesModel = KeyVaultItemProperties.FromSecretProperties(updatedProps);
 
-        WeakReferenceMessenger.Default.Send(new ShowSuccessOperationMessage(ItemPropertiesModel.Name, true), MessengerToken);
+            WeakReferenceMessenger.Default.Send(new ShowSuccessOperationMessage(ItemPropertiesModel.Name, true), MessengerToken);
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowValidationErrorMessage(ex.Message), MessengerToken);
+        }
     }
 
     [RelayCommand(FlowExceptionsToTaskScheduler = false, IncludeCancelCommand = true, AllowConcurrentExecutions = false)]
@@ -135,8 +139,8 @@ public partial class NewVersionViewModel : ObservableValidator
 
             newSecret.Properties.ContentType = ItemPropertiesModel.ContentType;
 
-            foreach (var tag in ItemPropertiesModel.Tags)
-                newSecret.Properties.Tags.Add(tag.Key, tag.Value);
+
+            ItemPropertiesModel.ApplyEditableTags(newSecret.Properties.Tags);
 
             token.ThrowIfCancellationRequested();
 
@@ -185,6 +189,4 @@ public partial class NewVersionViewModel : ObservableValidator
             ItemPropertiesModel.ExpiresOn = null;
         }
     }
-
-
 }

@@ -21,7 +21,6 @@
     mc:Ignorable="d skia">
 
 
-
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.Resources>
             <ResourceDictionary>
@@ -39,12 +38,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--<local:OverrideTitlebar
-            Name="OverrideTitlebar"
-            Grid.Row="0"
-            skia:Visibility="Collapsed"
-            SecondaryTitle="{x:Bind ViewModel.OpenedItem.Name, Mode=OneWay}" />-->
-
         <CommandBar
             Grid.Row="0"
             Padding="4,0"
@@ -55,12 +48,20 @@
                 <AppBarButton
                     x:Uid="ItemDetailsOpenAppBarButton"
                     Command="{x:Bind ViewModel.OpenInAzureCommand, Mode=OneWay}"
-                    Icon="OpenFile" />
+                    Icon="OpenFile">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="O" Modifiers="Control" />
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
 
                 <AppBarButton
                     x:Uid="ItemDetailsRefreshAppBarButton"
                     Command="{x:Bind ViewModel.RefreshCommand, Mode=OneWay}"
-                    Icon="Refresh" />
+                    Icon="Refresh">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="F5" />
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
                 <AppBarButton
                     x:Uid="ItemDetailsCopyAppBarButton"
                     Command="{x:Bind ViewModel.CopyCommand, Mode=OneWay}"
@@ -118,7 +119,7 @@
 
                 <Border
                     Grid.Column="0"
-                    MaxHeight="120"
+                    MaxHeight="150"
                     Padding="8,6"
                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                     BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
@@ -305,29 +306,28 @@
                             Text="{x:Bind ViewModel.OpenedItem.UpdatedOn, Mode=OneWay}" />
                     </Grid>
 
-                    <ItemsControl Margin="0,4,0,0" ItemsSource="{x:Bind ViewModel.OpenedItem.TagValues, Mode=OneWay}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" Spacing="4" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="x:String">
+                    <ItemsRepeater Margin="0,4,0,0" ItemsSource="{x:Bind ViewModel.OpenedItem.EditableTags, Mode=OneWay}">
+                        <ItemsRepeater.Layout>
+                            <toolkit:WrapLayout HorizontalSpacing="5" VerticalSpacing="5" />
+                        </ItemsRepeater.Layout>
+
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate x:DataType="models:TagItem">
                                 <Border
                                     Height="18"
                                     Padding="6,2"
-                                    Background="{ThemeResource SystemAccentColor}"
+                                    Background="{ThemeResource AccentAcrylicBackgroundFillColorDefaultBrush}"
                                     CornerRadius="2">
                                     <TextBlock
+                                        x:Name="textBlock"
                                         FontSize="10"
-                                        Foreground="White"
                                         IsTextSelectionEnabled="True"
-                                        Text="{x:Bind Mode=OneTime}"
+                                        Text="{x:Bind sys:String.Format(x:Null, '{0}: {1}', Key, Value)}"
                                         TextTrimming="CharacterEllipsis" />
                                 </Border>
                             </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
                 </StackPanel>
             </Border>
 

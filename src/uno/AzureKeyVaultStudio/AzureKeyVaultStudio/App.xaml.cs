@@ -70,7 +70,7 @@ public partial class App : Application
                                 LogLevel.Error)
 
                         // Default filters for core Uno Platform namespaces
-                        .CoreLogLevel(LogLevel.Warning);
+                        .CoreLogLevel(LogLevel.Critical);
 
 #if DEBUG
                     //Uno Platform namespace filter groups

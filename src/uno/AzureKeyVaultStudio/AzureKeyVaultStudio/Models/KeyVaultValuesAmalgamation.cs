@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using Azure.Security.KeyVault.Certificates;
 using Azure.Security.KeyVault.Keys;
@@ -33,6 +34,7 @@ public sealed class KeyVaultItemProperties
     public string[] TagValues => Tags is not null ? [.. Tags.Values] : [];
     public string[] TagKeys => Tags is not null ? [.. Tags.Keys] : [];
     public string TagValuesString => string.Join(", ", Tags?.Values ?? []);
+    public ObservableCollection<TagItem> EditableTags { get; set; } = new ObservableCollection<TagItem>();
 
     public DateTimeOffset? LastModifiedDate => UpdatedOn.HasValue ? UpdatedOn.Value.ToLocalTime() : CreatedOn?.ToLocalTime();
     public string? WhenLastModified => LastModifiedDate.HasValue ? FormatRelativeDate(LastModifiedDate.Value, true) : null;
@@ -108,15 +110,7 @@ public sealed class KeyVaultItemProperties
         properties.Enabled = Enabled;
         properties.NotBefore = NotBefore;
         properties.ExpiresOn = ExpiresOn;
-
-        if (Tags != null && Tags.Count > 0)
-        {
-            foreach (var tag in Tags)
-            {
-                properties.Tags[tag.Key] = tag.Value;
-            }
-        }
-
+        ApplyEditableTags(properties.Tags);
         return properties;
     }
 
@@ -126,15 +120,7 @@ public sealed class KeyVaultItemProperties
         properties.Enabled = Enabled;
         properties.NotBefore = NotBefore;
         properties.ExpiresOn = ExpiresOn;
-
-        if (Tags != null && Tags.Count > 0)
-        {
-            foreach (var tag in Tags)
-            {
-                properties.Tags[tag.Key] = tag.Value;
-            }
-        }
-
+        ApplyEditableTags(properties.Tags);
         return properties;
     }
 
@@ -142,14 +128,7 @@ public sealed class KeyVaultItemProperties
     {
         var properties = new CertificateProperties(Id);
         properties.Enabled = Enabled;
-        if (Tags != null && Tags.Count > 0)
-        {
-            foreach (var tag in Tags)
-            {
-                properties.Tags[tag.Key] = tag.Value;
-            }
-        }
-
+        ApplyEditableTags(properties.Tags);
         return properties;
     }
 
@@ -188,7 +167,8 @@ public sealed class KeyVaultItemProperties
             RecoveryLevel = recoveryLevel,
             Managed = managed,
             Tags = tags is null ? new Dictionary<string, string>() : new Dictionary<string, string>(tags),
-            Type = type
+            Type = type,
+            EditableTags = tags is null ? []: new ObservableCollection<TagItem>(tags.Select(t => new TagItem { Key = t.Key, Value = t.Value }))
         };
     }
 
@@ -225,6 +205,32 @@ public sealed class KeyVaultItemProperties
             ( < 366, _) => $"{(isPast ? string.Empty : "in ")}{months} {(months == 1 ? "month" : "months")}{(isPast ? " ago" : string.Empty)}",
             (_, _) => $"{(isPast ? string.Empty : "in ")}{years} {(years == 1 ? "year" : "years")}{(isPast ? " ago" : string.Empty)}"
         };
+
+
+        
+    }
+
+    public void ApplyEditableTags(IDictionary<string, string> targetTags)
+    {
+        targetTags.Clear();
+
+        if (EditableTags is null || EditableTags.Count == 0)
+            return;
+
+        var seenKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var tag in EditableTags)
+        {
+            var key = tag.Key?.Trim();
+
+            if (string.IsNullOrWhiteSpace(key))
+                continue;
+
+            if (!seenKeys.Add(key))
+                throw new InvalidOperationException("Duplicate tag keys are not allowed.");
+
+            targetTags[key] = tag.Value;
+        }
     }
 }
 
@@ -234,4 +240,13 @@ public enum KeyVaultItemType
     Secret = 1,
     Key = 2,
     All = 3
+}
+
+public partial class TagItem : ObservableObject
+{
+    [ObservableProperty]
+    public partial string Key { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string Value { get; set; } = string.Empty;
 }

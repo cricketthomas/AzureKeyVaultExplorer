@@ -12,7 +12,7 @@
     <AssemblyName>AzureKeyVaultStudio</AssemblyName>
     <ApplicationId>io.github.cricketthomas.AzureKeyVaultExplorer</ApplicationId>
 
-    <ApplicationDisplayVersion>2.0.5.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>2.1.0.0</ApplicationDisplayVersion>
     <ApplicationVersion>2</ApplicationVersion>
 
     <ApplicationPublisher>cricketthomas</ApplicationPublisher>
@@ -77,6 +77,7 @@
   </PropertyGroup>
 
 
+
   <ItemGroup>
     <PackageReference Include="Azure.ResourceManager.KeyVault" />
     <PackageReference Include="Azure.Security.KeyVault.Certificates" />
@@ -114,11 +115,4 @@
     <PackageReference Include="Uno.CommunityToolkit.WinUI.UI.Controls.DataGrid" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Content Update="Assets\Images\kv-gray-3.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-    
 </Project>

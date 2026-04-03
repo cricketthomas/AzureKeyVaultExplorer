@@ -576,6 +576,9 @@
   <data name="DataGridTextColumnTags.Header" xml:space="preserve">
     <value>Tags</value>
   </data>
+  <data name="TagsHeader.Text" xml:space="preserve">
+    <value>Tags</value>
+  </data>
   <data name="DataGridTextColumnUpdated.Header" xml:space="preserve">
     <value>Updated</value>
   </data>
@@ -668,5 +671,14 @@
   </data>
   <data name="DocumenationHyperlinkButton.Content" xml:space="preserve">
     <value>Documentation: Tenant setup guide</value>
+  </data>
+  <data name="RemoveTagButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Remove Tag</value>
+  </data>
+  <data name="AddTagButton.Content" xml:space="preserve">
+    <value>Add Tag</value>
+  </data>
+  <data name="CloseButtonText" xml:space="preserve">
+    <value>Close</value>
   </data>
 </root>
