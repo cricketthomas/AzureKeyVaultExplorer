@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageVersion Include="FluentAssertions" Version="[7.0.0]" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageVersion Include="Tmds.DBus.Protocol" Version="0.92.0" />
     <PackageVersion Include="Uno.UITest.Helpers" Version="1.1.0-dev.70" />
     <PackageVersion Include="Azure.Core" Version="1.50.0" />
     <PackageVersion Include="Azure.ResourceManager" Version="1.13.2" />

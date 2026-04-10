@@ -15,6 +15,7 @@ using CommunityToolkit.WinUI.Behaviors;
 using Microsoft.UI.Dispatching;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Graphics;
+using Windows.Graphics.Display;
 
 namespace AzureKeyVaultStudio.Presentation.ViewModels;
 
@@ -215,7 +216,12 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
             (vm as IDisposable)?.Dispose();
         };
 
-        window.AppWindow.Resize(new SizeInt32 { Width = 640, Height = 680 });
+
+        if (OperatingSystem.IsMacOS())
+            ResizeWindowScaled(window.AppWindow, 640, 680);
+        else
+            window.AppWindow.Resize(new SizeInt32 { Width = 640, Height = 680 });
+
         window.AppWindow.Show();
     }
 
@@ -778,6 +784,13 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
         await FilterAndLoadVaultValueTypeCommand.ExecuteAsync(token);
     }
 
+    private static void ResizeWindowScaled(Microsoft.UI.Windowing.AppWindow appWindow, int logicalWidth, int logicalHeight)
+    {
+        //https://github.com/unoplatform/uno/issues/22217
+        var scale = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
+        appWindow.Resize(new SizeInt32 { Width = (int)(logicalWidth * scale), Height = (int)(logicalHeight * scale) });
+    }
+
     private void ShowInAppNotification(string subject, string message, InfoBarSeverity notificationType)
     {
         WeakReferenceMessenger.Default.Send(new SendInAppNotificationMessage(new Notification
@@ -846,7 +859,12 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
             {
                 (itemVm as IDisposable)?.Dispose();
             };
-            window.AppWindow.Resize(new SizeInt32 { Width = 620, Height = 580 });
+
+            if (OperatingSystem.IsMacOS())
+                ResizeWindowScaled(window.AppWindow, 620, 680);
+            else
+                window.AppWindow.Resize(new SizeInt32 { Width = 640, Height = 680 });
+
             if (Application.Current is App app && app.MainWindow is Window mainWindow)
             {
                 var mainPos = mainWindow.AppWindow.Position;
