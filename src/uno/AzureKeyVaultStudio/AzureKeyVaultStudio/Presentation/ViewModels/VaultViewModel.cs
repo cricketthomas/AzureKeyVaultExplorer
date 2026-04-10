@@ -846,7 +846,7 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
             {
                 (itemVm as IDisposable)?.Dispose();
             };
-            window.AppWindow.Resize(new SizeInt32 { Width = 620, Height = 580 });
+            window.AppWindow.Resize(new SizeInt32 { Width = 620, Height = 680 });
             if (Application.Current is App app && app.MainWindow is Window mainWindow)
             {
                 var mainPos = mainWindow.AppWindow.Position;
