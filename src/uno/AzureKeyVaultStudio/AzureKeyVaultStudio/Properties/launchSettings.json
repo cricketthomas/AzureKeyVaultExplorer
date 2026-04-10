@@ -6,7 +6,8 @@
     },
     "AzureKeyVaultStudio (WinAppSDK Packaged)": {
       "commandName": "MsixPackage",
-      "compatibleTargetFramework": "windows"
+      "compatibleTargetFramework": "windows",
+      "alwaysReinstallApp": true
     },
     "AzureKeyVaultStudio (Desktop)": {
       "commandName": "Project",
