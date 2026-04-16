@@ -22,6 +22,8 @@ winget install "Key Vault Explorer" --source msstore
 ### macOS and Linux
 Download from the [releases page](https://github.com/cricketthomas/AzureKeyVaultExplorer/releases).
 
+
+![Downloads](https://img.shields.io/github/downloads/cricketthomas/AzureKeyVaultExplorer/total)
  <p style="display: block" align="center">
  	<sup>Named 'Key Vault Explorer' in the Microsoft Store.</sub>
  </p>
@@ -89,8 +91,8 @@ After downloading the `.exe`, Windows may block it (unless you got it from winge
 
 ## Azure CLI
 > [!NOTE]
-> You can use a custom client ID that belongs to Microsoft Azure CLI. This is intended for testing only and is not recommended by the maintainers of this repository, as it may violate Microsoft’s Terms of Service.
-> Doing so can bypass the need for an IT administrator to grant permissions to the application, effectively circumventing the standard consent process. Once done, click save in the settings page and restart the application.
+> You can use a custom client ID that belongs to Microsoft Azure CLI `04b07795-8ddb-461a-bbee-02f9e1bf7b46`. This is intended for testing only and is not recommended by the maintainers of this repository, as it may violate Microsoft’s Terms of Service.
+> Doing so can bypass the need for an IT administrator to grant permissions to the application, effectively circumventing the standard consent process. Navigate to the Ssttings page, check the "Custom Client ID" checkbox, add the aformentioned Clinet Id, click save, and restart the application.
 > See this article for more details on the well-known client ID.  https://rakhesh.com/azure/well-known-client-ids/
 <img width="800"  alt="image" src="https://github.com/user-attachments/assets/fe6a970c-b0bc-455c-9775-5aa57b865fd1" />
 
