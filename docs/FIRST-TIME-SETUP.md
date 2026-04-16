@@ -8,6 +8,12 @@ When running Key Vault Explorer for the first time, you may encounter an error l
 
 This means your Azure tenant global admin needs to grant consent. Have them open one of the following URLs in a browser:
 
+**Azure CLI CLIENT ID:**
+- This approach should require no intervention if Azure CLI is used by your organization. Please see the instructions here:
+[Using your own Client ID / Tenant ID](CUSTOM-CLIENT-TENANT-ID.md/#azure-cli)
+
+
+
 **Default Client ID:**
 
 ```
