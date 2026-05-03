@@ -19,7 +19,7 @@
 winget install "Key Vault Explorer" --source msstore
 ```
 
-### macOS and Linux
+### [macOS](#macos) and Linux
 Download from the [releases page](https://github.com/cricketthomas/AzureKeyVaultExplorer/releases).
 
 
