@@ -8,7 +8,7 @@ namespace AzureKeyVaultStudio.UserControls;
 
 public sealed partial class NewItem : UserControl
 {
-    public NewVersionViewModel ViewModel => DataContext as NewVersionViewModel;
+    public NewVersionViewModel? ViewModel => DataContext as NewVersionViewModel;
     public Window? ParentWindow { get; set; }
     private IStringLocalizer? _localizer { get; set; }
 

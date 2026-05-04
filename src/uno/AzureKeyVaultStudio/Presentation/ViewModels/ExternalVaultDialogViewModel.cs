@@ -8,8 +8,8 @@ namespace AzureKeyVaultStudio.Presentation.ViewModels;
 
 public partial class ExternalVaultDialogViewModel : ObservableValidator
 {
-    private readonly VaultService _vaultService;
-    public Guid MessengerToken { get; } = Guid.NewGuid();
+    private readonly VaultService? _vaultService;
+    public Guid MessengerToken { get; init; } = Guid.NewGuid();
 
     public ExternalVaultDialogViewModel()
     {
@@ -41,6 +41,8 @@ public partial class ExternalVaultDialogViewModel : ObservableValidator
     {
         try
         {
+            if (_vaultService == null)
+                return;
             var model = await _vaultService.GetKeyVaultResource(subscriptionId: SubscriptionId.Trim(), resourceGroupName: ResourceGroupName.Trim(), vaultName: KeyVaultName.Trim());
             WeakReferenceMessenger.Default.Send(new AddDocumentMessage(model.Data));
             WeakReferenceMessenger.Default.Send(new PinKeyVaultMessage(model));

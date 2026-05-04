@@ -422,7 +422,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         _dispatcher = dispatcher;
     }
 
-    partial void OnTreeDataSourceChanging(ObservableCollection<KvSubscriptionModel>? oldValue, ObservableCollection<KvSubscriptionModel>? newValue)
+    partial void OnTreeDataSourceChanging(ObservableCollection<KvSubscriptionModel> oldValue, ObservableCollection<KvSubscriptionModel> newValue)
     {
         if (oldValue is null)
             return;
@@ -441,7 +441,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         }
     }
 
-    partial void OnTreeDataSourceChanged(ObservableCollection<KvSubscriptionModel>? value)
+    partial void OnTreeDataSourceChanged(ObservableCollection<KvSubscriptionModel> value)
     {
         if (value is null)
             return;

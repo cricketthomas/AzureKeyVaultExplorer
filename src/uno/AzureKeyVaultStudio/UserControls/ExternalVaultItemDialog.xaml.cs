@@ -6,17 +6,17 @@ namespace AzureKeyVaultStudio.UserControls;
 
 public sealed partial class ExternalVaultItemDialog : ContentDialog
 {
-    private readonly IStringLocalizer _localizer;
-    public ExternalVaultItemDialogViewModel ViewModel => DataContext as ExternalVaultItemDialogViewModel;
+    private readonly IStringLocalizer? _localizer;
+    public ExternalVaultItemDialogViewModel? ViewModel => DataContext as ExternalVaultItemDialogViewModel;
 
     public ExternalVaultItemDialog()
     {
         DataContext = new ExternalVaultItemDialogViewModel();
         this.InitializeComponent();
-        _localizer = (Application.Current as App).Host?.Services?.GetRequiredService<IStringLocalizer>();
+        _localizer = (Application.Current as App)?.Host?.Services?.GetRequiredService<IStringLocalizer>();
         WeakReferenceMessenger.Default.Register<ShowValidationErrorMessage, Guid>(this, ViewModel.MessengerToken, async (r, m) =>
         {
-            ShowDialogMessage(title: _localizer["NewItemErrorTitle"], m.Data, _localizer["NewItemDismissButtonText"]);
+            ShowDialogMessage(title: _localizer?["NewItemErrorTitle"] ?? "Error", m.Data, _localizer?["NewItemDismissButtonText"] ?? "Ok");
         });
     }
 
