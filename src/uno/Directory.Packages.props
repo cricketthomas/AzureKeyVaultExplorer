@@ -8,7 +8,7 @@
   <ItemGroup>
     <PackageVersion Include="FluentAssertions" Version="[7.0.0]" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-    <PackageVersion Include="Tmds.DBus.Protocol" Version="0.92.0" />
+    <PackageVersion Include="Tmds.DBus.Protocol" Version="0.93.0" />
     <PackageVersion Include="Uno.UITest.Helpers" Version="1.1.0-dev.70" />
     <PackageVersion Include="Azure.Core" Version="1.50.0" />
     <PackageVersion Include="Azure.ResourceManager" Version="1.13.2" />
@@ -34,7 +34,6 @@
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="Uno.WinUI.MSAL" Version="6.5.153" />
     <PackageVersion Include="DevToolsUno" Version="0.1.0" />
-
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />

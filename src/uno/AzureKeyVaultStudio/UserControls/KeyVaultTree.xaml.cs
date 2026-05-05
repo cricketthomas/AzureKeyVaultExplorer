@@ -43,7 +43,12 @@ public sealed partial class KeyVaultTree : UserControl
         if (ViewModel?.RefreshCommand is not null && ViewModel.HasFetchedData == false)
         {
             Bindings.Update();
-            ViewModel.RefreshCommand.Execute(null);
+            DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+            {
+                if (ViewModel.RefreshCommand.IsRunning)
+                    return;
+                ViewModel.RefreshCommand.Execute(null);
+            });
         }
     }
 

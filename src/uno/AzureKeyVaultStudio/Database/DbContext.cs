@@ -174,7 +174,7 @@ public partial class DbContext : IDisposable
     {
         if (_password == null)
         {
-            var dbPassExists = await Task.Run(() => File.Exists(Constants.DatabasePasswordFilePath));
+            var dbPassExists = File.Exists(Constants.DatabasePasswordFilePath);
             if (!dbPassExists)
                 DatabaseEncryptedPasswordManager.SetSecret($"keyvaultexplorer_{System.Guid.NewGuid().ToString()[..6]}");
 

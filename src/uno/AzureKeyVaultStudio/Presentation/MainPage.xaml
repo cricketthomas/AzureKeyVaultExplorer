@@ -99,7 +99,7 @@
                             <uc:KeyVaultTree
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                DataContext="{x:Bind KeyVaultTreeViewModel}" />
+                                DataContext="{x:Bind KeyVaultTreeViewModel, Mode=OneWay}" />
                         </Border>
 
                         <Grid Grid.Row="1" Visibility="{x:Bind MainSplitView.IsPaneOpen, Mode=OneWay}">
