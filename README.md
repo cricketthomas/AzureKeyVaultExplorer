@@ -19,11 +19,12 @@
 winget install "Key Vault Explorer" --source msstore
 ```
 
-### macOS and Linux
+### [macOS](#macos) and Linux
 Download from the [releases page](https://github.com/cricketthomas/AzureKeyVaultExplorer/releases).
 
 
 ![Downloads](https://img.shields.io/github/downloads/cricketthomas/AzureKeyVaultExplorer/total)
+![CodeQL](https://github.com/cricketthomas/azurekeyvaultexplorer/workflows/CodeQL/badge.svg)
  <p style="display: block" align="center">
  	<sup>Named 'Key Vault Explorer' in the Microsoft Store.</sub>
  </p>
@@ -72,7 +73,7 @@ The SQLite database is encrypted using DPAPI on windows, and on macOS the passwo
 
 ### Get it from the [releases](https://github.com/cricketthomas/AzureKeyVaultExplorer/releases) page or the Microsoft Store.
 
-#### macOS
+### macOS
 After downloading the `.app` bundle, macOS may block it because it's from an unidentified developer. To fix this, run:
 
 ```bash
