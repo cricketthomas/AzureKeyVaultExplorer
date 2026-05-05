@@ -40,6 +40,7 @@ public sealed partial class KeyVaultTree : UserControl
 
     private void OnDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
     {
+ 
         if (ViewModel?.RefreshCommand is not null && ViewModel.HasFetchedData == false)
         {
             Bindings.Update();
@@ -48,17 +49,11 @@ public sealed partial class KeyVaultTree : UserControl
                 if (ViewModel.RefreshCommand.IsRunning)
                     return;
                 ViewModel.RefreshCommand.Execute(null);
+                args.Handled = true;
             });
+
         }
     }
-
-    //private async void KeyVaultTreeView_Loaded(object sender, RoutedEventArgs e)
-    //{
-    //    if (ViewModel?.RefreshCommand is not null)
-    //    {
-    //        ViewModel.RefreshCommand.ExecuteAsync(null);
-    //    }
-    //}
 
     private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
