@@ -46,14 +46,17 @@ public sealed partial class OverrideTitlebar : UserControl
         if (_appWindow is not null)
         {
             if (!string.IsNullOrWhiteSpace(SecondaryTitle))
-                _appWindow.Title = SecondaryTitle ;
-
+                _appWindow.Title = SecondaryTitle;
         }
 
         WeakReferenceMessenger.Default.Register<NavigationBackRequestedMessage>(this, async (r, m) => await GoBack());
-
+        this.Unloaded += OnUnloaded;
     }
 
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        WeakReferenceMessenger.Default.Unregister<NavigationBackRequestedMessage>(this);
+    }
 
     private async void BackButton_Click(object sender, RoutedEventArgs e)
     {
@@ -65,9 +68,11 @@ public sealed partial class OverrideTitlebar : UserControl
         await GoBack();
     }
 
-
     private async Task GoBack()
     {
+        if (!this.IsLoaded || XamlRoot == null)
+            return;
+
         var navigator = this.Navigator();
         if (navigator == null)
             return;

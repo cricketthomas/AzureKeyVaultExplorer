@@ -271,7 +271,7 @@ public partial class ItemPropertiesViewModel : ObservableObject
         {
             case KeyVaultItemType.Certificate:
                 var certificateProperties = await _vaultService.GetCertificateProperties(model.VaultUri, model.Name);
-                var latestCert = Enumerable.MaxBy(certificateProperties, x => x.UpdatedOn)!;
+                var latestCert = Enumerable.MaxBy(certificateProperties, x => x.CreatedOn)!;
                 ItemPropertiesList = new ObservableCollection<KeyVaultItemProperties>(KeyVaultItemProperties.FromCertificateProperties(certificateProperties));
                 IsEnabled = latestCert.Enabled ?? false;
                 IsCertificate = true;
@@ -280,7 +280,7 @@ public partial class ItemPropertiesViewModel : ObservableObject
 
             case KeyVaultItemType.Key:
                 var keyPropertiesList = await _vaultService.GetKeyProperties(model.VaultUri, model.Name);
-                var latestKey = Enumerable.MaxBy(keyPropertiesList, x => x.UpdatedOn)!;
+                var latestKey = Enumerable.MaxBy(keyPropertiesList, x => x.CreatedOn)!;
                 IsManaged = latestKey.Managed;
                 IsEnabled = latestKey.Enabled ?? false;
                 ItemPropertiesList = new ObservableCollection<KeyVaultItemProperties>(KeyVaultItemProperties.FromKeyProperties(keyPropertiesList));
@@ -290,7 +290,7 @@ public partial class ItemPropertiesViewModel : ObservableObject
 
             case KeyVaultItemType.Secret:
                 var secretPropertiesList = await _vaultService.GetSecretProperties(model.VaultUri, model.Name);
-                var latestSecret = Enumerable.MaxBy(secretPropertiesList, x => x.UpdatedOn)!;
+                var latestSecret = Enumerable.MaxBy(secretPropertiesList, x => x.CreatedOn)!;
                 IsManaged = latestSecret.Managed;
                 IsEnabled = latestSecret.Enabled ?? false;
                 ItemPropertiesList = new ObservableCollection<KeyVaultItemProperties>(KeyVaultItemProperties.FromSecretProperties(secretPropertiesList));

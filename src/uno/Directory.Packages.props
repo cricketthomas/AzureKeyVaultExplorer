@@ -14,13 +14,13 @@
     <PackageVersion Include="Azure.ResourceManager" Version="1.13.2" />
     <PackageVersion Include="Azure.ResourceManager.KeyVault" Version="1.4.0" />
     <PackageVersion Include="Azure.Security.KeyVault.Certificates" Version="4.8.0" />
-    <PackageVersion Include="Azure.Security.KeyVault.Keys" Version="4.9.0" />
-    <PackageVersion Include="Azure.Security.KeyVault.Secrets" Version="4.10.0" />
+    <PackageVersion Include="Azure.Security.KeyVault.Keys" Version="4.10.0" />
+    <PackageVersion Include="Azure.Security.KeyVault.Secrets" Version="4.11.0" />
     <PackageVersion Include="Microsoft.Data.Sqlite" Version="8.0.10" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="10.0.7" />
     <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.11" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="10.0.7" />
-    <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.83.3" />
+    <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.84.0" />
     <PackageVersion Include="DeviceId" Version="6.11.0" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.251219" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.2.251219" />
@@ -32,7 +32,7 @@
     <PackageVersion Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.251219" />
     <PackageVersion Include="System.Text.Json" Version="10.0.3" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
-    <PackageVersion Include="Uno.WinUI.MSAL" Version="6.5.153" />
+    <PackageVersion Include="Uno.WinUI.MSAL" Version="6.5.229" />
     <PackageVersion Include="DevToolsUno" Version="0.1.0" />
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">

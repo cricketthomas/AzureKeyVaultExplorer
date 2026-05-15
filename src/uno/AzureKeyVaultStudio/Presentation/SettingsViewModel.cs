@@ -6,6 +6,7 @@ using AzureKeyVaultStudio.Services;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI.Behaviors;
 using Microsoft.Identity.Client;
+using Microsoft.UI.Windowing;
 
 namespace AzureKeyVaultStudio.Presentation;
 
@@ -123,6 +124,15 @@ public partial class SettingsViewModel : ObservableRecipient
     public async Task ToggleThemeChangeAsync(AppTheme theme)
     {
         await _themeService.SetThemeAsync(theme);
+        var window = (Application.Current as App)?.MainWindow;
+
+        window.AppWindow.TitleBar.PreferredTheme = theme switch
+        {
+            AppTheme.Light => TitleBarTheme.Light,
+            AppTheme.Dark => TitleBarTheme.Dark,
+            _ => TitleBarTheme.UseDefaultAppMode,
+        };
+
         //SelectedTheme = theme;
     }
 
