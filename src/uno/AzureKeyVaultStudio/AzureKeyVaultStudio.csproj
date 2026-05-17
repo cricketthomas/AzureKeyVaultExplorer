@@ -74,6 +74,7 @@
     <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
     <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
     <NoWarn>$(NoWarn);IL2104</NoWarn>
+    <WinAppSdkVersion>1.8.7</WinAppSdkVersion>
   </PropertyGroup>
 
 
