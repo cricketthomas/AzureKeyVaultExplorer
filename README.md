@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img width="280" align="center" src="src\uno\icon-iOS-Default-1024x1024@1x.png">
+  <img width="280" align="center" src="src\uno\AzureKeyVaultStudio\icon-iOS-Default-1024x1024@1x.png">
 </p>
 <h1 align="center">
   Azure Key Vault Explorer
@@ -19,11 +19,12 @@
 winget install "Key Vault Explorer" --source msstore
 ```
 
-### macOS and Linux
+### [macOS](#macos) and Linux
 Download from the [releases page](https://github.com/cricketthomas/AzureKeyVaultExplorer/releases).
 
 
 ![Downloads](https://img.shields.io/github/downloads/cricketthomas/AzureKeyVaultExplorer/total)
+![CodeQL](https://github.com/cricketthomas/azurekeyvaultexplorer/workflows/CodeQL/badge.svg)
  <p style="display: block" align="center">
  	<sup>Named 'Key Vault Explorer' in the Microsoft Store.</sub>
  </p>
@@ -32,7 +33,7 @@ Download from the [releases page](https://github.com/cricketthomas/AzureKeyVault
 ## Overview
 Visit the releases section to download the application for mac and linux. 
 
-**Key Vault Explorer** is a lightweight tool with the idea to simplify finding and accessing secrets (and certificates and keys) stored in Azure Key Vault, providing a interface for aggregating, filtering, and quickly getting secret values. The app was inspired by the original [AzureKeyVaultExplorer](https://github.com/microsoft/AzureKeyVaultExplorer) with the goal to eventually bring some more feature parity but first brining the application to macOS.
+**Key Vault Explorer** is a lightweight tool with the idea to simplify finding and accessing secrets (and certificates and keys) stored in Azure Key Vault, providing a interface for aggregating, filtering, and quickly getting secret values. The app was inspired by the original [AzureKeyVaultExplorer](https://github.com/microsoft/AzureKeyVaultExplorer) with the goal to eventually bring some more feature parity but first bringing the application to macOS.
 
 ### Key features
 
@@ -72,7 +73,7 @@ The SQLite database is encrypted using DPAPI on windows, and on macOS the passwo
 
 ### Get it from the [releases](https://github.com/cricketthomas/AzureKeyVaultExplorer/releases) page or the Microsoft Store.
 
-#### macOS
+### macOS
 After downloading the `.app` bundle, macOS may block it because it's from an unidentified developer. To fix this, run:
 
 ```bash
