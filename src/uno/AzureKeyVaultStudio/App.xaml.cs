@@ -26,8 +26,6 @@ public partial class App : Application
     {
         this.InitializeComponent();
 
-
-
 #if DEBUG
         AppDomain.CurrentDomain.FirstChanceException += (_, e) =>
         {
@@ -46,10 +44,7 @@ public partial class App : Application
         UnhandledException += (sender, args) =>
         {
             Debug.WriteLine($"[Unhandled] {args.Exception}");
-
             args.Handled = true;
-            // Do not swallow in packaged Release while diagnosing.
-            //args.Handled = false;
         };
 #endif
     }
@@ -241,8 +236,7 @@ public partial class App : Application
     private static void EnsureEarlyWindow(Window window)
     {
 #if WINDOWS && !HAS_UNO
-        window.AppWindow.Resize(new SizeInt32 { Width = 1100, Height = 640 });
-        window.AppWindow.Move(new PointInt32 { X = 250, Y = 250 });
+        window.AppWindow.MoveAndResize(new RectInt32 { Width = 1100, Height = 640, X = 250, Y = 250 });
         window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
         //if (Microsoft.UI.Windowing.AppWindowTitleBar.IsCustomizationSupported())
         //{
