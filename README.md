@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img width="280" align="center" src="src\uno\AzureKeyVaultStudio\icon-iOS-Default-1024x1024@1x.png">
+  <img width="280" align="center" src="src/uno/icon-iOS-Default-1024x1024%401x.png">
 </p>
 <h1 align="center">
   Azure Key Vault Explorer
