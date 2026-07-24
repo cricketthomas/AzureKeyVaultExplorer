@@ -1,0 +1,6 @@
+{
+    "github-actions.workflows.pinned.workflows": [
+        ".github/workflows/publish-msstore.yml",
+        ".github/workflows/uno-dotnet.yml"
+    ]
+}

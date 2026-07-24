@@ -1,14 +1,18 @@
-name: Build and Release
+name: Release Azure Key Vault Explorer
+
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - master
-
-
+  workflow_dispatch:
+    inputs:
+      run_release:
+        type: boolean
+        description: Run Release true or false
+     
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened]
     branches:
       - master
 
@@ -46,12 +50,12 @@ jobs:
           Move-Item -Path ".\bin\Release\net10.0-windows10.0.26100\win-x64\publish\*.exe" -Destination "$env:GITHUB_WORKSPACE\win-x64\" -Force
       - name: Create Package
         shell: pwsh
-        run: tar -cvf azurekeyvaultstudio.win-x64.tar win-x64
+        run: Compress-Archive -Path "win-x64/*" -DestinationPath "azurekeyvaultstudio.win-x64.zip" -Force
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: azurekeyvaultstudio.win-x64.tar
-          path: azurekeyvaultstudio.win-x64.tar
+          name: azurekeyvaultstudio.win-x64.zip
+          path: azurekeyvaultstudio.win-x64.zip
 
   build_windows_arm64:
     name: Build Windows ARM64
@@ -77,15 +81,15 @@ jobs:
           Move-Item -Path ".\bin\Release\net10.0-windows10.0.26100\win-arm64\publish\*.exe" -Destination "$env:GITHUB_WORKSPACE\win-arm64\" -Force
       - name: Create Package
         shell: pwsh
-        run: tar -cvf azurekeyvaultstudio.win-arm64.tar win-arm64
+        run: Compress-Archive -Path "win-arm64/*" -DestinationPath "azurekeyvaultstudio.win-arm64.zip" -Force
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: azurekeyvaultstudio.win-arm64.tar
-          path: azurekeyvaultstudio.win-arm64.tar
+          name: azurekeyvaultstudio.win-arm64.zip
+          path: azurekeyvaultstudio.win-arm64.zip
 
   build_macos_x64:
-    name: Build macOS
+    name: Build macOS x64 (untested)
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -109,12 +113,15 @@ jobs:
           Move-Item -Path "./bin/Release/net10.0-desktop/osx-x64/publish/*.app" -Destination "$env:GITHUB_WORKSPACE/osx-x64/" -Force
       - name: Create Package
         shell: pwsh
-        run: tar -cvf azurekeyvaultstudio.macos-x64.tar osx-x64
+        run: |
+          $appBundle = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/osx-x64" -Filter "*.app" | Select-Object -First 1
+          if (-not $appBundle) { Get-ChildItem -recurse; throw "No macOS app bundle was found for packaging." }
+          ditto -c -k --sequesterRsrc --keepParent "$($appBundle.FullName)" "$env:GITHUB_WORKSPACE/azurekeyvaultstudio.macos-x64.zip"
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: azurekeyvaultstudio.macos-x64.tar
-          path: azurekeyvaultstudio.macos-x64.tar
+          name: azurekeyvaultstudio.macos-x64.zip
+          path: azurekeyvaultstudio.macos-x64.zip
   
   build_macos_arm64:
     name: Build macOS ARM64
@@ -141,12 +148,15 @@ jobs:
           Move-Item -Path "./bin/Release/net10.0-desktop/osx-arm64/publish/*.app" -Destination "$env:GITHUB_WORKSPACE/osx-arm64/" -Force
       - name: Create Package
         shell: pwsh
-        run: tar -cvf azurekeyvaultstudio.macos-arm64.tar osx-arm64
+        run: |
+          $appBundle = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/osx-arm64" -Filter "*.app" | Select-Object -First 1
+          if (-not $appBundle) { Get-ChildItem -recurse; throw "No macOS app bundle was found for packaging." }
+          ditto -c -k --sequesterRsrc --keepParent "$($appBundle.FullName)" "$env:GITHUB_WORKSPACE/azurekeyvaultstudio.macos-arm64.zip"
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: azurekeyvaultstudio.macos-arm64.tar
-          path: azurekeyvaultstudio.macos-arm64.tar
+          name: azurekeyvaultstudio.macos-arm64.zip
+          path: azurekeyvaultstudio.macos-arm64.zip
 
   build_linux:
     name: Build Linux
@@ -184,7 +194,7 @@ jobs:
     name: Release Packages
     needs: [build_windows_x64, build_windows_arm64, build_macos_x64, build_macos_arm64, build_linux]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' || github.event.inputs.run_release == 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Download all artifacts
@@ -194,10 +204,35 @@ jobs:
       - name: List artifacts
         shell: pwsh
         run: Get-ChildItem -Recurse
+      - name: Generate checksums for Cask
+        shell: bash
+        run: |
+          sha256sum \
+            "./azurekeyvaultstudio.win-x64.zip/azurekeyvaultstudio.win-x64.zip" \
+            "./azurekeyvaultstudio.win-arm64.zip/azurekeyvaultstudio.win-arm64.zip" \
+            "./azurekeyvaultstudio.macos-x64.zip/azurekeyvaultstudio.macos-x64.zip" \
+            "./azurekeyvaultstudio.macos-arm64.zip/azurekeyvaultstudio.macos-arm64.zip" \
+            "./azurekeyvaultstudio.linux-x64.tar/azurekeyvaultstudio.linux-x64.tar" > SHA256SUMS.txt
       - name: Create Release
         run: |
-          gh release create v${{ env.APP_VERSION_NUMBER }} --draft --title "Azure Key Vault v${{ env.APP_VERSION_NUMBER }}" || true
-          gh release upload v${{ env.APP_VERSION_NUMBER }} "./azurekeyvaultstudio.win-x64.tar/azurekeyvaultstudio.win-x64.tar" "./azurekeyvaultstudio.win-arm64.tar/azurekeyvaultstudio.win-arm64.tar" "./azurekeyvaultstudio.macos-x64.tar/azurekeyvaultstudio.macos-x64.tar" "./azurekeyvaultstudio.macos-arm64.tar/azurekeyvaultstudio.macos-arm64.tar" "./azurekeyvaultstudio.linux-x64.tar/azurekeyvaultstudio.linux-x64.tar" --clobber || true
+          cat > RELEASE_NOTES.md <<'EOF'
+          Notes:
+          - macOS x64 build is untested
+
+          ### SHA256 Hashes of the release artifacts:
+          ```text
+          EOF
+          cat ./SHA256SUMS.txt >> RELEASE_NOTES.md
+          echo '```' >> RELEASE_NOTES.md
+          gh release create v${{ env.APP_VERSION_NUMBER }} --draft --title "Azure Key Vault Explorer v${{ env.APP_VERSION_NUMBER }}" --notes-file RELEASE_NOTES.md || true
+          gh release upload v${{ env.APP_VERSION_NUMBER }} \
+            "./azurekeyvaultstudio.win-x64.zip/azurekeyvaultstudio.win-x64.zip" \
+            "./azurekeyvaultstudio.win-arm64.zip/azurekeyvaultstudio.win-arm64.zip" \
+            "./azurekeyvaultstudio.macos-x64.zip/azurekeyvaultstudio.macos-x64.zip" \
+            "./azurekeyvaultstudio.macos-arm64.zip/azurekeyvaultstudio.macos-arm64.zip" \
+            "./azurekeyvaultstudio.linux-x64.tar/azurekeyvaultstudio.linux-x64.tar" \
+            "./SHA256SUMS.txt" \
+            --clobber || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
