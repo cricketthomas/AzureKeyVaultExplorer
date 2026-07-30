@@ -35,11 +35,13 @@ public sealed class KeyVaultItemProperties
     public string[] TagValues => Tags is not null ? [.. Tags.Values] : [];
     public string[] TagKeys => Tags is not null ? [.. Tags.Keys] : [];
     public string TagValuesString => string.Join(", ", Tags?.Values ?? []);
-    public ObservableCollection<TagItem> EditableTags { get; set; } = new ObservableCollection<TagItem>();
+    public ObservableCollection<TagItem> EditableTags { get; set; } = [];
 
     public DateTimeOffset? LastModifiedDate => UpdatedOn.HasValue ? UpdatedOn.Value.ToLocalTime() : CreatedOn?.ToLocalTime();
     public string? WhenLastModified => LastModifiedDate.HasValue ? LastModifiedDate.Value.Humanize() : null;
     public string? WhenExpires => ExpiresOn.HasValue ? ExpiresOn.Value.Humanize() : null;
+
+    public bool IsExpired => ExpiresOn.HasValue && (ExpiresOn.Value < DateTimeOffset.Now);
 
     public static KeyVaultItemProperties FromSecretProperties(SecretProperties properties)
       => Create(

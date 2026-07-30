@@ -720,4 +720,7 @@
   <data name="PropertiesExpirationLabel.Text" xml:space="preserve">
     <value>Expiração:</value>
   </data>
+  <data name="ExpiredTextBlock.Text" xml:space="preserve">
+    <value>Expirado</value>
+  </data>
 </root>
