@@ -21,7 +21,7 @@
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="10.0.10" />
     <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.11" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.86.1" />
+    <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.87.0" />
     <PackageVersion Include="DeviceId" Version="6.11.0" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.251219" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.2.251219" />
@@ -33,7 +33,7 @@
     <PackageVersion Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.251219" />
     <PackageVersion Include="System.Text.Json" Version="10.0.3" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
-    <PackageVersion Include="Uno.WinUI.MSAL" Version="6.6.166" />
+    <PackageVersion Include="Uno.WinUI.MSAL" Version="6.6.184" />
     <PackageVersion Include="DevToolsUno" Version="0.1.0" />
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
