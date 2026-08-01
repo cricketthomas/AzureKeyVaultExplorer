@@ -135,7 +135,7 @@ jobs:
           path: azurekeyvaultstudio.win-arm64.zip
 
   build_macos_x64:
-    name: Build macOS x64 (untested)
+    name: Build macOS x64
     runs-on: macos-latest
     needs: prepare_version
     env:
@@ -274,7 +274,8 @@ jobs:
         run: |
           cat > RELEASE_NOTES.md <<'EOF'
           Notes:
-          - macOS x64 build is untested
+          - If you're a user, please consider starring the repo! Or leaving a review on the Microsoft Store! Thank you!
+            
 
           ### SHA256 Hashes of the release artifacts:
           ```text
