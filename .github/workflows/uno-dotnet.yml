@@ -10,6 +10,19 @@ on:
       run_release:
         type: boolean
         description: Run Release true or false
+      major_version:
+        type: string
+        description: Major version
+        required: true
+        default: '2'
+      minor_version:
+        type: string
+        description: Minor version
+        required: true
+        default: '2'
+      version:
+        type: string
+        description: 'Package version to publish (example: 2.1.0 or 2.1.0.0)'
      
   pull_request:
     types: [opened]
@@ -23,12 +36,42 @@ env:
   STEP_TIMEOUT_MINUTES: 60
   CONFIGURATION: Release
   dotnetVersion: 10.0.x
-  APP_VERSION_NUMBER: 2.1.${{ github.run_number }}
+  APP_VERSION_NUMBER: 2.2.${{ github.run_number }}
 
 jobs:
+  prepare_version:
+    name: Prepare version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Resolve version
+        id: version
+        shell: pwsh
+        run: |
+          $major = '${{ github.event.inputs.major_version }}'.Trim()
+          $minor = '${{ github.event.inputs.minor_version }}'.Trim()
+          $versionInput = '${{ github.event.inputs.version }}'
+          $version = ($versionInput -replace '^v', '').Trim()
+
+          if ([string]::IsNullOrWhiteSpace($major)) { $major = '2' }
+          if ([string]::IsNullOrWhiteSpace($minor)) { $minor = '2' }
+
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            $version = "$major.$minor.${{ github.run_number }}"
+          }
+          elseif ($version -notmatch '^\d+(?:\.\d+){2,3}$') {
+            throw "Version '$versionInput' is not in the expected format. Use 2.2.0, 2.2.0.0, or leave it empty to use the major/minor values plus the GitHub run number."
+          }
+
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+
   build_windows_x64:
     name: Build Windows x64
     runs-on: windows-latest
+    needs: prepare_version
+    env:
+      APP_VERSION_NUMBER: ${{ needs.prepare_version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
@@ -60,6 +103,9 @@ jobs:
   build_windows_arm64:
     name: Build Windows ARM64
     runs-on: windows-latest
+    needs: prepare_version
+    env:
+      APP_VERSION_NUMBER: ${{ needs.prepare_version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
@@ -91,6 +137,9 @@ jobs:
   build_macos_x64:
     name: Build macOS x64 (untested)
     runs-on: macos-latest
+    needs: prepare_version
+    env:
+      APP_VERSION_NUMBER: ${{ needs.prepare_version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
@@ -126,6 +175,9 @@ jobs:
   build_macos_arm64:
     name: Build macOS ARM64
     runs-on: macos-latest
+    needs: prepare_version
+    env:
+      APP_VERSION_NUMBER: ${{ needs.prepare_version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
@@ -161,6 +213,9 @@ jobs:
   build_linux:
     name: Build Linux
     runs-on: ubuntu-latest
+    needs: prepare_version
+    env:
+      APP_VERSION_NUMBER: ${{ needs.prepare_version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
@@ -192,9 +247,11 @@ jobs:
 
   release:
     name: Release Packages
-    needs: [build_windows_x64, build_windows_arm64, build_macos_x64, build_macos_arm64, build_linux]
+    needs: [prepare_version, build_windows_x64, build_windows_arm64, build_macos_x64, build_macos_arm64, build_linux]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || github.event.inputs.run_release == 'true'
+    env:
+      APP_VERSION_NUMBER: ${{ needs.prepare_version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
       - name: Download all artifacts
