@@ -12,7 +12,7 @@
     <AssemblyName>AzureKeyVaultStudio</AssemblyName>
     <ApplicationId>io.github.cricketthomas.AzureKeyVaultExplorer</ApplicationId>
 
-    <ApplicationDisplayVersion>2.1.1.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>2.2.0.0</ApplicationDisplayVersion>
     <ApplicationVersion>2</ApplicationVersion>
 
     <ApplicationPublisher>cricketthomas</ApplicationPublisher>
@@ -85,6 +85,7 @@
     <PackageReference Include="Azure.Security.KeyVault.Keys" />
     <PackageReference Include="Azure.Security.KeyVault.Secrets" />
     <PackageReference Include="DeviceId" />
+    <PackageReference Include="Humanizer" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
     <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" />

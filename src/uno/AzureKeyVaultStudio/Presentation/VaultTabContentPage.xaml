@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:AzureKeyVaultStudio.Models"
     xmlns:primitives="using:CommunityToolkit.WinUI.UI.Controls.Primitives"
     xmlns:skia="http://uno.ui/not_win"
     xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
@@ -254,12 +255,26 @@
                                 CanUserSort="True"
                                 Tag="UpdatedOn" />
 
-                            <controls:DataGridTextColumn
+                            <controls:DataGridTemplateColumn
                                 x:Uid="DataGridTextColumnWhenExpires"
                                 Width="150"
-                                Binding="{Binding WhenExpires}"
-                                CanUserSort="True"
-                                Tag="ExpiresOn" />
+                                Tag="ExpiresOn">
+                                <controls:DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:DataType="models:KeyVaultItemProperties">
+                                        <toolkit:SwitchPresenter
+                                            Margin="8,0,0,0"
+                                            TargetType="x:Boolean"
+                                            Value="{x:Bind IsExpired}">
+                                            <toolkit:Case Value="True">
+                                                <TextBlock x:Uid="ExpiredTextBlock" FontWeight="Medium" />
+                                            </toolkit:Case>
+                                            <toolkit:Case IsDefault="True" Value="False">
+                                                <TextBlock Text="{x:Bind WhenExpires}" />
+                                            </toolkit:Case>
+                                        </toolkit:SwitchPresenter>
+                                    </DataTemplate>
+                                </controls:DataGridTemplateColumn.CellTemplate>
+                            </controls:DataGridTemplateColumn>
 
                             <controls:DataGridTemplateColumn
                                 x:Uid="DataGridTextColumnTags"
@@ -268,7 +283,7 @@
                                 Tag="TagValuesString">
                                 <controls:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ItemsRepeater ItemsSource="{Binding TagValues}">
+                                        <ItemsRepeater Margin="8,0,0,0" ItemsSource="{Binding TagValues}">
                                             <ItemsRepeater.Layout>
                                                 <StackLayout Orientation="Horizontal" Spacing="2" />
                                             </ItemsRepeater.Layout>

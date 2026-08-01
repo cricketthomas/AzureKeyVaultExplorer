@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Azure.Security.KeyVault.Certificates;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Secrets;
+using Humanizer;
 
 namespace AzureKeyVaultStudio.Models;
 
@@ -34,11 +35,13 @@ public sealed class KeyVaultItemProperties
     public string[] TagValues => Tags is not null ? [.. Tags.Values] : [];
     public string[] TagKeys => Tags is not null ? [.. Tags.Keys] : [];
     public string TagValuesString => string.Join(", ", Tags?.Values ?? []);
-    public ObservableCollection<TagItem> EditableTags { get; set; } = new ObservableCollection<TagItem>();
+    public ObservableCollection<TagItem> EditableTags { get; set; } = [];
 
     public DateTimeOffset? LastModifiedDate => UpdatedOn.HasValue ? UpdatedOn.Value.ToLocalTime() : CreatedOn?.ToLocalTime();
-    public string? WhenLastModified => LastModifiedDate.HasValue ? FormatRelativeDate(LastModifiedDate.Value, true) : null;
-    public string? WhenExpires => ExpiresOn.HasValue ? FormatRelativeDate(ExpiresOn.Value) : null;
+    public string? WhenLastModified => LastModifiedDate.HasValue ? LastModifiedDate.Value.Humanize() : null;
+    public string? WhenExpires => ExpiresOn.HasValue ? ExpiresOn.Value.Humanize() : null;
+
+    public bool IsExpired => ExpiresOn.HasValue && (ExpiresOn.Value < DateTimeOffset.Now);
 
     public static KeyVaultItemProperties FromSecretProperties(SecretProperties properties)
       => Create(
@@ -170,44 +173,6 @@ public sealed class KeyVaultItemProperties
             Type = type,
             EditableTags = tags is null ? []: new ObservableCollection<TagItem>(tags.Select(t => new TagItem { Key = t.Key, Value = t.Value }))
         };
-    }
-
-    internal static string? FormatRelativeDate(DateTimeOffset dateTimeOffset, bool isPast = false)
-    {
-        DateTimeOffset now = DateTimeOffset.Now;
-
-        if (dateTimeOffset < now && !isPast)
-        {
-            return "Expired";
-        }
-
-        TimeSpan timeSpan = isPast ? now.Subtract(dateTimeOffset) : dateTimeOffset.Subtract(now);
-        int dayDifference = (int)timeSpan.TotalDays;
-        int secondDifference = (int)timeSpan.TotalSeconds;
-        var weeks = Math.Ceiling((double)dayDifference / 7);
-        var months = Math.Ceiling((double)dayDifference / 30);
-        var years = Math.Round((double)dayDifference / 365);
-
-        if (dayDifference < 0 || dayDifference >= 5000) return null;
-
-        return (dayDifference, secondDifference) switch
-        {
-            (0, < 60) when isPast => "just now",
-            (0, < 120) when isPast => "1 minute ago",
-            (0, < 3600) when isPast => $"{Math.Floor((double)secondDifference / 60)} minutes ago",
-            (0, < 7200) when isPast => "1 hour ago",
-            (0, < 86400) when isPast => $"{Math.Floor((double)secondDifference / 3600)} hours ago",
-            (0, < 86400) when !isPast => "in less than a day",
-            (1, _) when isPast => "yesterday",
-            (1, _) when !isPast => "tomorrow",
-            ( < 7, _) => $"{(isPast ? string.Empty : "in ")}{dayDifference} days{(isPast ? " ago" : string.Empty)}",
-            ( < 30, _) => $"{(isPast ? string.Empty : "in ")}{weeks} {(weeks == 1 ? "week" : "weeks")}{(isPast ? " ago" : string.Empty)}",
-            ( < 366, _) => $"{(isPast ? string.Empty : "in ")}{months} {(months == 1 ? "month" : "months")}{(isPast ? " ago" : string.Empty)}",
-            (_, _) => $"{(isPast ? string.Empty : "in ")}{years} {(years == 1 ? "year" : "years")}{(isPast ? " ago" : string.Empty)}"
-        };
-
-
-        
     }
 
     public void ApplyEditableTags(IDictionary<string, string> targetTags)
