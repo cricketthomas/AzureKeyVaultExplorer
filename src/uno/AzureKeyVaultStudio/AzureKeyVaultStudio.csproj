@@ -12,7 +12,7 @@
     <AssemblyName>AzureKeyVaultStudio</AssemblyName>
     <ApplicationId>io.github.cricketthomas.AzureKeyVaultExplorer</ApplicationId>
 
-    <ApplicationDisplayVersion>2.2.0.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>2.3.0.0</ApplicationDisplayVersion>
     <ApplicationVersion>2</ApplicationVersion>
 
     <ApplicationPublisher>cricketthomas</ApplicationPublisher>
@@ -27,6 +27,7 @@
 
 
     <PredefinedCulturesOnly>true</PredefinedCulturesOnly>
+    <PublishAot Condition=" $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'desktop' ">true</PublishAot>
       
     <UnoXamlResourcesTrimming>true</UnoXamlResourcesTrimming>
 
@@ -99,8 +100,6 @@
     <PackageReference Include="CommunityToolkit.WinUI.Collections" />
     <PackageReference Include="CommunityToolkit.WinUI.Behaviors" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" />
-    <PackageReference Include="DevToolsUno" Condition="'$(Configuration)' == 'Debug'" />
-
   </ItemGroup>
 
 

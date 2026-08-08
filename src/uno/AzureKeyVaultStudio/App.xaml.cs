@@ -12,12 +12,6 @@ using Windows.Graphics;
 using Windows.System;
 using Windows.UI.WindowManagement;
 
-#if HAS_UNO_SKIA && !WINDOWS && DEBUG
-using DevToolsUno;
-using DevToolsUno.Diagnostics;
-using DevToolsUno.Diagnostics.Screenshots;
-#endif
-
 namespace AzureKeyVaultStudio;
 
 public partial class App : Application
@@ -177,7 +171,7 @@ public partial class App : Application
         EnsureEarlyWindow(MainWindow);
        
 #if DEBUG
-        //MainWindow.UseStudio();
+        MainWindow.UseStudio();
 #endif
 
         MainWindow.SetWindowIcon();
@@ -199,14 +193,6 @@ public partial class App : Application
                 _ = DbContext.InitializeDatabase();
 
             });
-#if HAS_UNO_SKIA && !WINDOWS && DEBUG
-        _devTools = MainWindow.AttachDevTools(new DevToolsOptions
-        {
-            LaunchView = DevToolsViewKind.VisualTree,
-            ShowAsChildWindow = false,
-        });
-#endif
-
     }
 
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)

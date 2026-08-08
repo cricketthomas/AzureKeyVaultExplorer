@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Azure.ResourceManager.KeyVault;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Secrets;
@@ -347,6 +348,7 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
         }
     }
 
+    [DynamicDependency(nameof(FilterAndLoadVaultValueTypeCommand.IsRunning), typeof(AsyncRelayCommand))]
     [RelayCommand(FlowExceptionsToTaskScheduler = false, AllowConcurrentExecutions = false, IncludeCancelCommand = true)]
     private async Task FilterAndLoadVaultValueType(CancellationToken token)
     {

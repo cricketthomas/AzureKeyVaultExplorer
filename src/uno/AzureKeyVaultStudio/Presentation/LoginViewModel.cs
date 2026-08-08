@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using AzureKeyVaultStudio.Messages;
 using AzureKeyVaultStudio.Services;
 using CommunityToolkit.Mvvm.Messaging;
@@ -48,6 +49,8 @@ public partial class LoginViewModel : ObservableObject
         await _navigator.NavigateViewModelAsync<SubscriptionViewModel>(this);
     }
 
+
+    [DynamicDependency(nameof(GoToMainLayoutPageCommand.IsRunning), typeof(AsyncRelayCommand))]
     [RelayCommand(IncludeCancelCommand = true)]
     private async Task GoToMainLayoutPage(CancellationToken token)
     {

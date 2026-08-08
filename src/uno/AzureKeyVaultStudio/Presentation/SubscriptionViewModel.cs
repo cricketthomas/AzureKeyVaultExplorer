@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using AzureKeyVaultStudio.Database;
 using AzureKeyVaultStudio.Messages;
 using AzureKeyVaultStudio.Services;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace AzureKeyVaultStudio.Presentation;
 
+[Bindable(bindable: true)]
 public partial class SubscriptionViewModel : ObservableObject
 {
     [ObservableProperty]
@@ -36,7 +39,8 @@ public partial class SubscriptionViewModel : ObservableObject
         _dispatcher = dispatcher;
         _localizer = localizer;
     }
-
+    
+    [DynamicDependency(nameof(LoadSubscriptionCommand.IsRunning), typeof(AsyncRelayCommand))]
     [RelayCommand(FlowExceptionsToTaskScheduler = true, IncludeCancelCommand = true, AllowConcurrentExecutions = false)]
     private async Task LoadSubscriptionAsync(CancellationToken cancellationToken)
     {

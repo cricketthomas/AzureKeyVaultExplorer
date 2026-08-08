@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Azure.Core;
 using Azure.ResourceManager;
 using Azure.ResourceManager.KeyVault;
@@ -17,6 +18,8 @@ using static AzureKeyVaultStudio.Models.KvTreeNodeModel;
 
 namespace AzureKeyVaultStudio.UserControls.ViewModels;
 
+
+[Bindable(true)]
 public partial class KeyVaultTreeViewModel : ObservableObject
 {
     private readonly AuthService _authService;
@@ -114,6 +117,8 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         return true;
     }
 
+
+    [DynamicDependency(nameof(RefreshCommand.IsRunning), typeof(AsyncRelayCommand))]
     [RelayCommand(FlowExceptionsToTaskScheduler = true, IncludeCancelCommand = true, AllowConcurrentExecutions = false)]
     private async Task Refresh(CancellationToken token)
     {
@@ -239,10 +244,8 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         }
     }
 
-    //private void Item_PropertyChanging(object? sender, PropertyChangingEventArgs e)
-    //{
-    //    throw new NotImplementedException();
-    //}
+
+
     private async void KvResourceGroupNode_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (WatchedNameOfProps.Contains(e.PropertyName) && sender is not null)

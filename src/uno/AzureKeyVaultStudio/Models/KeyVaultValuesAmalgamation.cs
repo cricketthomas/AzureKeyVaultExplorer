@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Azure.Security.KeyVault.Certificates;
 using Azure.Security.KeyVault.Keys;
@@ -207,6 +208,7 @@ public enum KeyVaultItemType
     All = 3
 }
 
+[Bindable(true)]
 public partial class TagItem : ObservableObject
 {
     [ObservableProperty]
