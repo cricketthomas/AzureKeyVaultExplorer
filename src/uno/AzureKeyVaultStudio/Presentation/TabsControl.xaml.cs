@@ -15,12 +15,9 @@ public sealed partial class TabsControl : UserControl
     {
         ViewModel = new TabsControlViewModel();
         InitializeComponent();
-        //Loaded += TabsControl_Loaded;
-        //Unloaded += TabsControl_Unloaded;
     }
     public TabsControlViewModel ViewModel { get; }
 
-    //public FrameworkElement DragRegion => CustomDragRegion;
 
     private void TabsControl_Loaded(object sender, RoutedEventArgs e)
     {
