@@ -38,6 +38,7 @@ Visit the releases section to download the application for mac and linux.
 ### Key features
 
 - Signing in with a Microsoft Account [See how credentials are secured](#security)
+- English, French, Spanish, Portuguese and German language support in Microsoft Store and MacOS versions for v2
 - Support to selectively include/exclude subscriptions to show resource groups and key vaults in the tree
 - Ability to filter subscriptions, resource groups, and key vaults by name
 - Saving vaults to "pinned" section in quick access menu and saving selected subscriptions in SQLite
