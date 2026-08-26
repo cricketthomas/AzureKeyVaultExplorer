@@ -47,8 +47,6 @@ public partial class App : Application
     public IHost? Host { get; private set; }
     public string AppTitle { get; init; } = "Key Vault Explorer";
 
-    private IDisposable? _devTools;
-
 
     [SuppressMessage(category: "Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "Uno.Extensions APIs are used in a way that is safe for trimming in this template context.")]
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
