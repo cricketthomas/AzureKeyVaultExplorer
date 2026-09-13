@@ -25,9 +25,9 @@
 
     <BreakOnUnhandledExceptions Condition="'$(Configuration)' == 'Release'">false</BreakOnUnhandledExceptions>
 
-
     <PredefinedCulturesOnly>true</PredefinedCulturesOnly>
-    <PublishAot Condition=" $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'desktop' ">true</PublishAot>
+
+    <!--<PublishAot Condition=" $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'desktop' ">true</PublishAot>-->
       
     <UnoXamlResourcesTrimming>true</UnoXamlResourcesTrimming>
 
