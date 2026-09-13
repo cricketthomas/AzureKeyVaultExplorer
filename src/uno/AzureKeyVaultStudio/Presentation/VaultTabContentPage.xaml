@@ -283,7 +283,10 @@
                                 Tag="TagValuesString">
                                 <controls:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ItemsRepeater Margin="8,0,0,0" ItemsSource="{Binding TagValues}">
+                                        <ItemsRepeater
+                                            Margin="8,0,0,0"
+                                            IsHitTestVisible="False"
+                                            ItemsSource="{Binding TagValues}">
                                             <ItemsRepeater.Layout>
                                                 <StackLayout Orientation="Horizontal" Spacing="2" />
                                             </ItemsRepeater.Layout>

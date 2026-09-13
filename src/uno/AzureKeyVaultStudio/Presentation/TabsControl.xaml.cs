@@ -47,6 +47,7 @@ public sealed partial class TabsControl : UserControl
                 previousVm.IsActive = false;
         }
 
+        // TODO: see if there is a less ugly way to do this. this is confusing and ugly
         if (!_tabFrameCache.TryGetValue(tab, out var frame))
         {
             frame = new Frame();
