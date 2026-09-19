@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using AzureKeyVaultStudio.Database;
@@ -10,6 +12,9 @@ using Microsoft.UI.Windowing;
 
 namespace AzureKeyVaultStudio.Presentation;
 
+
+
+[Bindable(true)]
 public partial class SettingsViewModel : ObservableRecipient
 {
     private readonly IAuthenticationService _authentication;
@@ -33,6 +38,7 @@ public partial class SettingsViewModel : ObservableRecipient
     public partial CultureInfo Language { get; set; } = CultureInfo.CurrentCulture;
 
     [ObservableProperty]
+
     public partial IReadOnlyList<CultureInfo>? AvailableLanguages { get; set; } = [];
 
     [ObservableProperty]
@@ -66,6 +72,12 @@ public partial class SettingsViewModel : ObservableRecipient
     public AppTheme SystemTheme => AppTheme.System;
 
     public AzureCloudInstance[] AzureCloudInstances { get; } = Enum.GetValues<AzureCloudInstance>();
+
+
+    [DynamicDependency(nameof(AvailableLanguages))]
+    [DynamicDependency(nameof(CultureInfo.DisplayName), typeof(CultureInfo))]
+    [DynamicDependency(nameof(CultureInfo.Name), typeof(CultureInfo))]
+    [DynamicDependency(nameof(CultureInfo.TwoLetterISOLanguageName), typeof(CultureInfo))]
 
     public SettingsViewModel(IDispatcher dispatcher, IAuthenticationService authentication,
         ILocalSettingsService localSettings, AuthService authService, IThemeService themeService, ILocalizationService localizationService, INavigator navigator, IOptions<ProjectUrls> appConfig, IStringLocalizer localizer)

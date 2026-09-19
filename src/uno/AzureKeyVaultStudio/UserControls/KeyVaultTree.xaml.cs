@@ -38,9 +38,14 @@ public sealed partial class KeyVaultTree : UserControl
 #endif
     }
 
+
     private void OnDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
     {
- 
+
+#if HAS_UNO_SKIA
+    Bindings.Update();
+#endif
+
         if (ViewModel?.RefreshCommand is not null && ViewModel.HasFetchedData == false)
         {
             Bindings.Update();
