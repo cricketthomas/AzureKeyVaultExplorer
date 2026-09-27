@@ -32,7 +32,10 @@
     <UnoXamlResourcesTrimming>true</UnoXamlResourcesTrimming>
 
 
-    <UnoFeatures>
+    <SkiaSharpVersion>4.148.0</SkiaSharpVersion>
+
+
+      <UnoFeatures>
         Toolkit;
         Logging;
         Storage;
