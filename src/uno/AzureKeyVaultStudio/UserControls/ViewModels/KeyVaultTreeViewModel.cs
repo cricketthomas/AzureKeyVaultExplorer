@@ -126,7 +126,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         //await Task.Delay(4000, token);
 #endif
         SearchQuery = string.Empty;
-        await InitializeTreeDataSource(token);
+        await Task.Run(async () => await InitializeTreeDataSource(token), token);
     }
 
     [RelayCommand]

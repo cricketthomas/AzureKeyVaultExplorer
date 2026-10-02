@@ -41,23 +41,20 @@ public sealed partial class KeyVaultTree : UserControl
 
     private void OnDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
     {
-
 #if HAS_UNO_SKIA
     Bindings.Update();
 #endif
 
-        if (ViewModel?.RefreshCommand is not null && ViewModel.HasFetchedData == false)
-        {
-            Bindings.Update();
-            DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
-            {
-                if (ViewModel.RefreshCommand.IsRunning)
-                    return;
-                ViewModel.RefreshCommand.Execute(null);
-                args.Handled = true;
-            });
+        if (ViewModel?.RefreshCommand is null || ViewModel.HasFetchedData)
+            return;
 
-        }
+        Bindings.Update();
+
+        DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+        {
+            if (ViewModel is { HasFetchedData: false } vm && !vm.RefreshCommand.IsRunning)
+                vm.RefreshCommand.Execute(null);
+        });
     }
 
     private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
