@@ -12,12 +12,6 @@ using Windows.Graphics;
 using Windows.System;
 using Windows.UI.WindowManagement;
 
-#if HAS_UNO_SKIA && !WINDOWS && DEBUG
-using DevToolsUno;
-using DevToolsUno.Diagnostics;
-using DevToolsUno.Diagnostics.Screenshots;
-#endif
-
 namespace AzureKeyVaultStudio;
 
 public partial class App : Application
@@ -52,8 +46,6 @@ public partial class App : Application
     public Window? MainWindow { get; private set; }
     public IHost? Host { get; private set; }
     public string AppTitle { get; init; } = "Key Vault Explorer";
-
-    private IDisposable? _devTools;
 
 
     [SuppressMessage(category: "Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "Uno.Extensions APIs are used in a way that is safe for trimming in this template context.")]
@@ -177,7 +169,7 @@ public partial class App : Application
         EnsureEarlyWindow(MainWindow);
        
 #if DEBUG
-        //MainWindow.UseStudio();
+        MainWindow.UseStudio();
 #endif
 
         MainWindow.SetWindowIcon();
@@ -199,14 +191,6 @@ public partial class App : Application
                 _ = DbContext.InitializeDatabase();
 
             });
-#if HAS_UNO_SKIA && !WINDOWS && DEBUG
-        _devTools = MainWindow.AttachDevTools(new DevToolsOptions
-        {
-            LaunchView = DevToolsViewKind.VisualTree,
-            ShowAsChildWindow = false,
-        });
-#endif
-
     }
 
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)

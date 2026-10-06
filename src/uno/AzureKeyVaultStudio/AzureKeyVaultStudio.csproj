@@ -12,7 +12,7 @@
     <AssemblyName>AzureKeyVaultStudio</AssemblyName>
     <ApplicationId>io.github.cricketthomas.AzureKeyVaultExplorer</ApplicationId>
 
-    <ApplicationDisplayVersion>2.2.0.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>2.3.0.0</ApplicationDisplayVersion>
     <ApplicationVersion>2</ApplicationVersion>
 
     <ApplicationPublisher>cricketthomas</ApplicationPublisher>
@@ -25,13 +25,17 @@
 
     <BreakOnUnhandledExceptions Condition="'$(Configuration)' == 'Release'">false</BreakOnUnhandledExceptions>
 
-
     <PredefinedCulturesOnly>true</PredefinedCulturesOnly>
+
+    <!--<PublishAot Condition=" $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'desktop' ">true</PublishAot>-->
       
     <UnoXamlResourcesTrimming>true</UnoXamlResourcesTrimming>
 
 
-    <UnoFeatures>
+    <SkiaSharpVersion>4.148.0</SkiaSharpVersion>
+
+
+      <UnoFeatures>
         Toolkit;
         Logging;
         Storage;
@@ -74,7 +78,7 @@
     <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
     <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
     <NoWarn>$(NoWarn);IL2104</NoWarn>
-    <!--<WinAppSdkVersion>1.8.260508005</WinAppSdkVersion>-->
+    <WinAppSdkVersion>2.5.1</WinAppSdkVersion>
   </PropertyGroup>
 
 
@@ -99,8 +103,6 @@
     <PackageReference Include="CommunityToolkit.WinUI.Collections" />
     <PackageReference Include="CommunityToolkit.WinUI.Behaviors" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" />
-    <PackageReference Include="DevToolsUno" Condition="'$(Configuration)' == 'Debug'" />
-
   </ItemGroup>
 
 
