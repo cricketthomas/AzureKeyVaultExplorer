@@ -61,8 +61,7 @@
         </Grid.RowDefinitions>
         <TabView
             x:Name="MainTabView"
-            Grid.Row="0"
-            Background="{ThemeResource LayerOnMicaBaseAltFillColorDefaultBrush}"
+            Background="{ThemeResource SolidBackgroundFillColorQuarternaryBrush}"
             CanDragTabs="True"
             CompositeMode="SourceOver"
             IsAddTabButtonVisible="False"

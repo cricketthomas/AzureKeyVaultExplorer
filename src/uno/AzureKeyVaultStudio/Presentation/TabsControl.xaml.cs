@@ -15,12 +15,9 @@ public sealed partial class TabsControl : UserControl
     {
         ViewModel = new TabsControlViewModel();
         InitializeComponent();
-        //Loaded += TabsControl_Loaded;
-        //Unloaded += TabsControl_Unloaded;
     }
     public TabsControlViewModel ViewModel { get; }
 
-    //public FrameworkElement DragRegion => CustomDragRegion;
 
     private void TabsControl_Loaded(object sender, RoutedEventArgs e)
     {
@@ -50,6 +47,7 @@ public sealed partial class TabsControl : UserControl
                 previousVm.IsActive = false;
         }
 
+        // TODO: see if there is a less ugly way to do this. this is confusing and ugly
         if (!_tabFrameCache.TryGetValue(tab, out var frame))
         {
             frame = new Frame();
