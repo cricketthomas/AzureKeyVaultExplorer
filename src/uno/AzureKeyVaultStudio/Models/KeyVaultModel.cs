@@ -54,7 +54,7 @@ public abstract partial class KvTreeNodeModel : ObservableObject
         return new SolidColorBrush(isDark ? Colors.White : Colors.Black);
     }
 
-public partial class KvSubscriptionModel : KvTreeNodeModel
+    public partial class KvSubscriptionModel : KvTreeNodeModel
     {
         public enum ExplorerItemType
         { QuickAccess, ResourceGroup };
@@ -68,6 +68,8 @@ public partial class KvSubscriptionModel : KvTreeNodeModel
         public override Brush? IconForeground => Type == ExplorerItemType.QuickAccess
             ? GrayBrush
             : GetThemeBrush("IconForegroundColorBrush");
+
+
     }
 
     public partial class KvResourceGroupModel : KvTreeNodeModel

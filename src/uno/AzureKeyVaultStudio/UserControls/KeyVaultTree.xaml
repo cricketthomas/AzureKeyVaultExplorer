@@ -63,7 +63,7 @@
             <DataTemplate x:Key="TreeNodeTemplate" x:DataType="models:KvTreeNodeModel">
                 <TreeViewItem
                     AutomationProperties.Name="{x:Bind DisplayName}"
-                    ContextFlyout="{StaticResource TreeViewContextFlyout}"
+                    ContextRequested="TreeViewItem_ContextRequested"
                     DoubleTapped="TreeViewItem_DoubleTapped"
                     IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}"
                     IsSelected="{x:Bind IsSelected, Mode=TwoWay}"
@@ -174,8 +174,8 @@
             <TreeView
                 Name="KeyVaultTreeView"
                 Background="Transparent"
+                CanDrag="False"
                 Collapsed="KeyVaultTreeView_Collapsed"
-                ContextFlyout="{StaticResource TreeViewContextFlyout}"
                 DragItemsStarting="KeyVaultTreeView_DragItemsStarting"
                 Expanding="KeyVaultTreeView_Expanding"
                 ItemTemplate="{StaticResource TreeNodeTemplate}"
