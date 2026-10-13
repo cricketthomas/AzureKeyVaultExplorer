@@ -11,9 +11,8 @@ namespace AzureKeyVaultStudio.UserControls;
 
 public sealed partial class KeyVaultTree : UserControl
 {
-    private IStringLocalizer? _localizer { get; set; }
     public DispatcherQueueTimer _debounceTimerSearch = DispatcherQueue.GetForCurrentThread().CreateTimer();
-    private MenuFlyout keyVaultMenuFlyout;
+    private readonly MenuFlyout keyVaultMenuFlyout;
 
     public KeyVaultTreeViewModel? ViewModel => DataContext as KeyVaultTreeViewModel;
 
@@ -45,14 +44,17 @@ public sealed partial class KeyVaultTree : UserControl
 #endif
 
         if (ViewModel?.RefreshCommand is null || ViewModel.HasFetchedData)
+        {
             return;
-
+        }
         Bindings.Update();
 
         DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
         {
             if (ViewModel is { HasFetchedData: false } vm && !vm.RefreshCommand.IsRunning)
+            {
                 vm.RefreshCommand.Execute(null);
+            }
         });
     }
 
