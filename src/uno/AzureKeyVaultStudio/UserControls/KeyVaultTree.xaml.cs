@@ -130,7 +130,7 @@ public sealed partial class KeyVaultTree : UserControl
     private void TreeViewItem_ContextRequested(UIElement sender, ContextRequestedEventArgs args)
     {
         var point = new Point(0, 0);
-        if (sender as TreeViewItem != null && (sender as TreeViewItem)!.DataContext is KvKeyVaultResourceModel)
+        if (sender is TreeViewItem && (sender as TreeViewItem)!.DataContext is KvKeyVaultResourceModel)
         {
             if (args.TryGetPosition(sender, out point))
             {
