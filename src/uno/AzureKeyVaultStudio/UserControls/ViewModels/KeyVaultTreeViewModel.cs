@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Azure.Core;
 using Azure.ResourceManager;
 using Azure.ResourceManager.KeyVault;
@@ -17,6 +18,7 @@ using static AzureKeyVaultStudio.Models.KvTreeNodeModel;
 
 namespace AzureKeyVaultStudio.UserControls.ViewModels;
 
+[Bindable(true)]
 public partial class KeyVaultTreeViewModel : ObservableObject
 {
     private readonly AuthService _authService;
@@ -114,6 +116,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         return true;
     }
 
+    [DynamicDependency(nameof(RefreshCommand.IsRunning), typeof(AsyncRelayCommand))]
     [RelayCommand(FlowExceptionsToTaskScheduler = true, IncludeCancelCommand = true, AllowConcurrentExecutions = false)]
     private async Task Refresh(CancellationToken token)
     {
@@ -121,7 +124,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         //await Task.Delay(4000, token);
 #endif
         SearchQuery = string.Empty;
-        await InitializeTreeDataSource(token);
+        await Task.Run(async () => await InitializeTreeDataSource(token), token);
     }
 
     [RelayCommand]
@@ -239,10 +242,6 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         }
     }
 
-    //private void Item_PropertyChanging(object? sender, PropertyChangingEventArgs e)
-    //{
-    //    throw new NotImplementedException();
-    //}
     private async void KvResourceGroupNode_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (WatchedNameOfProps.Contains(e.PropertyName) && sender is not null)
@@ -396,7 +395,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         }
     }
 
-    private void TreeViewSubNode_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private async void TreeViewSubNode_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Add && sender is not null)
         {
@@ -405,7 +404,9 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                 newItem.PropertyChanged += KvResourceGroupNode_PropertyChanged;
 
                 if (newItem.IsExpanded)
-                    _ = LoadResourceGroupVaults(newItem);
+                {
+                    await  LoadResourceGroupVaults(newItem);
+                }
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -441,7 +442,7 @@ public partial class KeyVaultTreeViewModel : ObservableObject
         }
     }
 
-    partial void OnTreeDataSourceChanged(ObservableCollection<KvSubscriptionModel> value)
+    async partial void OnTreeDataSourceChanged(ObservableCollection<KvSubscriptionModel> value)
     {
         if (value is null)
             return;
@@ -463,7 +464,9 @@ public partial class KeyVaultTreeViewModel : ObservableObject
                 rg.PropertyChanged += KvResourceGroupNode_PropertyChanged;
 
                 if (rg.IsExpanded)
-                    _ = LoadResourceGroupVaults(rg);
+                {
+                    await LoadResourceGroupVaults(rg);
+                }
             }
         }
     }
@@ -478,27 +481,17 @@ public partial class KeyVaultTreeViewModel : ObservableObject
 
         try
         {
-            await Task.Run(async () =>
+            var vaults = _vaultService.GetKeyVaultsByResourceGroup(kvResourceModel.ResourceGroupResource);
+            _dispatcher.TryEnqueue(async () =>
             {
-                var vaults = _vaultService.GetKeyVaultsByResourceGroup(kvResourceModel.ResourceGroupResource);
-                var vaultsList = new List<KeyVaultResource>();
-
                 await foreach (var vault in vaults)
                 {
-                    vaultsList.Add(vault);
-                }
-
-                _dispatcher.TryEnqueue(() =>
-                {
-                    foreach (var vault in vaultsList)
+                    kvResourceModel.Children.Add(new KvKeyVaultResourceModel
                     {
-                        kvResourceModel.Children.Add(new KvKeyVaultResourceModel
-                        {
-                            DisplayName = vault.Data.Name,
-                            Resource = vault,
-                        });
-                    }
-                });
+                        DisplayName = vault.Data.Name,
+                        Resource = vault,
+                    });
+                }
             });
         }
         catch (OperationCanceledException)

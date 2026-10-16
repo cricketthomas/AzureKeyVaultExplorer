@@ -160,7 +160,7 @@
                         Width="200"
                         CacheMode="BitmapCache"
                         Opacity=".4"
-                        Source="/Assets/Images/kv-gray-3.png" />
+                        Source="/Assets/Images/kv-gray-icon.png" />
 
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock

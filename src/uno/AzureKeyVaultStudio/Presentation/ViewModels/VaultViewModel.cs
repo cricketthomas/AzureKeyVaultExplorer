@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Azure.ResourceManager.KeyVault;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Secrets;
@@ -203,27 +204,33 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
                 Enabled = true
             }
         };
-        var window = new SharedWindow();
-        window.AppWindow.Title = _localizer["NewSecret"] ?? "New Secret";
-        window.Content = new NewItem()
+        var childWindow = new SharedWindow()
+        {
+            Title = _localizer["NewSecret"] ?? "New Secret",
+        };
+        childWindow.Content = new NewItem()
         {
             DataContext = vm,
-            ParentWindow = window
+            ParentWindow = childWindow,
         };
-
-        window.AppWindow.Closing += (s, e) =>
-        {
-            (vm as IDisposable)?.Dispose();
-        };
-
-
+        
+     
         if (OperatingSystem.IsMacOS())
-            ResizeWindowScaled(window.AppWindow, 640, 680);
+            ResizeWindowScaled(childWindow.AppWindow, 640, 680);
         else
-            window.AppWindow.Resize(new SizeInt32 { Width = 640, Height = 680 });
+            childWindow.AppWindow.Resize(new SizeInt32 { Width = 640, Height = 680 });
 
-        window.AppWindow.Show();
+
+        //SystemThemeHelper.SetApplicationTheme(childWindow.Content.XamlRoot, ElementTheme.Light);
+        //childWindow.AppWindow.TitleBar.PreferredTheme = Microsoft.UI.Windowing.TitleBarTheme.UseDefaultAppMode;
+
+        childWindow.Activate();
+        //childWindow.AppWindow.Show();
+
+
     }
+
+
 
     async partial void OnSelectedIndexChanged(int value)
     {
@@ -347,6 +354,7 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
         }
     }
 
+    [DynamicDependency(nameof(FilterAndLoadVaultValueTypeCommand.IsRunning), typeof(AsyncRelayCommand))]
     [RelayCommand(FlowExceptionsToTaskScheduler = false, AllowConcurrentExecutions = false, IncludeCancelCommand = true)]
     private async Task FilterAndLoadVaultValueType(CancellationToken token)
     {
@@ -855,11 +863,7 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
             };
             window.Content = itemDetailsView;
 
-            window.AppWindow.Closing += (s, e) =>
-            {
-                (itemVm as IDisposable)?.Dispose();
-            };
-
+       
             if (OperatingSystem.IsMacOS())
                 ResizeWindowScaled(window.AppWindow, 620, 680);
             else
@@ -875,7 +879,9 @@ public partial class VaultViewModel : ObservableRecipient, IDisposable
                 int y = mainPos.Y + (mainSize.Height - childSize.Height) / 2;
                 window.AppWindow.Move(new PointInt32 { X = x, Y = y });
             }
-            window.AppWindow.Show();
+            window.Activate();
+
+
             try
             {
                 await itemVm.GetPropertiesForKeyVaultValue(model);

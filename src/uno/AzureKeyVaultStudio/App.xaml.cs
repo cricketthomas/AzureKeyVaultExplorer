@@ -4,19 +4,11 @@ using AzureKeyVaultStudio.Database;
 using AzureKeyVaultStudio.Services;
 using AzureKeyVaultStudio.UserControls;
 using AzureKeyVaultStudio.UserControls.ViewModels;
-using CommunityToolkit.WinUI.Controls;
-using Microsoft.Extensions.Configuration;
+using Microsoft.UI;
 using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Windowing;
 using Windows.Graphics;
-using Windows.System;
-using Windows.UI.WindowManagement;
-
-#if HAS_UNO_SKIA && !WINDOWS && DEBUG
-using DevToolsUno;
-using DevToolsUno.Diagnostics;
-using DevToolsUno.Diagnostics.Screenshots;
-#endif
+using Windows.UI.ViewManagement;
 
 namespace AzureKeyVaultStudio;
 
@@ -52,19 +44,15 @@ public partial class App : Application
     public Window? MainWindow { get; private set; }
     public IHost? Host { get; private set; }
     public string AppTitle { get; init; } = "Key Vault Explorer";
-
-    private IDisposable? _devTools;
-
+    public static Dictionary<WindowId, Window> ActiveWindows { get; set; } = new Dictionary<WindowId, Window>();
 
     [SuppressMessage(category: "Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "Uno.Extensions APIs are used in a way that is safe for trimming in this template context.")]
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {
-
         var builder = this.CreateBuilder(args)
             .UseToolkitNavigation()
             .Configure(host => host
 #if DEBUG
-                // Switch to Development environment when running in DEBUG
                 .UseEnvironment(Environments.Development)
 #endif
                 .UseLogging(configure: (context, logBuilder) =>
@@ -175,37 +163,31 @@ public partial class App : Application
         MainWindow = builder.Window;
         MainWindow.Title = AppTitle;
         EnsureEarlyWindow(MainWindow);
-       
+
 #if DEBUG
-        //MainWindow.UseStudio();
+        MainWindow.UseStudio();
 #endif
 
         MainWindow.SetWindowIcon();
 
-        Host = await builder.NavigateAsync<Shell>
-            (initialNavigate: async (services, navigator) =>
-            {
-                var auth = services.GetRequiredService<IAuthenticationService>();
-                var authenticated = await auth.RefreshAsync(CancellationToken.None);
-                if (authenticated)
-                {
-                    await navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.Nested);
-                }
-                else
-                {
-                    await navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.Nested);
-                }
 
-                _ = DbContext.InitializeDatabase();
-
-            });
-#if HAS_UNO_SKIA && !WINDOWS && DEBUG
-        _devTools = MainWindow.AttachDevTools(new DevToolsOptions
+        async Task InitialNavigate(IServiceProvider services, INavigator navigator)
         {
-            LaunchView = DevToolsViewKind.VisualTree,
-            ShowAsChildWindow = false,
-        });
-#endif
+            var auth = services.GetRequiredService<IAuthenticationService>();
+            var authenticated = await auth.RefreshAsync(CancellationToken.None);
+            if (authenticated)
+            {
+                await navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.Nested);
+            }
+            else
+            {
+                await navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.Nested);
+            }
+            _ = DbContext.InitializeDatabase();
+        }
+        //Host = await MainWindow.InitializeNavigationAsync(() => Task.FromResult(builder.Build()),  initialNavigate:  builder.NavigateAsync<Shell>(initialNavigate: InitialNavigate));
+        Host = await builder.NavigateAsync<Shell>(initialNavigate: InitialNavigate);
+
 
     }
 
@@ -216,8 +198,8 @@ public partial class App : Application
             new ViewMap<LoginPage, LoginViewModel>(),
             new ViewMap<MainPage, MainViewModel>(),
             new ViewMap<SettingsPage, SettingsViewModel>(),
-            new ViewMap<SubscriptionsPage, SubscriptionViewModel>(),
-            new DataViewMap<ItemDetails, ItemPropertiesViewModel, KeyVaultItemProperties>()
+            new ViewMap<SubscriptionsPage, SubscriptionViewModel>()
+        //new DataViewMap<ItemDetails, ItemPropertiesViewModel, KeyVaultItemProperties>()
         );
 
         routes.Register(
@@ -225,7 +207,7 @@ public partial class App : Application
                 Nested:
                 [
                     new ("Login", View: views.FindByViewModel<LoginViewModel>()),
-                    new ("Main", View: views.FindByViewModel<MainViewModel>(), IsDefault:true),
+                    new ("Main", View: views.FindByViewModel<MainViewModel>(), IsDefault: true),
                     new ("SettingsPage", View: views.FindByViewModel<SettingsViewModel>()),
                     new ("SubscriptionsPage", View: views.FindByViewModel<SubscriptionViewModel>()),
                 ]
@@ -259,6 +241,12 @@ public partial class App : Application
 #else
         _ = window;
 #endif
+        window.Closed += Window_Closed;
     }
 
+    // https://learn.microsoft.com/en-us/windows/apps/develop/ui/multiple-windows
+    private static async void Window_Closed(object sender, WindowEventArgs args)
+    {
+        ActiveWindows.Values.AsParallel().ForEach(x => x.Close());
+    }
 }
