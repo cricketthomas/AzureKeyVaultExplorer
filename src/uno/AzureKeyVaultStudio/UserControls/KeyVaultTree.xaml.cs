@@ -19,7 +19,6 @@ public sealed partial class KeyVaultTree : UserControl
     public KeyVaultTree()
     {
         InitializeComponent();
-        //Loaded += KeyVaultTree_Loaded;
         DataContextChanged += OnDataContextChanged;
         keyVaultMenuFlyout = Resources["TreeViewContextFlyout"] as MenuFlyout;
 #if HAS_UNO
@@ -42,6 +41,9 @@ public sealed partial class KeyVaultTree : UserControl
 #if HAS_UNO_SKIA
     Bindings.Update();
 #endif
+
+        if (ViewModel?.RefreshCommand is null || ViewModel.HasFetchedData)
+            return;
 
         if (ViewModel?.RefreshCommand is null || ViewModel.HasFetchedData)
         {
