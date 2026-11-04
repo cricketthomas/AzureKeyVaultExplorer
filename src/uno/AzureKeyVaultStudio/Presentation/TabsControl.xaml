@@ -18,12 +18,12 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <!--<Style TargetType="TabViewItem">
+            <Style TargetType="TabViewItem">
                 <Setter Property="CornerRadius">
-                    <Setter.Value>4,4,4,4</Setter.Value>
+                    <Setter.Value>7</Setter.Value>
                 </Setter>
-            -->
-            <!--<Setter Property="HeaderTemplate">
+
+                <Setter Property="HeaderTemplate">
                     <Setter.Value>
                         <DataTemplate x:DataType="local:TabContainerBase">
                             <StackPanel
@@ -41,8 +41,8 @@
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>-->
-            <!--
+            </Style>
+
 
             <Style TargetType="TabView">
                 <Setter Property="TabItemTemplate">
@@ -52,13 +52,14 @@
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>-->
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Grid.Row="1" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TabView
@@ -155,10 +156,46 @@
                 <Rectangle skia:Width="75" win:Width="0" />
             </TabView.TabStripHeader>-->
 
-        </TabView>
 
-        <toolkit:SwitchPresenter
+        </TabView>
+        <Border
             Grid.Row="1"
+            Margin="5"
+            Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="{ThemeResource CornerRadiusValue}">
+            <Grid x:Name="Toolbar">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <CommandBar
+                    Grid.Column="0"
+                    Margin="-10"
+                    HorizontalAlignment="Left"
+                    HorizontalContentAlignment="Left"
+                    Background="Transparent"
+                    DefaultLabelPosition="Right"
+                    IsOpen="False">
+                    <AppBarButton Icon="Add" Label="Add" />
+                    <AppBarButton Icon="Edit" Label="Edit" />
+                    <AppBarButton Icon="Share" Label="Share" />
+                </CommandBar>
+                <AppBarButton
+                    Grid.Column="1"
+                    Margin="-10"
+                    HorizontalAlignment="Right"
+                    HorizontalContentAlignment="Right"
+                    Icon="Setting">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="I" Modifiers="Control" />
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+            </Grid>
+        </Border>
+        <toolkit:SwitchPresenter
+            Grid.Row="2"
             Background="{ThemeResource BaseBackgroundBrush}"
             TargetType="x:Int32"
             Value="{x:Bind ViewModel.Tabs.Count, Mode=OneWay}">
