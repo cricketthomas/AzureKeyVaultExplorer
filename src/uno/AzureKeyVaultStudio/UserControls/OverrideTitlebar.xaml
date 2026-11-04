@@ -16,7 +16,7 @@
     <Grid x:Name="DraggableRegion" Background="Transparent">
         <!--  skia:Margin="75,8,0,10"  -->
         <StackPanel Orientation="Horizontal" Spacing="5">
-            <Button
+            <!--<Button
                 x:Name="BackButton"
                 x:Uid="BackButton"
                 VerticalAlignment="Center"
@@ -24,9 +24,9 @@
                 Style="{StaticResource TransparentButton}"
                 Visibility="{x:Bind IsBackButtonVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=IsBackButtonVisible}">
                 <FontIcon FontSize="12" Glyph="&#xE72B;" />
-            </Button>
+            </Button>-->
 
-            <TextBlock
+            <!--<TextBlock
                 VerticalAlignment="Top"
                 Text="Key Vault Explorer for Azure"
                 Visibility="{x:Bind IsBackButtonVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=IsBackButtonVisible}" />
@@ -35,21 +35,21 @@
                 VerticalAlignment="Center"
                 FontSize="12"
                 Foreground="{ThemeResource AccentTextFillColorDisabledBrush}"
-                Text="{x:Bind SecondaryTitle, Mode=OneWay}" />
+                Text="{x:Bind SecondaryTitle, Mode=OneWay}" />-->
         </StackPanel>
 
-        <!--<win:TitleBar
+        <win:TitleBar
             x:Name="DefaultTitleBar"
             Title="Key Vault Explorer for Azure"
             BackRequested="DefaultTitleBar_BackRequested"
             IsBackButtonEnabled="True"
-            IsBackButtonVisible="{x:Bind IsBackButtonVisible}"
+            IsBackButtonVisible="{x:Bind IsBackButtonVisible, Mode=OneWay}"
             RequestedTheme="Default"
             Subtitle="{x:Bind SecondaryTitle, Mode=OneWay}">
             <win:TitleBar.IconSource>
                 <ImageIconSource ImageSource="/Assets/Images/AppIcon.png" />
             </win:TitleBar.IconSource>
-        </win:TitleBar>-->
+        </win:TitleBar>
 
     </Grid>
 

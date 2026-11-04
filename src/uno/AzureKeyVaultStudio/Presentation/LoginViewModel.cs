@@ -41,12 +41,15 @@ public partial class LoginViewModel : ObservableObject
     private async Task GoToSettingsView()
     {
         await _navigator.NavigateViewModelAsync<SettingsViewModel>(this);
+        WeakReferenceMessenger.Default.Send(new BackButtonIsVisibleMessage());
+
     }
 
     [RelayCommand]
     private async Task GoToSubscriptionsPage()
     {
         await _navigator.NavigateViewModelAsync<SubscriptionViewModel>(this);
+        WeakReferenceMessenger.Default.Send(new BackButtonIsVisibleMessage());
     }
 
 

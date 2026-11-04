@@ -54,7 +54,7 @@
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
-    <Thickness x:Key="TabViewHeaderPadding">0,4,0,0</Thickness>
+    <!--<Thickness x:Key="TabViewHeaderPadding">0,4,0,0</Thickness>
     <Thickness x:Key="TabViewItemHeaderPadding">8,3,4,3</Thickness>
     <Thickness x:Key="TabViewSelectedItemHeaderPadding">9,3,5,4</Thickness>
     <x:Double x:Key="TabViewItemHeight">16</x:Double>
@@ -84,6 +84,6 @@
     <Thickness x:Key="TabViewItemSeparatorMargin">0,8,0,8</Thickness>
     <Thickness x:Key="TabViewItemBorderThickness">1</Thickness>
     <Thickness x:Key="TabViewSelectedItemBorderThickness">1,1,1,0</Thickness>
-    <Thickness x:Key="TabViewSelectedItemHeaderMargin">-1,0,-1,0</Thickness>
+    <Thickness x:Key="TabViewSelectedItemHeaderMargin">-1,0,-1,0</Thickness>-->
 
 </ResourceDictionary>

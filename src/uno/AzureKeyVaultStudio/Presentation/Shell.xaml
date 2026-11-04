@@ -7,17 +7,24 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:local="using:AzureKeyVaultStudio.Presentation"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="using:AzureKeyVaultStudio.UserControls"
     xmlns:utu="using:Uno.Toolkit.UI"
+    xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     d:DesignHeight="300"
     d:DesignWidth="400"
     mc:Ignorable="d">
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <uc:OverrideTitlebar x:Name="DefaultTitleBar" />
+
         <utu:ExtendedSplashScreen
             x:Name="Splash"
+            Grid.Row="1"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
@@ -51,7 +58,7 @@
             </utu:ExtendedSplashScreen.LoadingContentTemplate>
         </utu:ExtendedSplashScreen>
         <InfoBar
-            Grid.Row="0"
+            Grid.Row="1"
             MaxWidth="480"
             Margin="10"
             HorizontalAlignment="Left"

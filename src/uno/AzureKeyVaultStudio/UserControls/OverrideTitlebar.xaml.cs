@@ -11,25 +11,11 @@ namespace AzureKeyVaultStudio.UserControls;
 
 public sealed partial class OverrideTitlebar : UserControl
 {
-    public static readonly DependencyProperty IsBackButtonVisibleProperty =
-        DependencyProperty.Register(
-            nameof(IsBackButtonVisible),
-            typeof(bool),
-            typeof(OverrideTitlebar),
-            new PropertyMetadata(default(OverrideTitlebar)));
-
     public bool IsBackButtonVisible
     {
         get => (bool)GetValue(IsBackButtonVisibleProperty);
         set => SetValue(IsBackButtonVisibleProperty, value);
     }
-
-    public static readonly DependencyProperty SecondaryTitleProperty =
-        DependencyProperty.Register(
-            nameof(SecondaryTitle),
-            typeof(string),
-            typeof(OverrideTitlebar),
-            new PropertyMetadata(default(OverrideTitlebar)));
 
     public string SecondaryTitle
     {
@@ -37,54 +23,56 @@ public sealed partial class OverrideTitlebar : UserControl
         set => SetValue(SecondaryTitleProperty, value);
     }
 
-    private AppWindow? _appWindow;
+    public static readonly DependencyProperty IsBackButtonVisibleProperty =
+    DependencyProperty.Register(nameof(IsBackButtonVisible), typeof(bool),
+        typeof(OverrideTitlebar), new PropertyMetadata(false));
+
+    public static readonly DependencyProperty SecondaryTitleProperty =
+        DependencyProperty.Register(nameof(SecondaryTitle), typeof(string),
+            typeof(OverrideTitlebar), new PropertyMetadata(string.Empty));
 
     public OverrideTitlebar()
     {
         this.InitializeComponent();
-        _appWindow = (Application.Current as App)?.MainWindow?.AppWindow;
-        if (_appWindow is not null)
-        {
-            if (!string.IsNullOrWhiteSpace(SecondaryTitle))
-                _appWindow.Title = SecondaryTitle;
-        }
+        Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
+    }
 
-        WeakReferenceMessenger.Default.Register<NavigationBackRequestedMessage>(this, async (r, m) => await GoBack());
-        this.Unloaded += OnUnloaded;
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+
+        WeakReferenceMessenger.Default.Register<BackButtonIsVisibleMessage>(this, async (r, m) => IsBackButtonVisible = true);
+        WeakReferenceMessenger.Default.Register<BackButtonIsHiddenMessage>(this, async (r, m) => IsBackButtonVisible = false);
+        var window = (Application.Current as App)?.MainWindow;
+        if (window is null) return;
+
+        if (!string.IsNullOrWhiteSpace(SecondaryTitle))
+            window.Title = SecondaryTitle;
+
+#if WINDOWS
+        DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
+        {
+            if (!IsLoaded) return;
+            window.ExtendsContentIntoTitleBar = true;
+            window.SetTitleBar(DefaultTitleBar);
+        });
+#endif
     }
 
     private void OnUnloaded(object sender, RoutedEventArgs e)
     {
         WeakReferenceMessenger.Default.Unregister<NavigationBackRequestedMessage>(this);
+        WeakReferenceMessenger.Default.Unregister<BackButtonIsVisibleMessage>(this);
+        WeakReferenceMessenger.Default.Unregister<BackButtonIsHiddenMessage>(this);
     }
 
-    private async void BackButton_Click(object sender, RoutedEventArgs e)
+    private void BackButton_Click(object sender, RoutedEventArgs e)
     {
-        await GoBack();
+        WeakReferenceMessenger.Default.Send(message: new NavigationBackRequestedMessage());
     }
 
-    private async void DefaultTitleBar_BackRequested(TitleBar sender, object args)
+    private void DefaultTitleBar_BackRequested(TitleBar sender, object args)
     {
-        await GoBack();
-    }
-
-    private async Task GoBack()
-    {
-        if (!this.IsLoaded || XamlRoot == null)
-            return;
-
-        var navigator = this.Navigator();
-        if (navigator == null)
-            return;
-
-        try
-        {
-            if (await navigator.CanGoBack())
-                await navigator.NavigateBackAsync(this);
-        }
-        catch (Exception ex)
-        {
-            Debug.Write($"Failed to navigate back {ex.Message}", ex.StackTrace);
-        }
+        WeakReferenceMessenger.Default.Send(new NavigationBackRequestedMessage());
     }
 }

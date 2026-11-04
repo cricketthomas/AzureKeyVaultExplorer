@@ -1,7 +1,9 @@
 using System.Diagnostics;
+using AzureKeyVaultStudio.Messages;
 using AzureKeyVaultStudio.Presentation.TabsModels;
 using AzureKeyVaultStudio.Presentation.ViewModels;
 using AzureKeyVaultStudio.UserControls;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace AzureKeyVaultStudio.Presentation;
 
@@ -153,11 +155,12 @@ public sealed partial class TabsControl : UserControl
 
     private void SetTabPageState()
     {
-        SplitButtonTeachingTip.IsOpen = false;
+        //SplitButtonTeachingTip.IsOpen = false;
     }
     private void SettingsMenuItemButton_Click(object sender, RoutedEventArgs e)
     {
         _ = this.Navigator()?.NavigateViewModelAsync<SettingsViewModel>(this);
+        WeakReferenceMessenger.Default.Send(new BackButtonIsVisibleMessage());
         SetTabPageState();
     
     }
@@ -165,6 +168,7 @@ public sealed partial class TabsControl : UserControl
     private void SubscriptionsButton_Click(object sender, RoutedEventArgs e)
     {
         _ = this.Navigator()?.NavigateViewModelAsync<SubscriptionViewModel>(this);
+        WeakReferenceMessenger.Default.Send(new BackButtonIsVisibleMessage());
         SetTabPageState();
     }
 
@@ -278,5 +282,18 @@ public sealed partial class TabsControl : UserControl
             DefaultButton = ContentDialogButton.Primary
         };
         await dialog.ShowAsync();
+    }
+
+
+    private void UpdateCaptionButtonInset()
+    {
+        // RightInset is in physical pixels; convert to DIPs.
+        double scale = (Content as FrameworkElement)?.XamlRoot?.RasterizationScale ?? 1.0;
+        if (scale <= 0)
+        {
+            scale = 1.0;
+        }
+
+        //CustomDragRegion.MinWidth = AppWindow.TitleBar.RightInset / scale;
     }
 }

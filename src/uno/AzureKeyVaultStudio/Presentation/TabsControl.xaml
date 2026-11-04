@@ -18,11 +18,12 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style TargetType="TabViewItem">
+            <!--<Style TargetType="TabViewItem">
                 <Setter Property="CornerRadius">
                     <Setter.Value>4,4,4,4</Setter.Value>
                 </Setter>
-                <Setter Property="HeaderTemplate">
+            -->
+            <!--<Setter Property="HeaderTemplate">
                     <Setter.Value>
                         <DataTemplate x:DataType="local:TabContainerBase">
                             <StackPanel
@@ -40,7 +41,8 @@
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>
+            </Style>-->
+            <!--
 
             <Style TargetType="TabView">
                 <Setter Property="TabItemTemplate">
@@ -50,7 +52,7 @@
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>
+            </Style>-->
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -70,71 +72,84 @@
             TabCloseRequested="TabView_TabCloseRequested"
             TabItemsSource="{x:Bind ViewModel.Tabs}"
             TabWidthMode="Equal">
-            <TabView.TabStripFooter>
-                <Grid
-                    MinHeight="32"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <!--  TODO ADD TEACHING TIP WHEN EMPTY  -->
-                    <SplitButton
-                        x:Name="PaneToggleSplitButton"
-                        x:Uid="PaneToggleSplitButton"
-                        Grid.Column="0"
-                        HorizontalAlignment="Right"
+            <TabView.TabStripHeader>
+                <Grid>
+                    <Image
+                        Width="16"
+                        Margin="16,4,12,0"
                         VerticalAlignment="Center"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Click="PaneToggleButton_Click">
-                        <FontIcon FontSize="14" Glyph="&#xEA49;" />
-                        <SplitButton.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="B" Modifiers="Control" />
-                        </SplitButton.KeyboardAccelerators>
-                        <SplitButton.Flyout>
-                            <MenuFlyout Placement="Bottom">
-                                <MenuFlyoutItem x:Uid="PasswordGeneratorMenuItem" Command="{x:Bind ViewModel.OpenPasswordGeneratorCommand}">
-                                    <MenuFlyoutItem.Icon>
-                                        <FontIcon Glyph="&#xE8D7;" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <MenuFlyoutItem x:Uid="OpenExternalItemByURLMenuItem" Click="OpenExternalItemByURLMenuItem_Click">
-                                    <MenuFlyoutItem.Icon>
-                                        <SymbolIcon Symbol="OpenWith" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <MenuFlyoutItem x:Uid="OpenExternalVaultButton" Click="OpenExternalVaultButton_Click">
-                                    <MenuFlyoutItem.Icon>
-                                        <SymbolIcon Symbol="OpenLocal" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <MenuFlyoutSeparator />
-                                <MenuFlyoutItem x:Uid="SubscriptionsMenuItem" Click="SubscriptionsButton_Click">
-                                    <MenuFlyoutItem.Icon>
-                                        <FontIcon Glyph="&#xE9D5;" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <MenuFlyoutItem x:Uid="SettingsMenuItem" Click="SettingsMenuItemButton_Click">
-                                    <MenuFlyoutItem.Icon>
-                                        <FontIcon Glyph="&#xE713;" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                            </MenuFlyout>
-                        </SplitButton.Flyout>
-                    </SplitButton>
-                    <TeachingTip
-                        x:Name="SplitButtonTeachingTip"
-                        x:Uid="SplitButtonTeachingTip"
-                        IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=TwoWay}"
-                        Target="{x:Bind PaneToggleSplitButton}">
-                        <TeachingTip.IconSource>
-                            <SymbolIconSource Symbol="Flag" />
-                        </TeachingTip.IconSource>
-                    </TeachingTip>
+                        Source="/Assets/Images/AppIcon.png" />
                 </Grid>
+            </TabView.TabStripHeader>
+            <TabView.TabStripFooter>
+                <StackPanel>
+
+                    <Grid x:Name="CustomDragRegion" />
+                    <Grid
+                        MinHeight="32"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  TODO ADD TEACHING TIP WHEN EMPTY  -->
+                        <SplitButton
+                            x:Name="PaneToggleSplitButton"
+                            x:Uid="PaneToggleSplitButton"
+                            Grid.Column="0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Click="PaneToggleButton_Click">
+                            <FontIcon FontSize="14" Glyph="&#xEA49;" />
+                            <SplitButton.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="B" Modifiers="Control" />
+                            </SplitButton.KeyboardAccelerators>
+                            <SplitButton.Flyout>
+                                <MenuFlyout Placement="Bottom">
+                                    <MenuFlyoutItem x:Uid="PasswordGeneratorMenuItem" Command="{x:Bind ViewModel.OpenPasswordGeneratorCommand}">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE8D7;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem x:Uid="OpenExternalItemByURLMenuItem" Click="OpenExternalItemByURLMenuItem_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <SymbolIcon Symbol="OpenWith" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem x:Uid="OpenExternalVaultButton" Click="OpenExternalVaultButton_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <SymbolIcon Symbol="OpenLocal" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutSeparator />
+                                    <MenuFlyoutItem x:Uid="SubscriptionsMenuItem" Click="SubscriptionsButton_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE9D5;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem x:Uid="SettingsMenuItem" Click="SettingsMenuItemButton_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE713;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                </MenuFlyout>
+                            </SplitButton.Flyout>
+                        </SplitButton>
+                        <TeachingTip
+                            x:Name="SplitButtonTeachingTip"
+                            x:Uid="SplitButtonTeachingTip"
+                            IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=TwoWay}"
+                            Target="{x:Bind PaneToggleSplitButton}">
+                            <TeachingTip.IconSource>
+                                <SymbolIconSource Symbol="Flag" />
+                            </TeachingTip.IconSource>
+                        </TeachingTip>
+                    </Grid>
+                </StackPanel>
             </TabView.TabStripFooter>
             <!-- <TabView.TabStripHeader>
                 <Rectangle skia:Width="75" win:Width="0" />
