@@ -31,7 +31,6 @@
         <toolkit:SwitchPresenter RelativePanel.AlignRightWithPanel="True" Value="{x:Bind ViewModel.Claims, Mode=OneWay}">
             <toolkit:Case Value="{x:Null}">
                 <StackPanel win:Margin="4,0" Orientation="Horizontal">
-                    <FontIcon Glyph="&#xEC9C;" />
                     <TextBlock Text="You are currently signed out" />
                 </StackPanel>
             </toolkit:Case>
@@ -42,10 +41,6 @@
                     win:Margin="0,0,4,0"
                     Orientation="Horizontal"
                     Spacing="4">
-                    <FontIcon
-                        VerticalAlignment="Center"
-                        FontSize="14"
-                        Glyph="&#xE753;" />
                     <TextBlock Text="{x:Bind ViewModel.Claims.Email, Mode=OneWay}" />
                 </StackPanel>
             </toolkit:Case>
