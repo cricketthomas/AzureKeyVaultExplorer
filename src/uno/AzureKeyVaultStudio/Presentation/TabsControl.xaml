@@ -62,6 +62,7 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
         <TabView
             x:Name="MainTabView"
             Background="{ThemeResource SolidBackgroundFillColorQuarternaryBrush}"
@@ -79,7 +80,8 @@
                         Width="18"
                         Margin="14,4,12,0"
                         VerticalAlignment="Center"
-                        Source="/Assets/Images/AppIcon.png" />
+                        Source="/Assets/Images/AppIcon.png"
+                        Visibility="Collapsed" />
                 </Grid>
             </TabView.TabStripHeader>
             <TabView.TabStripFooter>
