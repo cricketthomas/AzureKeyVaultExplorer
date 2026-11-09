@@ -7,7 +7,7 @@ namespace AzureKeyVaultStudio.Presentation;
 
 public sealed partial class Shell : UserControl, IContentControlProvider
 {
-    public ContentControl ContentControl => Splash;
+    public ContentControl ContentControl => PageHost;
     public const int NotifcationTimeoutSeconds = 2;
 
     public Shell()

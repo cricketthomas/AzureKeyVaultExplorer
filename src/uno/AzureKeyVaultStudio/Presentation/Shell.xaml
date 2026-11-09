@@ -7,7 +7,9 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:local="using:AzureKeyVaultStudio.Presentation"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:skia="http://uno.ui/not_win"
     xmlns:uc="using:AzureKeyVaultStudio.UserControls"
+    xmlns:uen="using:Uno.Extensions.Navigation.UI"
     xmlns:utu="using:Uno.Toolkit.UI"
     xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     d:DesignHeight="300"
@@ -16,14 +18,23 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="32" />
+            <win:RowDefinition Height="0" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <uc:OverrideTitlebar x:Name="DefaultTitleBar" />
+        <uc:OverrideTitlebar x:Name="DefaultTitleBar" Visibility="Collapsed" />
 
-        <utu:ExtendedSplashScreen
-            x:Name="Splash"
+
+
+        <ContentControl
+            x:Name="PageHost"
+            Grid.Row="1"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            uen:Region.Attached="True" />
+
+        <!--  <utu:ExtendedSplashScreen
+           x:Name="PageHost"
             Grid.Row="1"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -56,7 +67,7 @@
                     </Grid>
                 </DataTemplate>
             </utu:ExtendedSplashScreen.LoadingContentTemplate>
-        </utu:ExtendedSplashScreen>
+        </utu:ExtendedSplashScreen>-->
         <InfoBar
             Grid.Row="1"
             MaxWidth="480"

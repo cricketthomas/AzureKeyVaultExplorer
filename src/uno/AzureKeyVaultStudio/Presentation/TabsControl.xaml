@@ -74,89 +74,20 @@
             TabItemsSource="{x:Bind ViewModel.Tabs}"
             TabWidthMode="Equal">
             <TabView.TabStripHeader>
-                <Grid>
+                <Grid MinHeight="40">
                     <Image
-                        Width="16"
-                        Margin="16,4,12,0"
+                        Width="18"
+                        Margin="14,4,12,0"
                         VerticalAlignment="Center"
                         Source="/Assets/Images/AppIcon.png" />
                 </Grid>
             </TabView.TabStripHeader>
             <TabView.TabStripFooter>
-                <StackPanel>
-
-                    <Grid x:Name="CustomDragRegion" />
-                    <Grid
-                        MinHeight="32"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Stretch">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <!--  TODO ADD TEACHING TIP WHEN EMPTY  -->
-                        <SplitButton
-                            x:Name="PaneToggleSplitButton"
-                            x:Uid="PaneToggleSplitButton"
-                            Grid.Column="0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Click="PaneToggleButton_Click">
-                            <FontIcon FontSize="14" Glyph="&#xEA49;" />
-                            <SplitButton.KeyboardAccelerators>
-                                <KeyboardAccelerator Key="B" Modifiers="Control" />
-                            </SplitButton.KeyboardAccelerators>
-                            <SplitButton.Flyout>
-                                <MenuFlyout Placement="Bottom">
-                                    <MenuFlyoutItem x:Uid="PasswordGeneratorMenuItem" Command="{x:Bind ViewModel.OpenPasswordGeneratorCommand}">
-                                        <MenuFlyoutItem.Icon>
-                                            <FontIcon Glyph="&#xE8D7;" />
-                                        </MenuFlyoutItem.Icon>
-                                    </MenuFlyoutItem>
-                                    <MenuFlyoutItem x:Uid="OpenExternalItemByURLMenuItem" Click="OpenExternalItemByURLMenuItem_Click">
-                                        <MenuFlyoutItem.Icon>
-                                            <SymbolIcon Symbol="OpenWith" />
-                                        </MenuFlyoutItem.Icon>
-                                    </MenuFlyoutItem>
-                                    <MenuFlyoutItem x:Uid="OpenExternalVaultButton" Click="OpenExternalVaultButton_Click">
-                                        <MenuFlyoutItem.Icon>
-                                            <SymbolIcon Symbol="OpenLocal" />
-                                        </MenuFlyoutItem.Icon>
-                                    </MenuFlyoutItem>
-                                    <MenuFlyoutSeparator />
-                                    <MenuFlyoutItem x:Uid="SubscriptionsMenuItem" Click="SubscriptionsButton_Click">
-                                        <MenuFlyoutItem.Icon>
-                                            <FontIcon Glyph="&#xE9D5;" />
-                                        </MenuFlyoutItem.Icon>
-                                    </MenuFlyoutItem>
-                                    <MenuFlyoutItem x:Uid="SettingsMenuItem" Click="SettingsMenuItemButton_Click">
-                                        <MenuFlyoutItem.Icon>
-                                            <FontIcon Glyph="&#xE713;" />
-                                        </MenuFlyoutItem.Icon>
-                                    </MenuFlyoutItem>
-                                </MenuFlyout>
-                            </SplitButton.Flyout>
-                        </SplitButton>
-                        <TeachingTip
-                            x:Name="SplitButtonTeachingTip"
-                            x:Uid="SplitButtonTeachingTip"
-                            IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=TwoWay}"
-                            Target="{x:Bind PaneToggleSplitButton}">
-                            <TeachingTip.IconSource>
-                                <SymbolIconSource Symbol="Flag" />
-                            </TeachingTip.IconSource>
-                        </TeachingTip>
-                    </Grid>
-                </StackPanel>
+                <Grid
+                    x:Name="CustomDragRegion"
+                    MinWidth="188"
+                    Background="Red" />
             </TabView.TabStripFooter>
-            <!-- <TabView.TabStripHeader>
-                <Rectangle skia:Width="75" win:Width="0" />
-            </TabView.TabStripHeader>-->
-
-
         </TabView>
         <Border
             Grid.Row="1"
@@ -178,20 +109,61 @@
                     Background="Transparent"
                     DefaultLabelPosition="Right"
                     IsOpen="False">
-                    <AppBarButton Icon="Add" Label="Add" />
-                    <AppBarButton Icon="Edit" Label="Edit" />
-                    <AppBarButton Icon="Share" Label="Share" />
+
+                    <AppBarButton
+                        x:Uid="PaneToggleSplitButton"
+                        Click="PaneAppBarButton_Click"
+                        Icon="Library"
+                        Label="Vault List">
+                        <AppBarButton.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="B" Modifiers="Control" />
+                        </AppBarButton.KeyboardAccelerators>
+                    </AppBarButton>
+                    <AppBarButton
+                        Click="SubscriptionsButton_Click"
+                        Icon="Switch"
+                        Label="Subscriptions" />
+                    <AppBarButton Icon="Add" Label="New.." />
+
+                    <AppBarButton
+                        AllowFocusOnInteraction="True"
+                        Icon="SwitchApps"
+                        Label="Tools">
+                        <AppBarButton.Flyout>
+                            <MenuFlyout Placement="Bottom">
+                                <MenuFlyoutItem x:Uid="PasswordGeneratorMenuItem" Command="{x:Bind ViewModel.OpenPasswordGeneratorCommand}">
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon Glyph="&#xE8D7;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutSeparator />
+                                <MenuFlyoutItem x:Uid="OpenExternalItemByURLMenuItem" Click="OpenExternalItemByURLMenuItem_Click">
+                                    <MenuFlyoutItem.Icon>
+                                        <SymbolIcon Symbol="OpenWith" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutItem x:Uid="OpenExternalVaultButton" Click="OpenExternalVaultButton_Click">
+                                    <MenuFlyoutItem.Icon>
+                                        <SymbolIcon Symbol="OpenLocal" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+
+                            </MenuFlyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
                 </CommandBar>
-                <AppBarButton
+                <Button
                     Grid.Column="1"
-                    Margin="-10"
                     HorizontalAlignment="Right"
-                    HorizontalContentAlignment="Right"
-                    Icon="Setting">
-                    <AppBarButton.KeyboardAccelerators>
+                    Click="SettingsMenuItemButton_Click"
+                    Content="&#xE713;"
+                    FontFamily="Segoe Fluent Icons"
+                    Style="{StaticResource TransparentButton}">
+
+                    <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="I" Modifiers="Control" />
-                    </AppBarButton.KeyboardAccelerators>
-                </AppBarButton>
+                    </Button.KeyboardAccelerators>
+                </Button>
             </Grid>
         </Border>
         <toolkit:SwitchPresenter

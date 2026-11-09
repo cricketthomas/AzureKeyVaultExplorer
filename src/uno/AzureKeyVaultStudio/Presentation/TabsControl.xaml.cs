@@ -4,6 +4,7 @@ using AzureKeyVaultStudio.Presentation.TabsModels;
 using AzureKeyVaultStudio.Presentation.ViewModels;
 using AzureKeyVaultStudio.UserControls;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.UI.Windowing;
 
 namespace AzureKeyVaultStudio.Presentation;
 
@@ -12,11 +13,14 @@ public sealed partial class TabsControl : UserControl
     private readonly Dictionary<TabContainerBase, Frame> _tabFrameCache = new();
     private readonly Dictionary<TabContainerBase, CancellationTokenSource> _tabCancellationTokens = new();
     private Frame? _currentFrame;
-
+    private Window? _window;
     public TabsControl()
     {
         ViewModel = new TabsControlViewModel();
         InitializeComponent();
+        _window = (Application.Current as App)?.MainWindow;
+        _window.SetTitleBar(CustomDragRegion);
+        //_window.AppWindow.Changed += OnAppWindowChanged;
     }
     public TabsControlViewModel ViewModel { get; }
 
@@ -285,15 +289,28 @@ public sealed partial class TabsControl : UserControl
     }
 
 
-    private void UpdateCaptionButtonInset()
-    {
-        // RightInset is in physical pixels; convert to DIPs.
-        double scale = (Content as FrameworkElement)?.XamlRoot?.RasterizationScale ?? 1.0;
-        if (scale <= 0)
-        {
-            scale = 1.0;
-        }
 
-        //CustomDragRegion.MinWidth = AppWindow.TitleBar.RightInset / scale;
+    private void PaneAppBarButton_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.IsPaneOpen = !ViewModel.IsPaneOpen;
     }
+
+    //private void OnAppWindowChanged(AppWindow sender, AppWindowChangedEventArgs args)
+    //{
+    //    if (args.DidSizeChange || args.DidPositionChange)
+    //    {
+    //        UpdateCaptionButtonInset();
+    //    }
+    //}
+    //private void UpdateCaptionButtonInset()
+    //{
+    //    var scale = (Content as FrameworkElement)?.XamlRoot?.RasterizationScale ?? 1.0;
+    //    if (scale <= 0)
+    //    {
+    //        scale = 1.0;
+    //    }
+
+    //    CustomDragRegion.MinWidth = _window.AppWindow.TitleBar.RightInset / scale;
+    //}
+
 }

@@ -169,7 +169,9 @@ public partial class App : Application
 #endif
 
         MainWindow.SetWindowIcon();
-
+        // TODO: this is a hack
+        var shell = new Shell();
+        MainWindow.Content = shell;
 
         async Task InitialNavigate(IServiceProvider services, INavigator navigator)
         {
@@ -185,10 +187,11 @@ public partial class App : Application
             }
             _ = DbContext.InitializeDatabase();
         }
-        //Host = await MainWindow.InitializeNavigationAsync(() => Task.FromResult(builder.Build()),  initialNavigate:  builder.NavigateAsync<Shell>(initialNavigate: InitialNavigate));
-        Host = await builder.NavigateAsync<Shell>(initialNavigate: InitialNavigate);
+        //Host = await MainWindow.InitializeNavigationAsync(() => Task.FromResult(builder.Build()), initialNavigate: InitialNavigate); // this is FAST, but i need the shell
 
-
+        // TODO: this is a hack
+        Host = await MainWindow.InitializeNavigationAsync( () => Task.FromResult(builder.Build()), navigationRoot: shell.ContentControl, initialNavigate: InitialNavigate);
+        //Host = await builder.NavigateAsync<Shell>(initialNavigate: InitialNavigate); // this is SLOW
     }
 
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)
@@ -199,7 +202,6 @@ public partial class App : Application
             new ViewMap<MainPage, MainViewModel>(),
             new ViewMap<SettingsPage, SettingsViewModel>(),
             new ViewMap<SubscriptionsPage, SubscriptionViewModel>()
-        //new DataViewMap<ItemDetails, ItemPropertiesViewModel, KeyVaultItemProperties>()
         );
 
         routes.Register(
@@ -220,10 +222,8 @@ public partial class App : Application
 #if WINDOWS && !HAS_UNO
         window.AppWindow.MoveAndResize(new RectInt32 { Width = 1100, Height = 640, X = 250, Y = 250 });
         window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
-        //if (Microsoft.UI.Windowing.AppWindowTitleBar.IsCustomizationSupported())
-        //{
-        //window.ExtendsContentIntoTitleBar = true;
-        //}
+        window.AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
+    
 
         //var content = window.Content?.XamlRoot?.Content as FrameworkElement;
 
