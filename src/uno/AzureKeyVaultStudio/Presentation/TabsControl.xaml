@@ -2,6 +2,7 @@
     x:Class="AzureKeyVaultStudio.Presentation.TabsControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:AzureKeyVaultStudio.Presentation"
     xmlns:macos="http://uno.ui/macos"
@@ -77,18 +78,19 @@
             <TabView.TabStripHeader>
                 <Grid MinHeight="40">
                     <Image
+                        x:Name="TabStripHeaderIcon"
                         Width="18"
                         Margin="14,4,12,0"
                         VerticalAlignment="Center"
-                        Source="/Assets/Images/AppIcon.png"
-                        Visibility="Collapsed" />
+                        Source="/Assets/Images/AppIcon.png" />
                 </Grid>
             </TabView.TabStripHeader>
             <TabView.TabStripFooter>
-                <Grid
-                    x:Name="CustomDragRegion"
-                    MinWidth="188"
-                    Background="Red" />
+                <Grid x:Name="CustomDragRegion" MinWidth="188">
+
+                    <TextBlock Grid.Row="2" Text="{x:Bind ViewModel.IsLeftPaneClosed, Mode=OneWay}" />
+                </Grid>
+
             </TabView.TabStripFooter>
         </TabView>
         <Border
@@ -235,6 +237,36 @@
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
+            <VisualStateGroup x:Name="SideBarIconStates">
+
+                <VisualState x:Name="SplitViewPaneIsLeftAndOpen">
+                    <VisualState.StateTriggers>
+                        <triggers:IsEqualStateTrigger Value="{x:Bind ViewModel.IsLeftPaneOpen, Mode=OneWay}" To="True" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="TabStripHeaderIcon.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="SplitViewPaneIsLeftAndClosed">
+                    <VisualState.StateTriggers>
+                        <triggers:IsEqualStateTrigger Value="{x:Bind ViewModel.IsLeftPaneClosed, Mode=OneWay}" To="True" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="TabStripHeaderIcon.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="SplitViewPaneIsRight">
+                    <VisualState.StateTriggers>
+                        <triggers:IsEqualStateTrigger Value="{x:Bind ViewModel.PanePlacement, Mode=OneWay}" To="{x:Bind controls:SplitViewPanePlacement.Right}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="TabStripHeaderIcon.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+
         </VisualStateManager.VisualStateGroups>
     </Grid>
 </UserControl>

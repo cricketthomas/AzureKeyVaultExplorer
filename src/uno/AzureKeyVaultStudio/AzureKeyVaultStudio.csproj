@@ -79,6 +79,7 @@
     <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
     <NoWarn>$(NoWarn);IL2104</NoWarn>
     <WinAppSdkVersion>2.6.6-experimental</WinAppSdkVersion>
+      <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
   </PropertyGroup>
 
 

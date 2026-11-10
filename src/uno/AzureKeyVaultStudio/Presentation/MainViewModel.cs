@@ -1,4 +1,5 @@
 using AzureKeyVaultStudio.Messages;
+using AzureKeyVaultStudio.Presentation.ViewModels;
 using AzureKeyVaultStudio.Services;
 using AzureKeyVaultStudio.UserControls.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
@@ -43,14 +44,14 @@ public partial class MainViewModel : ObservableObject
         Title += $" - {localizer["ApplicationName"]}";
         Title += $" - {appInfo?.Value?.Environment}";
 
-        //GoToSecond = new AsyncRelayCommand(GoToSecondView);
         Logout = new AsyncRelayCommand(DoLogout);
 
         LoadSplitViewSettings();
 
         WeakReferenceMessenger.Default.Register<MainViewModel, PaneStateChangedMessage>(this, (r, m) =>
         {
-            r.IsPaneOpen = m.Value;
+            r.IsPaneOpen = m.Value.IsOpen;
+            r.PanePlacement = m.Value.PanePlacement;
         });
     }
 
@@ -72,6 +73,8 @@ public partial class MainViewModel : ObservableObject
     }
 
     public bool IsPaneLeft => PanePlacement == SplitViewPanePlacement.Left;
+
+
     [ObservableProperty]
     public partial bool IsPaneOpen { get; set; } = true;
 
@@ -95,11 +98,13 @@ public partial class MainViewModel : ObservableObject
     public partial double SplitViewWidth { get; set; } = 220;
 
     public string? Title { get; }
+
+
     [RelayCommand]
     public void ClosePane()
     {
         IsPaneOpen = false;
-        WeakReferenceMessenger.Default.Send(new PaneStateChangedMessage(false));
+        WeakReferenceMessenger.Default.Send(new PaneStateChangedMessage(new PaneState(false, PanePlacement)));
     }
 
     public async Task DoLogout(CancellationToken token)
@@ -120,6 +125,7 @@ public partial class MainViewModel : ObservableObject
     public void TogglePaneLocation()
     {
         PanePlacement = PanePlacement == SplitViewPanePlacement.Right ? SplitViewPanePlacement.Left : SplitViewPanePlacement.Right;
+        WeakReferenceMessenger.Default.Send(new PaneStateChangedMessage(new PaneState(IsPaneOpen, PanePlacement)));
     }
 
     [RelayCommand]
