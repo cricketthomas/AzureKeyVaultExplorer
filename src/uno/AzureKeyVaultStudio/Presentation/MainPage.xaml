@@ -34,6 +34,7 @@
             DisplayMode="{x:Bind ViewModel.SplitViewDisplay, Mode=TwoWay}"
             IsPaneOpen="{x:Bind ViewModel.IsPaneOpen, Mode=TwoWay}"
             OpenPaneLength="{x:Bind ViewModel.SplitViewWidth, Mode=TwoWay}"
+            
             PaneBackground="Transparent"
             PanePlacement="{x:Bind ViewModel.PanePlacement, Mode=OneWay}">
 

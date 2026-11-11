@@ -26,21 +26,38 @@ public sealed partial class MainPage : Page
             _appWindow.Closing += _appWindow_Closing;
         }
 
-        //AboveTreeViewArea.Loaded += (s, e) => UpdateDraggableRegion();
+        AboveTreeViewArea.Loaded += (s, e) => UpdateDraggableRegion();
         //AboveTreeViewArea.SizeChanged += (s, e) => UpdateDraggableRegion();
-        AboveTreeViewArea.SizeChanged += (_, _) => UpdateDraggableRegion();
+        //AboveTreeViewArea.SizeChanged += (_, _) => UpdateDraggableRegion();
+        MainSplitView.Loaded += (_, _) => UpdateDraggableRegion();
         MainSplitView.PaneClosed += (_, _) => UpdateDraggableRegion();
         MainSplitView.PaneOpened += (_, _) => UpdateDraggableRegion();
-        VaultTabsControl.CustomDragRegionTabViewFooter.SizeChanged +=
-            (_, _) => UpdateDraggableRegion();
 
+        VaultTabsControl.CustomDragRegionTabViewFooter.SizeChanged += (_, _) => UpdateDraggableRegion();
+        VaultTabsControl.CustomDragRegionTabViewFooter.Loaded += (_, _) => UpdateDraggableRegion();
         SizeChanged += (_, _) => UpdateDraggableRegion();
+
+            MainSplitView.RegisterPropertyChangedCallback(
+    SplitView.PanePlacementProperty,
+    (sender, property) =>
+    {
+
+        UpdateDraggableRegion();
+        //var splitView = (SplitView)sender;
+
+        //if (splitView.PanePlacement == SplitViewPanePlacement.Left)
+        //{
+        //}
+        //else
+        //{
+        //}
+    });
     }
+
     private RectInt32 GetWindowRect(FrameworkElement element)
     {
         var transform = element.TransformToVisual(null);
-        var position = transform.TransformPoint(
-            new Windows.Foundation.Point(0, 0));
+        var position = transform.TransformPoint(new Windows.Foundation.Point(0, 0));
 
         var scale = element.XamlRoot.RasterizationScale;
 
@@ -60,26 +77,33 @@ public sealed partial class MainPage : Page
             VaultTabsControl?.CustomDragRegionTabViewFooter is null ||
             _appWindow is null)
             return;
-        AboveTreeViewArea.Background = new SolidColorBrush(Colors.AliceBlue);
         //VaultTabsControl.CustomDragRegionTabViewFooter.Background = new SolidColorBrush(Colors.AliceBlue);
         try
         {
             var regions = new[]
             {
-          
-            GetWindowRect(VaultTabsControl.CustomDragRegionTabViewFooter)
-        };
+                GetWindowRect(VaultTabsControl.CustomDragRegionTabViewFooter)
+             };
 
             if (MainSplitView.IsPaneOpen)
-                regions.Prepend(GetWindowRect(AboveTreeViewArea));
+            {
+                AboveTreeViewArea.Background = new SolidColorBrush(Colors.AliceBlue);
+                regions = new[]
+          {
+                    GetWindowRect(AboveTreeViewArea),
+                GetWindowRect(VaultTabsControl.CustomDragRegionTabViewFooter)
+             };
+            }
 
- _nonClientPointerSource.SetRegionRects( NonClientRegionKind.Caption, regions);
+            _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Caption, regions);
         }
         catch
         {
             // Region registration may fail on unsupported configurations.
+            Debug.Write("Unsupported config");
         }
     }
+
     private void _appWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
     {
         if (ViewModel is MainViewModel mv)
@@ -88,29 +112,24 @@ public sealed partial class MainPage : Page
         }
     }
 
+    //    private void MainPage_Loaded(object sender, RoutedEventArgs e)
+    //    {
+    //#if !MACCATALYST && !HAS_UNO
+    //        var currentWindow = (Application.Current as App)?.MainWindow;
+    //        if (currentWindow is null)
+    //            return;
 
+    //        try
+    //        {
+    //            //currentWindow.SetTitleBar(DefaultOverrideTitleBar);
+    //            currentWindow.SetTitleBar(DefaultOverrideTitleBar.TitleBarElement);
 
-//    private void MainPage_Loaded(object sender, RoutedEventArgs e)
-//    {
-//#if !MACCATALYST && !HAS_UNO
-//        var currentWindow = (Application.Current as App)?.MainWindow;
-//        if (currentWindow is null)
-//            return;
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Debug.WriteLine($"Failed to set title bar: {ex.Message}");
+    //        }
 
-//        try
-//        {
-//            //currentWindow.SetTitleBar(DefaultOverrideTitleBar);
-//            currentWindow.SetTitleBar(DefaultOverrideTitleBar.TitleBarElement);
-
-//        }
-//        catch (Exception ex)
-//        {
-//            Debug.WriteLine($"Failed to set title bar: {ex.Message}");
-//        }
-
-//#endif
-//    }
-
-   
-
+    //#endif
+    //    }
 }
