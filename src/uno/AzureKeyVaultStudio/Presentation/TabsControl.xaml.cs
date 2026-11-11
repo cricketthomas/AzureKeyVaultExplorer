@@ -14,12 +14,14 @@ public sealed partial class TabsControl : UserControl
     private readonly Dictionary<TabContainerBase, CancellationTokenSource> _tabCancellationTokens = new();
     private Frame? _currentFrame;
     private Window? _window;
+
+    public FrameworkElement CustomDragRegionTabViewFooter => CustomDragRegion;
     public TabsControl()
     {
         ViewModel = new TabsControlViewModel();
         InitializeComponent();
         _window = (Application.Current as App)?.MainWindow;
-        _window.SetTitleBar(CustomDragRegion);
+        //_window.SetTitleBar(CustomDragRegion);
         //_window.AppWindow.Changed += OnAppWindowChanged;
     }
     public TabsControlViewModel ViewModel { get; }

@@ -63,7 +63,6 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <TabView
             x:Name="MainTabView"
             Background="{ThemeResource SolidBackgroundFillColorQuarternaryBrush}"
@@ -86,11 +85,7 @@
                 </Grid>
             </TabView.TabStripHeader>
             <TabView.TabStripFooter>
-                <Grid x:Name="CustomDragRegion" MinWidth="188">
-
-                    <TextBlock Grid.Row="2" Text="{x:Bind ViewModel.IsLeftPaneClosed, Mode=OneWay}" />
-                </Grid>
-
+                <Grid x:Name="CustomDragRegion" MinWidth="188" />
             </TabView.TabStripFooter>
         </TabView>
         <Border
