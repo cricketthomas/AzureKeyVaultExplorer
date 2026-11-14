@@ -15,8 +15,10 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <uc:OverrideTitlebar IsBackButtonVisible="False" Grid.Row="0" />
 
         <ScrollViewer Grid.Row="1">
             <StackPanel

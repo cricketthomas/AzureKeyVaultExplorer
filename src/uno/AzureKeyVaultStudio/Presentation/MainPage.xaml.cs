@@ -1,9 +1,12 @@
 using System.Diagnostics;
+using AzureKeyVaultStudio.Messages;
 using AzureKeyVaultStudio.UserControls.ViewModels;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
+using Uno.Extensions.Navigation.Regions;
 using Windows.Graphics;
 
 namespace AzureKeyVaultStudio.Presentation;
@@ -18,7 +21,6 @@ public sealed partial class MainPage : Page
     public MainPage()
     {
         this.InitializeComponent();
-        //Loaded += MainPage_Loaded;
         _appWindow = (Application.Current as App)?.MainWindow?.AppWindow;
         if (_appWindow is not null)
         {
@@ -36,22 +38,47 @@ public sealed partial class MainPage : Page
         VaultTabsControl.CustomDragRegionTabViewFooter.SizeChanged += (_, _) => UpdateDraggableRegion();
         VaultTabsControl.CustomDragRegionTabViewFooter.Loaded += (_, _) => UpdateDraggableRegion();
         SizeChanged += (_, _) => UpdateDraggableRegion();
+        MainSplitView.RegisterPropertyChangedCallback(SplitView.PanePlacementProperty,
+        (sender, property) =>
+        {
+            UpdateDraggableRegion();
+        });
 
-            MainSplitView.RegisterPropertyChangedCallback(
-    SplitView.PanePlacementProperty,
-    (sender, property) =>
+        WeakReferenceMessenger.Default.Register<TitleBarChangedMessage>(this, (r, m) => UpdateTitleBar(m.Value));
+    }
+
+    private void UpdateTitleBar(TitleBar titleBar)
     {
+        Console.WriteLine("title bar updated");
 
-        UpdateDraggableRegion();
-        //var splitView = (SplitView)sender;
+        var x = GetWindowRect(titleBar);
+        _nonClientPointerSource.ClearAllRegionRects();
+        //_appWindow.TitleBar.ExtendsContentIntoTitleBar = true;
 
-        //if (splitView.PanePlacement == SplitViewPanePlacement.Left)
+        _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Caption, [x]);
+
+        Console.WriteLine("title bar updated");
+#if WINDOWS
+        //var window = (Application.Current as App)?.MainWindow;
+
+        //if (window is null)
+        //    return;
+
+        //void Apply()
         //{
+        //    if (titleBar.XamlRoot is null)
+        //        return;
+
+        //window.SetTitleBar(titleBar);
+        //window.ExtendsContentIntoTitleBar = true;
+
         //}
+
+        //if (window.DispatcherQueue.HasThreadAccess)
+        //    Apply();
         //else
-        //{
-        //}
-    });
+        //    window.DispatcherQueue.TryEnqueue(Apply);
+#endif
     }
 
     private RectInt32 GetWindowRect(FrameworkElement element)
@@ -77,7 +104,6 @@ public sealed partial class MainPage : Page
             VaultTabsControl?.CustomDragRegionTabViewFooter is null ||
             _appWindow is null)
             return;
-        //VaultTabsControl.CustomDragRegionTabViewFooter.Background = new SolidColorBrush(Colors.AliceBlue);
         try
         {
             var regions = new[]
@@ -87,20 +113,18 @@ public sealed partial class MainPage : Page
 
             if (MainSplitView.IsPaneOpen)
             {
-                AboveTreeViewArea.Background = new SolidColorBrush(Colors.AliceBlue);
                 regions = new[]
-          {
+                {
                     GetWindowRect(AboveTreeViewArea),
-                GetWindowRect(VaultTabsControl.CustomDragRegionTabViewFooter)
-             };
+                    GetWindowRect(VaultTabsControl.CustomDragRegionTabViewFooter)
+                };
             }
 
             _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Caption, regions);
         }
         catch
         {
-            // Region registration may fail on unsupported configurations.
-            Debug.Write("Unsupported config");
+            Debug.Write("unsupported config");
         }
     }
 

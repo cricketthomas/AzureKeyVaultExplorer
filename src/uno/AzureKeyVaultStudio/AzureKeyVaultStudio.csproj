@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Uno.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net10.0-windows10.0.26100;net10.0-desktop</TargetFrameworks>
+    <TargetFrameworks>net11.0-desktop;net11.0-windows10.0.26100;</TargetFrameworks>
 
     <OutputType>Exe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
@@ -32,7 +32,8 @@
     <UnoXamlResourcesTrimming>true</UnoXamlResourcesTrimming>
 
 
-    <SkiaSharpVersion>4.148.0</SkiaSharpVersion>
+    <!--<SkiaSharpVersion>4.148.0</SkiaSharpVersion>-->
+    <!--<WindowsAppSdkDeploymentManagerInitialize>false</WindowsAppSdkDeploymentManagerInitialize>-->
 
 
       <UnoFeatures>
@@ -50,7 +51,7 @@
 
     <PackageProjectUrl>https://github.com/cricketthomas/AzureKeyVaultExplorer</PackageProjectUrl>
     <RepositoryUrl>https://github.com/cricketthomas/AzureKeyVaultExplorer</RepositoryUrl>
-    <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
@@ -59,10 +60,12 @@
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Never</AppxBundle>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <PackageCertificateThumbprint>3F71B8AACE1D46D0CF91BAF4E6EC1632E338BF77</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>AzureKeyVaultStudio_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
 
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-windows10.0.26100'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net11.0-windows10.0.26100'">
     <SelfContained>false</SelfContained>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <PublishAot>false</PublishAot>

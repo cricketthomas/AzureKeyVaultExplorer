@@ -16,6 +16,7 @@
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
@@ -23,7 +24,8 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Row="0" Grid.Column="0">
+        <uc:OverrideTitlebar IsBackButtonVisible="True" Grid.Row="0" x:Name="DefaultTitleBar"/>
+        <ScrollViewer Grid.Row="1" Grid.Column="0">
             <StackPanel
                 x:Name="ContentPanel"
                 Margin="20,20"
@@ -222,7 +224,7 @@
             </StackPanel>
         </ScrollViewer>
         <Border
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.ColumnSpan="2"
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
             BorderThickness="0,1,0,0">

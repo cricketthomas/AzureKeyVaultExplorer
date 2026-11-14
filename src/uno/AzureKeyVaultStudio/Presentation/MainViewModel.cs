@@ -56,7 +56,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     public string FontIconType => PanePlacement == SplitViewPanePlacement.Left ? "\uE8E4" : "\uE8E2";
-    public ICommand GoToSecond { get; }
+
     public double InvertedSplitViewWidth
     {
         get => PaneMaxWidth - (SplitViewWidth - PaneMinWidth);
@@ -82,6 +82,7 @@ public partial class MainViewModel : ObservableObject
     public ICommand Logout { get; }
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsPaneLeft))]
+    [NotifyPropertyChangedFor(nameof(IsPaneOpen))]
     [NotifyPropertyChangedFor(nameof(FontIconType))]
     public partial SplitViewPanePlacement PanePlacement { get; set; } = SplitViewPanePlacement.Right;
 
@@ -146,6 +147,8 @@ public partial class MainViewModel : ObservableObject
         SplitViewWidth = _localSettings.GetValue(nameof(SplitViewWidth), 300d);
         IsPaneOpen = _localSettings.GetValue(nameof(IsPaneOpen), true);
         PanePlacement = GetSettingsValue(nameof(PanePlacement), SplitViewPanePlacement.Right);
+        WeakReferenceMessenger.Default.Send(new PaneStateChangedMessage(new PaneState(IsPaneOpen, PanePlacement)));
+
     }
     private void Save<T>(string key, T value)
     {

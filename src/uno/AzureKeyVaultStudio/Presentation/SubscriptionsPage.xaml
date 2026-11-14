@@ -15,13 +15,15 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
 
+        <uc:OverrideTitlebar IsBackButtonVisible="True" Grid.Row="0" />
         <StackPanel
-            Grid.Row="0"
+            Grid.Row="1"
             Margin="10,5"
             Orientation="Vertical"
             Spacing="5">
@@ -65,7 +67,7 @@
             </Border>
         </StackPanel>
         <toolkit:SwitchPresenter
-            Grid.Row="1"
+            Grid.Row="2"
             TargetType="x:Boolean"
             Value="{x:Bind ViewModel.IsBusy, Mode=OneWay}">
             <toolkit:Case Value="False">

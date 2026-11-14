@@ -8,6 +8,7 @@
     xmlns:macos="http://uno.ui/macos"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:skia="http://uno.ui/not_win"
+    xmlns:triggers="using:CommunityToolkit.WinUI"
     xmlns:uc="using:AzureKeyVaultStudio.UserControls"
     xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
@@ -21,20 +22,13 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-
-
-
-        <!--<uc:OverrideTitlebar
-            x:Name="DefaultOverrideTitleBar"
-          d" />-->
-
         <SplitView
             x:Name="MainSplitView"
             Grid.Row="0"
+            Background="{ThemeResource SolidBackgroundFillColorQuarternaryBrush}"
             DisplayMode="{x:Bind ViewModel.SplitViewDisplay, Mode=TwoWay}"
             IsPaneOpen="{x:Bind ViewModel.IsPaneOpen, Mode=TwoWay}"
             OpenPaneLength="{x:Bind ViewModel.SplitViewWidth, Mode=TwoWay}"
-            
             PaneBackground="Transparent"
             PanePlacement="{x:Bind ViewModel.PanePlacement, Mode=OneWay}">
 
@@ -57,18 +51,16 @@
                     </StackPanel>
 
                     <Grid
-                        Margin="0,40,0,0"
-                        BorderThickness="1,0,1,1"
-                        CornerRadius="5">
+                        Margin="0,39,0,0"
+                        Background="{ThemeResource BaseBackgroundBrush}"
+                        BorderBrush="{ThemeResource TabViewBorderBrushCustom}"
+                        BorderThickness="0,1,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <RelativePanel
-                            Width="{x:Bind MainSplitView.OpenPaneLength, Mode=OneWay}"
-                            BorderBrush="{ThemeResource TabViewBorderBrushCustom}"
-                            BorderThickness="0,0,0,1">
+                        <RelativePanel Width="{x:Bind MainSplitView.OpenPaneLength, Mode=OneWay}">
                             <TextBlock
                                 x:Name="PaneHeader"
                                 x:Uid="PaneHeader"
@@ -108,7 +100,6 @@
                         <Border
                             Grid.Row="1"
                             Margin="4"
-                            Background="{ThemeResource ControlAltFillColorSecondaryBrush}"
                             BorderBrush="{ThemeResource ControlElevationBorderBrush}"
                             BorderThickness="1"
                             CornerRadius="4">
@@ -149,6 +140,28 @@
         </SplitView>
 
         <uc:StatusBarControl Grid.Row="2" />
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="SplitViewPaneIsLeftAndOpen">
+                    <VisualState.StateTriggers>
+                        <triggers:IsEqualStateTrigger Value="{x:Bind ViewModel.IsPaneLeft, Mode=OneWay}" To="True" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AboveTreeViewArea.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="SplitViewPaneRight">
+                    <VisualState.StateTriggers>
+                        <triggers:IsEqualStateTrigger Value="{x:Bind ViewModel.IsPaneLeft, Mode=OneWay}" To="False" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AboveTreeViewArea.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 
 </Page>

@@ -169,6 +169,8 @@ public partial class App : Application
 #endif
 
         MainWindow.SetWindowIcon();
+
+
         // TODO: this is a hack
         var shell = new Shell();
         MainWindow.Content = shell;
@@ -219,27 +221,16 @@ public partial class App : Application
 
     private static void EnsureEarlyWindow(Window window)
     {
-#if WINDOWS && !HAS_UNO
+#if WINDOWS
         window.AppWindow.MoveAndResize(new RectInt32 { Width = 1100, Height = 640, X = 250, Y = 250 });
         window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
         window.AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
-    
-
-        //var content = window.Content?.XamlRoot?.Content as FrameworkElement;
-
-        //window.AppWindow.TitleBar.PreferredTheme = content?.RequestedTheme switch
-        //{
-        //    ElementTheme.Light => TitleBarTheme.Light,
-        //    ElementTheme.Dark => TitleBarTheme.Dark,
-        //    _ => TitleBarTheme.UseDefaultAppMode,
-        //};
+        //window.AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
 
         window.SystemBackdrop = new MicaBackdrop()
         {
             Kind = MicaKind.Base,
         };
-#else
-        _ = window;
 #endif
         window.Closed += Window_Closed;
     }

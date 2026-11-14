@@ -85,7 +85,7 @@
                 </Grid>
             </TabView.TabStripHeader>
             <TabView.TabStripFooter>
-                <Grid x:Name="CustomDragRegion" MinWidth="188" />
+                <Grid x:Name="CustomDragRegion" MinWidth="148" />
             </TabView.TabStripFooter>
         </TabView>
         <Border
@@ -249,6 +249,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="TabStripHeaderIcon.Visibility" Value="Visible" />
+
                     </VisualState.Setters>
                 </VisualState>
 
@@ -259,6 +260,7 @@
                     <VisualState.Setters>
                         <Setter Target="TabStripHeaderIcon.Visibility" Value="Visible" />
                     </VisualState.Setters>
+
                 </VisualState>
             </VisualStateGroup>
 
