@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using AzureKeyVaultStudio.Messages;
 using CommunityToolkit.Mvvm.Messaging;
+using DirectN.Extensions.Utilities;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml.Input;
@@ -36,7 +37,19 @@ public sealed partial class OverrideTitlebar : UserControl
         this.InitializeComponent();
         Loaded += OnLoaded;
         Unloaded += OnUnloaded;
+        SizeChanged += (_, e) => {
+#if WINDOWS
+            if (IsLoaded)
+            {
+                var window = (Application.Current as App)?.MainWindow;
+                window.SetTitleBar(DefaultTitleBar);
+                //DefaultTitleBar.RecomputeDragRegions();
+            }
+#endif
+        };
     }
+
+
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
@@ -52,7 +65,9 @@ public sealed partial class OverrideTitlebar : UserControl
 #if WINDOWS
         if (!IsLoaded) return;
         window.SetTitleBar(DefaultTitleBar);
+        TitleBar.SetIsDragRegion(BackButton, false);  // always clickable
 #endif
+
     }
 
     private void OnUnloaded(object sender, RoutedEventArgs e)
