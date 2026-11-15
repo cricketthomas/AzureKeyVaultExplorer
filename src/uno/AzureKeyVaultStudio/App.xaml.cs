@@ -162,6 +162,8 @@ public partial class App : Application
 
         MainWindow = builder.Window;
         MainWindow.Title = AppTitle;
+        MainWindow.ExtendsContentIntoTitleBar = true;
+        MainWindow.AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
         EnsureEarlyWindow(MainWindow);
 
 #if DEBUG
@@ -223,9 +225,8 @@ public partial class App : Application
     {
 #if WINDOWS
         window.AppWindow.MoveAndResize(new RectInt32 { Width = 1100, Height = 640, X = 250, Y = 250 });
-        window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
-        window.AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
-        //window.AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
+        //window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
+        //window.AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
 
         window.SystemBackdrop = new MicaBackdrop()
         {

@@ -50,12 +50,8 @@ public sealed partial class OverrideTitlebar : UserControl
             window.Title = SecondaryTitle;
 
 #if WINDOWS
-        DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
-        {
-            if (!IsLoaded) return;
-            window.ExtendsContentIntoTitleBar = true;
-            window.SetTitleBar(DefaultTitleBar);
-        });
+        if (!IsLoaded) return;
+        window.SetTitleBar(DefaultTitleBar);
 #endif
     }
 
@@ -75,4 +71,5 @@ public sealed partial class OverrideTitlebar : UserControl
     {
         WeakReferenceMessenger.Default.Send(new NavigationBackRequestedMessage());
     }
+  
 }

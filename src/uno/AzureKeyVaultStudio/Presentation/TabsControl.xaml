@@ -152,13 +152,13 @@
                     </AppBarButton>
                 </CommandBar>
                 <Button
+                    x:Name="SettingsButton"
                     Grid.Column="1"
                     HorizontalAlignment="Right"
                     Click="SettingsMenuItemButton_Click"
                     Content="&#xE713;"
                     FontFamily="Segoe Fluent Icons"
                     Style="{StaticResource TransparentButton}">
-
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="I" Modifiers="Control" />
                     </Button.KeyboardAccelerators>

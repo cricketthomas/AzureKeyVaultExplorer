@@ -31,7 +31,7 @@
       
     <UnoXamlResourcesTrimming>true</UnoXamlResourcesTrimming>
 
-
+      <Features>runtime-async=on</Features>
     <!--<SkiaSharpVersion>4.148.0</SkiaSharpVersion>-->
     <!--<WindowsAppSdkDeploymentManagerInitialize>false</WindowsAppSdkDeploymentManagerInitialize>-->
 

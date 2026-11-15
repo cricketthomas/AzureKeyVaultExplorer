@@ -28,23 +28,22 @@ public sealed partial class MainPage : Page
             _appWindow.Closing += _appWindow_Closing;
         }
 
-        AboveTreeViewArea.Loaded += (s, e) => UpdateDraggableRegion();
-        //AboveTreeViewArea.SizeChanged += (s, e) => UpdateDraggableRegion();
+        //AboveTreeViewArea.Loaded += (s, e) => UpdateDraggableRegion();
+        SizeChanged += (_, _) => UpdateDraggableRegion();
+        AboveTreeViewArea.SizeChanged += (s, e) => UpdateDraggableRegion();
+        VaultTabsControl.CustomDragRegionTabViewFooter.Loaded += (_, _) => UpdateDraggableRegion();
         //AboveTreeViewArea.SizeChanged += (_, _) => UpdateDraggableRegion();
-        MainSplitView.Loaded += (_, _) => UpdateDraggableRegion();
+        MainSplitView.SizeChanged += (_, _) => UpdateDraggableRegion();
         MainSplitView.PaneClosed += (_, _) => UpdateDraggableRegion();
         MainSplitView.PaneOpened += (_, _) => UpdateDraggableRegion();
-
         VaultTabsControl.CustomDragRegionTabViewFooter.SizeChanged += (_, _) => UpdateDraggableRegion();
-        VaultTabsControl.CustomDragRegionTabViewFooter.Loaded += (_, _) => UpdateDraggableRegion();
-        SizeChanged += (_, _) => UpdateDraggableRegion();
         MainSplitView.RegisterPropertyChangedCallback(SplitView.PanePlacementProperty,
         (sender, property) =>
         {
             UpdateDraggableRegion();
         });
 
-        WeakReferenceMessenger.Default.Register<TitleBarChangedMessage>(this, (r, m) => UpdateTitleBar(m.Value));
+        //WeakReferenceMessenger.Default.Register<TitleBarChangedMessage>(this, (r, m) => UpdateTitleBar(m.Value));
     }
 
     private void UpdateTitleBar(TitleBar titleBar)
@@ -52,10 +51,10 @@ public sealed partial class MainPage : Page
         Console.WriteLine("title bar updated");
 
         var x = GetWindowRect(titleBar);
-        _nonClientPointerSource.ClearAllRegionRects();
+        //_nonClientPointerSource.ClearAllRegionRects();
         //_appWindow.TitleBar.ExtendsContentIntoTitleBar = true;
 
-        _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Caption, [x]);
+        _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Passthrough, [x]);
 
         Console.WriteLine("title bar updated");
 #if WINDOWS

@@ -18,17 +18,17 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <win:RowDefinition Height="0" />
+            <!--<win:RowDefinition Height="32" />-->
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <uc:OverrideTitlebar x:Name="DefaultTitleBar" Visibility="Collapsed" />
+        <!--<uc:OverrideTitlebar />-->
 
 
 
         <ContentControl
             x:Name="PageHost"
-            Grid.Row="1"
+            Grid.Row="0"
             HorizontalContentAlignment="Stretch"
             VerticalContentAlignment="Stretch"
             uen:Region.Attached="True" />

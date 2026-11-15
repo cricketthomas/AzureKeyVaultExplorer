@@ -14,9 +14,11 @@ public sealed partial class Shell : UserControl, IContentControlProvider
     {
         this.InitializeComponent();
         WeakReferenceMessenger.Default.Register<SendInAppNotificationMessage>(this, (r, m) => ShowInAppNotification(m.Notification));
+
         PointerPressed += Shell_PointerPressed;
     }
 
+ 
     private async void Shell_PointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
     {
         if (e.GetCurrentPoint(sender as UIElement).Properties.IsXButton1Pressed)
