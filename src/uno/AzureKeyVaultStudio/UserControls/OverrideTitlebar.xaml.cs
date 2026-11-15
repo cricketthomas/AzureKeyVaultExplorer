@@ -1,12 +1,7 @@
-using System.Diagnostics;
 using AzureKeyVaultStudio.Messages;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.Messaging;
-using DirectN.Extensions.Utilities;
-using Microsoft.UI.Dispatching;
-using Microsoft.UI.Windowing;
-using Microsoft.UI.Xaml.Input;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace AzureKeyVaultStudio.UserControls;
 
@@ -41,9 +36,12 @@ public sealed partial class OverrideTitlebar : UserControl
 #if WINDOWS
             if (IsLoaded)
             {
-                var window = (Application.Current as App)?.MainWindow;
-                window.SetTitleBar(DefaultTitleBar);
-                //DefaultTitleBar.RecomputeDragRegions();
+                  WeakReferenceMessenger.Default.Send(message: new TitleBarChangedMessage(BackButton));
+                //var window = (Application.Current as App)?.MainWindow;
+                //window.SetTitleBar(DefaultTitleBar);
+                ////DefaultTitleBar.RecomputeDragRegions();
+        Debug.WriteLine("Loaded titlebar size changed");
+
             }
 #endif
         };
@@ -62,10 +60,13 @@ public sealed partial class OverrideTitlebar : UserControl
         if (!string.IsNullOrWhiteSpace(SecondaryTitle))
             window.Title = SecondaryTitle;
 
+
 #if WINDOWS
-        if (!IsLoaded) return;
-        window.SetTitleBar(DefaultTitleBar);
-        TitleBar.SetIsDragRegion(BackButton, false);  // always clickable
+        WeakReferenceMessenger.Default.Send(message: new TitleBarChangedMessage(BackButton));
+        Debug.WriteLine("Loaded titlebar changed");
+        //if (!IsLoaded) return;
+        //window.SetTitleBar(DefaultTitleBar);
+        //TitleBar.SetIsDragRegion(BackButton, false);
 #endif
 
     }

@@ -43,40 +43,17 @@ public sealed partial class MainPage : Page
             UpdateDraggableRegion();
         });
 
-        //WeakReferenceMessenger.Default.Register<TitleBarChangedMessage>(this, (r, m) => UpdateTitleBar(m.Value));
+        WeakReferenceMessenger.Default.Register<TitleBarChangedMessage>(this, (r, m) => UpdateTitleBar(m.Value));
     }
 
-    private void UpdateTitleBar(TitleBar titleBar)
+    private void UpdateTitleBar(FrameworkElement backButtonPassthrough)
     {
-        Console.WriteLine("title bar updated");
-
-        var x = GetWindowRect(titleBar);
-        //_nonClientPointerSource.ClearAllRegionRects();
-        //_appWindow.TitleBar.ExtendsContentIntoTitleBar = true;
-
-        _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Passthrough, [x]);
-
-        Console.WriteLine("title bar updated");
 #if WINDOWS
-        //var window = (Application.Current as App)?.MainWindow;
-
-        //if (window is null)
-        //    return;
-
-        //void Apply()
-        //{
-        //    if (titleBar.XamlRoot is null)
-        //        return;
-
-        //window.SetTitleBar(titleBar);
-        //window.ExtendsContentIntoTitleBar = true;
-
-        //}
-
-        //if (window.DispatcherQueue.HasThreadAccess)
-        //    Apply();
-        //else
-        //    window.DispatcherQueue.TryEnqueue(Apply);
+        if (_nonClientPointerSource is null)
+            return;
+        var backButton = GetWindowRect(backButtonPassthrough);
+        _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Passthrough, [backButton]);
+        Debug.WriteLine("title bar updated");
 #endif
     }
 
