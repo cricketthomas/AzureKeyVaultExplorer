@@ -110,18 +110,19 @@
                     IsOpen="False">
 
                     <AppBarButton
-                        x:Uid="PaneToggleSplitButton"
+                        x:Name="VaultListButton"
+                        x:Uid="VaultListButton"
                         Click="PaneAppBarButton_Click"
-                        Icon="Library"
-                        Label="Vault List">
+                        Icon="Library">
                         <AppBarButton.KeyboardAccelerators>
                             <KeyboardAccelerator Key="B" Modifiers="Control" />
                         </AppBarButton.KeyboardAccelerators>
                     </AppBarButton>
                     <AppBarButton
+                        x:Name="SubscriptionsButton"
+                        x:Uid="SubscriptionsButton"
                         Click="SubscriptionsButton_Click"
-                        Icon="Switch"
-                        Label="Subscriptions" />
+                        Icon="Switch" />
                     <AppBarButton Icon="Add" Label="New.." />
 
                     <AppBarButton
@@ -152,7 +153,8 @@
                     </AppBarButton>
                 </CommandBar>
                 <Button
-                    x:Name="SettingsButton"
+                    x:Name="SettingsIconButton"
+                    x:Uid="SettingsIconButton"
                     Grid.Column="1"
                     HorizontalAlignment="Right"
                     Click="SettingsMenuItemButton_Click"

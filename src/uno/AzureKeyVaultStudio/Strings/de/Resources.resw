@@ -297,8 +297,11 @@
   <data name="SegmentedItemAll.ToolTipService.ToolTip" xml:space="preserve">
     <value>Alle</value>
   </data>
-  <data name="SubscriptionsMenuItem.Text" xml:space="preserve">
-    <value>Abonnements verwalten...</value>
+  <data name="SubscriptionsButton.Label" xml:space="preserve">
+    <value>Verwalten</value>
+  </data>
+  <data name="VaultListButton.Label" xml:space="preserve">
+    <value>Tresorliste</value>
   </data>
   <data name="PasswordGeneratorMenuItem.Text" xml:space="preserve">
     <value>Kennwortgenerator..</value>
@@ -722,5 +725,8 @@
   </data>
   <data name="ExpiredTextBlock.Text" xml:space="preserve">
     <value>Abgelaufen</value>
+  </data>
+  <data name="SubscriptionsMenuItem.Text" xml:space="preserve">
+    <value>Abonnements verwalten...</value>
   </data>
 </root>

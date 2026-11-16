@@ -31,8 +31,11 @@
             Grid.Row="0"
             HorizontalContentAlignment="Stretch"
             VerticalContentAlignment="Stretch"
-            uen:Region.Attached="True" />
-
+            uen:Region.Attached="True">
+            <ContentControl.ContentTransitions>
+                <TransitionCollection />
+            </ContentControl.ContentTransitions>
+        </ContentControl>
         <!--  <utu:ExtendedSplashScreen
            x:Name="PageHost"
             Grid.Row="1"

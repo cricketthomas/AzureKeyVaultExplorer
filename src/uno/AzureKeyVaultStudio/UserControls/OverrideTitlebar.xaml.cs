@@ -36,7 +36,7 @@ public sealed partial class OverrideTitlebar : UserControl
 #if WINDOWS
             if (IsLoaded)
             {
-                  WeakReferenceMessenger.Default.Send(message: new TitleBarChangedMessage(BackButton));
+                WeakReferenceMessenger.Default.Send(message: new TitleBarChangedMessage(BackButton, DefaultTitleBar));
                 //var window = (Application.Current as App)?.MainWindow;
                 //window.SetTitleBar(DefaultTitleBar);
                 ////DefaultTitleBar.RecomputeDragRegions();
@@ -62,7 +62,7 @@ public sealed partial class OverrideTitlebar : UserControl
 
 
 #if WINDOWS
-        WeakReferenceMessenger.Default.Send(message: new TitleBarChangedMessage(BackButton));
+        WeakReferenceMessenger.Default.Send(message: new TitleBarChangedMessage(BackButton, DefaultTitleBar));
         Debug.WriteLine("Loaded titlebar changed");
         //if (!IsLoaded) return;
         //window.SetTitleBar(DefaultTitleBar);

@@ -43,16 +43,18 @@ public sealed partial class MainPage : Page
             UpdateDraggableRegion();
         });
 
-        WeakReferenceMessenger.Default.Register<TitleBarChangedMessage>(this, (r, m) => UpdateTitleBar(m.Value));
+        WeakReferenceMessenger.Default.Register<TitleBarChangedMessage>(this, (r, m) => UpdateTitleBar(m.Value.Item1, m.Value.Item2));
     }
 
-    private void UpdateTitleBar(FrameworkElement backButtonPassthrough)
+    private void UpdateTitleBar(FrameworkElement backButtonPassthrough, FrameworkElement dragRegion)
     {
 #if WINDOWS
         if (_nonClientPointerSource is null)
             return;
-        var backButton = GetWindowRect(backButtonPassthrough);
-        _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Passthrough, [backButton]);
+        var backButtonRect = GetWindowRect(backButtonPassthrough);
+        var dragRegionRect = GetWindowRect(dragRegion);
+        _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Passthrough, [backButtonRect]);
+        _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Caption, [dragRegionRect]);
         Debug.WriteLine("title bar updated");
 #endif
     }

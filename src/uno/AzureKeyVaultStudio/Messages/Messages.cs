@@ -14,4 +14,6 @@ public enum TitleBarMode
 
 public sealed class TitleBarModeChangedMessage(TitleBarMode mode)
     : ValueChangedMessage<TitleBarMode>(mode);
-public sealed class TitleBarChangedMessage(FrameworkElement titleBar) : ValueChangedMessage<FrameworkElement>(titleBar);
+
+public sealed class TitleBarChangedMessage(FrameworkElement passThrough, FrameworkElement dragRegion) 
+    :ValueChangedMessage<(FrameworkElement, FrameworkElement)>((passThrough, dragRegion));
