@@ -41,7 +41,7 @@ You can stop all collection of information by the Application easily by uninstal
 
 ## Data Retention Policy
 
-The Service Provider will retain User Provided data for as long as you use the Application and for a reasonable time thereafter. If you'd like them to delete User Provided Data that you have provided via the Application, please contact them at [athomas@sidesteplabs.us](mailto:athomas@sidesteplabs.us) and they will respond in a reasonable time.
+The Service Provider will retain User Provided data for as long as you use the Application and for a reasonable time thereafter. If you'd like them to delete User Provided Data that you have provided via the Application, please contact them at [acthomasiv@gmail.com](mailto:acthomasiv@gmail.com) and they will respond in a reasonable time.
 
 ## Your Consent
 
@@ -53,4 +53,4 @@ We may update this Privacy Policy from time to time. Users will be informed of a
 
 ## Contact Us
 
-If you have any questions about this Privacy Policy, please contact us at [athomas@sidesteplabs.us](mailto:athomas@sidesteplabs.us).
+If you have any questions about this Privacy Policy, please contact us at [acthomasiv@gmail.com](mailto:acthomasiv@gmail.com).
