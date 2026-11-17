@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Uno.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net11.0-desktop;net11.0-windows10.0.26100;</TargetFrameworks>
+    <TargetFrameworks>net11.0-windows10.0.26100;net11.0-desktop</TargetFrameworks>
 
     <OutputType>Exe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
@@ -82,7 +82,9 @@
     <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
     <NoWarn>$(NoWarn);IL2104</NoWarn>
     <WinAppSdkVersion>2.6.6-experimental</WinAppSdkVersion>
-      <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType>MSIX</WindowsPackageType>
   </PropertyGroup>
 
 
