@@ -150,8 +150,7 @@ public partial class MainViewModel : ObservableObject
 
         _dispatcher.TryEnqueue(() =>
         {
-            WeakReferenceMessenger.Default.Send(new PaneStateChangedMessage(new PaneState(IsPaneOpen, PanePlacement)));  to fire out a solution 
-
+            WeakReferenceMessenger.Default.Send(new PaneStateChangedMessage(new PaneState(IsPaneOpen, PanePlacement)));
         });
 
     }

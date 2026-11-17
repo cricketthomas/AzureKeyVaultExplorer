@@ -122,7 +122,7 @@
                         x:Name="SubscriptionsButton"
                         x:Uid="SubscriptionsButton"
                         Click="SubscriptionsButton_Click"
-                        Icon="Switch" />
+                        Icon="Globe" />
                     <AppBarButton Icon="Add" Label="New.." />
 
                     <AppBarButton

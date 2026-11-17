@@ -40,7 +40,6 @@ public sealed partial class TabsControl : UserControl
     private void HomeMenuItem_Click(object sender, RoutedEventArgs e)
     {
         _ = this.Navigator()?.NavigateViewModelAsync<LoginViewModel>(this);
-        SetTabPageState();
     }
 
     private void MyTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)

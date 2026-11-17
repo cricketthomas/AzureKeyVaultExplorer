@@ -38,10 +38,8 @@
                     <StackPanel
                         x:Name="AboveTreeViewArea"
                         Width="{x:Bind MainSplitView.OpenPaneLength, Mode=OneWay}"
-                        Height="40"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Orientation="Vertical"
                         Spacing="0">
                         <Image
                             Width="18"
@@ -52,7 +50,7 @@
 
                     <Grid
                         Margin="0,39,0,0"
-                        Background="{ThemeResource BaseBackgroundBrush}"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
                         BorderBrush="{ThemeResource TabViewBorderBrushCustom}"
                         BorderThickness="0,1,0,0">
                         <Grid.RowDefinitions>
@@ -60,54 +58,66 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <RelativePanel Width="{x:Bind MainSplitView.OpenPaneLength, Mode=OneWay}">
-                            <TextBlock
-                                x:Name="PaneHeader"
-                                x:Uid="PaneHeader"
-                                Margin="5,5,0,0"
-                                FontSize="13"
-                                FontWeight="Medium"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-                            <StackPanel
-                                Margin="0,0,10,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal"
-                                RelativePanel.AlignRightWith="PaneHeader"
-                                RelativePanel.AlignRightWithPanel="True">
-                                <Button
-                                    x:Uid="PaneLocationToggleButton"
-                                    Command="{x:Bind ViewModel.TogglePaneLocationCommand}"
-                                    Content="{x:Bind ViewModel.FontIconType, Mode=OneWay}"
-                                    CornerRadius="{ThemeResource CornerRadiusValue}"
-                                    FontFamily="Segoe Fluent Icons"
-                                    Style="{StaticResource TransparentButton}" />
-                                <ToggleButton
-                                    x:Uid="PaneDisplayToggleButton"
-                                    Command="{x:Bind ViewModel.ToggleSplitViewDisplayCommand}"
-                                    Content="&#xE718;"
-                                    FontFamily="Segoe Fluent Icons"
-                                    Style="{StaticResource TransparentToggleButton}" />
-                                <Button
-                                    x:Uid="PaneToggleButton"
-                                    Command="{x:Bind ViewModel.ClosePaneCommand}"
-                                    Content="&#xE8BB;"
-                                    FontFamily="Segoe Fluent Icons"
-                                    Style="{StaticResource TransparentButton}" />
-                            </StackPanel>
-                        </RelativePanel>
-
-
-                        <Border
+                        <Grid
                             Grid.Row="1"
                             Margin="4"
                             BorderBrush="{ThemeResource ControlElevationBorderBrush}"
                             BorderThickness="1"
                             CornerRadius="4">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <RelativePanel Grid.Row="0" Width="{x:Bind MainSplitView.OpenPaneLength, Mode=OneWay}">
+
+                                <TextBlock
+                                    x:Name="PaneHeader"
+                                    x:Uid="PaneHeader"
+                                    Margin="5,5,0,0"
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+                                <StackPanel
+                                    Margin="0,0,10,0"
+                                    HorizontalAlignment="Left"
+                                    Orientation="Horizontal"
+                                    RelativePanel.AlignRightWith="PaneHeader"
+                                    RelativePanel.AlignRightWithPanel="True">
+
+                                    <Button
+                                        x:Uid="PaneLocationToggleButton"
+                                        Margin="0"
+                                        Command="{x:Bind ViewModel.TogglePaneLocationCommand}"
+                                        Content="&#xE8AB;"
+                                        FontFamily="Segoe Fluent Icons"
+                                        Style="{StaticResource TransparentButton}" />
+
+                                    <ToggleButton
+                                        x:Uid="PaneDisplayToggleButton"
+                                        Command="{x:Bind ViewModel.ToggleSplitViewDisplayCommand}"
+                                        Content="&#xE718;"
+                                        FontFamily="Segoe Fluent Icons"
+                                        Style="{StaticResource TransparentToggleButton}" />
+
+                                    <Button
+                                        x:Uid="PaneToggleButton"
+                                        Command="{x:Bind ViewModel.ClosePaneCommand}"
+                                        Content="&#xE8BB;"
+                                        FontFamily="Segoe Fluent Icons"
+                                        Style="{StaticResource TransparentButton}" />
+                                </StackPanel>
+                            </RelativePanel>
+
                             <uc:KeyVaultTree
+                                Grid.Row="1"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 DataContext="{x:Bind KeyVaultTreeViewModel, Mode=OneWay}" />
-                        </Border>
+
+                        </Grid>
 
                         <Grid Grid.Row="1" Visibility="{x:Bind MainSplitView.IsPaneOpen, Mode=OneWay}">
 
