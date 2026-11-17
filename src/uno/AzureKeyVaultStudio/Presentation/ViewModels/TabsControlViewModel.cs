@@ -30,8 +30,6 @@ public partial class TabsControlViewModel : ObservableRecipient
     public bool IsLeftPaneClosed => PanePlacement == SplitViewPanePlacement.Left && !IsPaneOpen;
     public bool IsLeftPaneOpen => PanePlacement == SplitViewPanePlacement.Left && IsPaneOpen;
 
-    [ObservableProperty]
-    public partial bool IsTeachingTipOpen { get; set; } = false;
 
     [ObservableProperty]
     public partial VaultViewModel? CurrentVaultViewModel { get; set; }
@@ -101,8 +99,6 @@ public partial class TabsControlViewModel : ObservableRecipient
     partial void OnSelectedTabChanged(TabContainerBase? value)
     {
         UpdateCurrentVaultViewModel();
-        // show teaching tip until we figure out a better design for this would be menubar.
-        IsTeachingTipOpen = Tabs.Count == 0 && IsActive;
     }
 
     private void UpdateCurrentVaultViewModel()

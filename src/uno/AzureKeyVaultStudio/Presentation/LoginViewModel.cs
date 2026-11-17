@@ -41,15 +41,12 @@ public partial class LoginViewModel : ObservableObject
     private async Task GoToSettingsView()
     {
         await _navigator.NavigateViewModelAsync<SettingsViewModel>(this);
-        WeakReferenceMessenger.Default.Send(new BackButtonIsVisibleMessage());
-
     }
 
     [RelayCommand]
     private async Task GoToSubscriptionsPage()
     {
         await _navigator.NavigateViewModelAsync<SubscriptionViewModel>(this);
-        WeakReferenceMessenger.Default.Send(new BackButtonIsVisibleMessage());
     }
 
 
@@ -61,9 +58,6 @@ public partial class LoginViewModel : ObservableObject
         {
             var success = await _authentication.LoginAsync(_dispatcher, new Dictionary<string, string> { { "Username", string.Empty }, { "Password", string.Empty } }, cancellationToken: token);
             token.ThrowIfCancellationRequested();
-#if DEBUG
-            await Task.Delay(4000, token);
-#endif
             if (success)
             {
                 await _navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack, cancellation: token);

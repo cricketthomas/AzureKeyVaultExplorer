@@ -85,7 +85,7 @@
                 </Grid>
             </TabView.TabStripHeader>
             <TabView.TabStripFooter>
-                <Grid x:Name="CustomDragRegion" MinWidth="148" />
+                <Grid x:Name="CustomDragRegion" MinWidth="188" />
             </TabView.TabStripFooter>
         </TabView>
         <Border
@@ -209,33 +209,7 @@
             </toolkit:Case>
         </toolkit:SwitchPresenter>
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="TabViewStates">
-                <VisualState x:Name="TabViewNotEmptyState">
-                    <VisualState.StateTriggers>
-                        <!--<triggers:IsNullOrEmptyStateTrigger Value="{Binding TabItemsSource, ElementName=MainTabView, Mode=OneWay}" />-->
-                        <StateTrigger IsActive="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <!--<Setter Target="CustomDragRegion.MinWidth" Value="188" />-->
-                        <!--<Setter Target="SplitButtonTeachingTip.IsOpen" Value="False" />-->
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="TabViewEmptyState">
-                    <VisualState.StateTriggers>
-                        <!--<triggers:IsNullOrEmptyStateTrigger Value="{Binding TabItemsSource, ElementName=MainTabView, Mode=OneWay}" />-->
-                        <StateTrigger IsActive="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <!--<Setter Target="SplitButtonTeachingTip.IsOpen" Value="True" />
-                        <Setter Target="SplitButtonTeachingTip.IsLightDismissEnabled" Value="False" />-->
-                        <!--<Setter Target="CustomDragRegion.BorderBrush" Value="Transparent" />
-                        <Setter Target="MainTabView.BorderThickness" Value="0" />
-                        <Setter Target="FooterPaneToggleSplitButton.Visibility" Value="Collapsed" />-->
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
             <VisualStateGroup x:Name="SideBarIconStates">
-
                 <VisualState x:Name="SplitViewPaneIsLeftAndOpen">
                     <VisualState.StateTriggers>
                         <triggers:IsEqualStateTrigger Value="{x:Bind ViewModel.IsLeftPaneOpen, Mode=OneWay}" To="True" />
@@ -262,7 +236,6 @@
                     <VisualState.Setters>
                         <Setter Target="TabStripHeaderIcon.Visibility" Value="Visible" />
                     </VisualState.Setters>
-
                 </VisualState>
             </VisualStateGroup>
 

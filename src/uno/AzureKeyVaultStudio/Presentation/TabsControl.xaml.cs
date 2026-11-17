@@ -159,23 +159,15 @@ public sealed partial class TabsControl : UserControl
         frame.Navigate(targetPageType, parameter);
     }
 
-    private void SetTabPageState()
-    {
-        //SplitButtonTeachingTip.IsOpen = false;
-    }
+  
     private void SettingsMenuItemButton_Click(object sender, RoutedEventArgs e)
     {
         _ = this.Navigator()?.NavigateViewModelAsync<SettingsViewModel>(this);
-        WeakReferenceMessenger.Default.Send(new BackButtonIsVisibleMessage());
-        SetTabPageState();
-    
     }
 
     private void SubscriptionsButton_Click(object sender, RoutedEventArgs e)
     {
         _ = this.Navigator()?.NavigateViewModelAsync<SubscriptionViewModel>(this);
-        WeakReferenceMessenger.Default.Send(new BackButtonIsVisibleMessage());
-        SetTabPageState();
     }
 
     private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
@@ -296,23 +288,5 @@ public sealed partial class TabsControl : UserControl
     {
         ViewModel.IsPaneOpen = !ViewModel.IsPaneOpen;
     }
-
-    //private void OnAppWindowChanged(AppWindow sender, AppWindowChangedEventArgs args)
-    //{
-    //    if (args.DidSizeChange || args.DidPositionChange)
-    //    {
-    //        UpdateCaptionButtonInset();
-    //    }
-    //}
-    //private void UpdateCaptionButtonInset()
-    //{
-    //    var scale = (Content as FrameworkElement)?.XamlRoot?.RasterizationScale ?? 1.0;
-    //    if (scale <= 0)
-    //    {
-    //        scale = 1.0;
-    //    }
-
-    //    CustomDragRegion.MinWidth = _window.AppWindow.TitleBar.RightInset / scale;
-    //}
 
 }

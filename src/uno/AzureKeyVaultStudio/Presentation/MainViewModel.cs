@@ -147,7 +147,12 @@ public partial class MainViewModel : ObservableObject
         SplitViewWidth = _localSettings.GetValue(nameof(SplitViewWidth), 300d);
         IsPaneOpen = _localSettings.GetValue(nameof(IsPaneOpen), true);
         PanePlacement = GetSettingsValue(nameof(PanePlacement), SplitViewPanePlacement.Right);
-        WeakReferenceMessenger.Default.Send(new PaneStateChangedMessage(new PaneState(IsPaneOpen, PanePlacement))); // ToDO: Need this to hide the second logo.. need to fire out a solution 
+
+        _dispatcher.TryEnqueue(() =>
+        {
+            WeakReferenceMessenger.Default.Send(new PaneStateChangedMessage(new PaneState(IsPaneOpen, PanePlacement)));  to fire out a solution 
+
+        });
 
     }
     private void Save<T>(string key, T value)

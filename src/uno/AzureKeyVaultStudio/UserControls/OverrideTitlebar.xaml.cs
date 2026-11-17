@@ -37,11 +37,7 @@ public sealed partial class OverrideTitlebar : UserControl
             if (IsLoaded)
             {
                 WeakReferenceMessenger.Default.Send(message: new TitleBarChangedMessage(BackButton, DefaultTitleBar));
-                //var window = (Application.Current as App)?.MainWindow;
-                //window.SetTitleBar(DefaultTitleBar);
-                ////DefaultTitleBar.RecomputeDragRegions();
-        Debug.WriteLine("Loaded titlebar size changed");
-
+                Debug.WriteLine("Loaded titlebar size changed");
             }
 #endif
         };
@@ -52,8 +48,8 @@ public sealed partial class OverrideTitlebar : UserControl
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
 
-        WeakReferenceMessenger.Default.Register<BackButtonIsVisibleMessage>(this, async (r, m) => IsBackButtonVisible = true);
-        WeakReferenceMessenger.Default.Register<BackButtonIsHiddenMessage>(this, async (r, m) => IsBackButtonVisible = false);
+        //WeakReferenceMessenger.Default.Register<BackButtonIsVisibleMessage>(this, async (r, m) => IsBackButtonVisible = true);
+        //WeakReferenceMessenger.Default.Register<BackButtonIsHiddenMessage>(this, async (r, m) => IsBackButtonVisible = false);
         var window = (Application.Current as App)?.MainWindow;
         if (window is null) return;
 
@@ -74,8 +70,8 @@ public sealed partial class OverrideTitlebar : UserControl
     private void OnUnloaded(object sender, RoutedEventArgs e)
     {
         WeakReferenceMessenger.Default.Unregister<NavigationBackRequestedMessage>(this);
-        WeakReferenceMessenger.Default.Unregister<BackButtonIsVisibleMessage>(this);
-        WeakReferenceMessenger.Default.Unregister<BackButtonIsHiddenMessage>(this);
+        //WeakReferenceMessenger.Default.Unregister<BackButtonIsVisibleMessage>(this);
+        //WeakReferenceMessenger.Default.Unregister<BackButtonIsHiddenMessage>(this);
     }
 
     private void BackButton_Click(object sender, RoutedEventArgs e)

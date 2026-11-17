@@ -31,8 +31,6 @@ public class ShellViewModel
     private async void LoggedOut(object? sender, EventArgs e)
     {
         await _navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.ClearBackStack);
-        WeakReferenceMessenger.Default.Send(new BackButtonIsHiddenMessage());
-
     }
 
 
@@ -45,8 +43,6 @@ public class ShellViewModel
         {
             if (await _navigator.CanGoBack())
                 await _navigator.NavigateBackAsync(this);
-            WeakReferenceMessenger.Default.Send(new BackButtonIsHiddenMessage());
-
         }
         catch (Exception ex)
         {
