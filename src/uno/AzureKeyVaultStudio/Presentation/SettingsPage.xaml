@@ -24,7 +24,10 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <uc:OverrideTitlebar IsBackButtonVisible="True" Grid.Row="0" x:Name="DefaultTitleBar"/>
+        <uc:OverrideTitlebar
+            x:Name="DefaultTitleBar"
+            Grid.Row="0"
+            IsBackButtonVisible="True" />
         <ScrollViewer Grid.Row="1" Grid.Column="0">
             <StackPanel
                 x:Name="ContentPanel"
@@ -243,6 +246,7 @@
                     Style="{StaticResource AccentButtonStyle}" />
             </Grid>
         </Border>
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState x:Name="NarrowState">

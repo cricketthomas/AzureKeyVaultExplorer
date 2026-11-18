@@ -729,4 +729,7 @@
   <data name="SubscriptionsMenuItem.Text" xml:space="preserve">
     <value>Gerenciar assinaturas...</value>
   </data>
+  <data name="MoreOptionsButton.Label" xml:space="preserve">
+    <value>Mais...</value>
+  </data>
 </root>

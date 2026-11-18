@@ -123,12 +123,13 @@
                         x:Uid="SubscriptionsButton"
                         Click="SubscriptionsButton_Click"
                         Icon="Globe" />
-                    <AppBarButton Icon="Add" Label="New.." />
+                    <!--<AppBarButton Icon="Add" Label="New.." />-->
 
                     <AppBarButton
+                        x:Name="MoreOptionsButton"
+                        x:Uid="MoreOptionsButton"
                         AllowFocusOnInteraction="True"
-                        Icon="SwitchApps"
-                        Label="Tools">
+                        Icon="SwitchApps">
                         <AppBarButton.Flyout>
                             <MenuFlyout Placement="Bottom">
                                 <MenuFlyoutItem x:Uid="PasswordGeneratorMenuItem" Command="{x:Bind ViewModel.OpenPasswordGeneratorCommand}">
