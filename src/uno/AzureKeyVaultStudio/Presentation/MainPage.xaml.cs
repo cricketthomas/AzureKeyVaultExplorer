@@ -2,11 +2,8 @@ using System.Diagnostics;
 using AzureKeyVaultStudio.Messages;
 using AzureKeyVaultStudio.UserControls.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.UI;
-using Microsoft.UI.Dispatching;
 using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
-using Uno.Extensions.Navigation.Regions;
 using Windows.Graphics;
 
 namespace AzureKeyVaultStudio.Presentation;

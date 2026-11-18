@@ -18,27 +18,27 @@ public partial class App : Application
     {
         this.InitializeComponent();
 
-//#if DEBUG
-//        AppDomain.CurrentDomain.FirstChanceException += (_, e) =>
-//        {
-//            Debug.WriteLine($"[FirstChance] {e.Exception.GetType().FullName}: {e.Exception.Message}");
-//            Debug.WriteLine(e.Exception.StackTrace);
-//        };
+        //#if DEBUG
+        //        AppDomain.CurrentDomain.FirstChanceException += (_, e) =>
+        //        {
+        //            Debug.WriteLine($"[FirstChance] {e.Exception.GetType().FullName}: {e.Exception.Message}");
+        //            Debug.WriteLine(e.Exception.StackTrace);
+        //        };
 
-//        TaskScheduler.UnobservedTaskException += (sender, e) =>
-//        {
-//            Console.WriteLine("Unobserved exception caught!");
-//            foreach (var ex in e.Exception.Flatten().InnerExceptions)
-//                Console.WriteLine(ex);
-//            e.SetObserved();
-//        };
+        //        TaskScheduler.UnobservedTaskException += (sender, e) =>
+        //        {
+        //            Console.WriteLine("Unobserved exception caught!");
+        //            foreach (var ex in e.Exception.Flatten().InnerExceptions)
+        //                Console.WriteLine(ex);
+        //            e.SetObserved();
+        //        };
 
-//        UnhandledException += (sender, args) =>
-//        {
-//            Debug.WriteLine($"[Unhandled] {args.Exception}");
-//            args.Handled = true;
-//        };
-//#endif
+        //        UnhandledException += (sender, args) =>
+        //        {
+        //            Debug.WriteLine($"[Unhandled] {args.Exception}");
+        //            args.Handled = true;
+        //        };
+        //#endif
     }
 
     public Window? MainWindow { get; private set; }
@@ -171,7 +171,6 @@ public partial class App : Application
 
         MainWindow.SetWindowIcon();
 
-
         // TODO: this is a hack
         var shell = new Shell();
         MainWindow.Content = shell;
@@ -190,10 +189,9 @@ public partial class App : Application
             }
             _ = DbContext.InitializeDatabase();
         }
-        //Host = await MainWindow.InitializeNavigationAsync(() => Task.FromResult(builder.Build()), initialNavigate: InitialNavigate); // this is FAST, but i need the shell
 
-        // TODO: this is a hack
-        Host = await MainWindow.InitializeNavigationAsync( () => Task.FromResult(builder.Build()), navigationRoot: shell.ContentControl, initialNavigate: InitialNavigate);
+        // this is a hack, however, it makes startup much quicker
+        Host = await MainWindow.InitializeNavigationAsync(() => Task.FromResult(builder.Build()), navigationRoot: shell.ContentControl, initialNavigate: InitialNavigate);
         //Host = await builder.NavigateAsync<Shell>(initialNavigate: InitialNavigate); // this is SLOW
     }
 
@@ -230,7 +228,6 @@ public partial class App : Application
             window.AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
             //window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
             window.AppWindow.TitleBar.ButtonForegroundColor = Colors.LightSlateGray;
-       
         }
         window.SystemBackdrop = new MicaBackdrop()
         {
