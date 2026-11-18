@@ -60,8 +60,8 @@
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Never</AppxBundle>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <PackageCertificateThumbprint>3F71B8AACE1D46D0CF91BAF4E6EC1632E338BF77</PackageCertificateThumbprint>
-    <PackageCertificateKeyFile>AzureKeyVaultStudio_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <!--<PackageCertificateThumbprint>3F71B8AACE1D46D0CF91BAF4E6EC1632E338BF77</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>AzureKeyVaultStudio_TemporaryKey.pfx</PackageCertificateKeyFile>-->
   </PropertyGroup>
 
 
@@ -81,10 +81,10 @@
     <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
     <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
     <NoWarn>$(NoWarn);IL2104</NoWarn>
-    <WinAppSdkVersion>2.6.6-experimental</WinAppSdkVersion>
+    <WinAppSdkVersion>2.7.0</WinAppSdkVersion>
     <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
-    <EnableMsixTooling>true</EnableMsixTooling>
-    <WindowsPackageType>MSIX</WindowsPackageType>
+    <!--<EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType>MSIX</WindowsPackageType>-->
   </PropertyGroup>
 
 
