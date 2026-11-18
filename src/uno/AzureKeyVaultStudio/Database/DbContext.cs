@@ -29,7 +29,6 @@ public partial class DbContext : IDisposable
 
         var rowsAffected = await command.ExecuteNonQueryAsync();
 
-        // Check if any rows were deleted (1 or more indicates success)
         return rowsAffected > 0;
     }
 
@@ -251,7 +250,7 @@ public partial class DbContext : IDisposable
         if (File.Exists(Constants.DatabaseFilePath))
         {
             using var connection = await TryCreateDatabaseAndOpenConnection();
-            await connection.CloseAsync();
+            connection.Close();
             File.Delete(Constants.DatabaseFilePath);
             DatabaseEncryptedPasswordManager.PurgePasswords();
         }
