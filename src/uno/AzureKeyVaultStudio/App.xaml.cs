@@ -228,7 +228,9 @@ public partial class App : Application
         {
             window.ExtendsContentIntoTitleBar = true;
             window.AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
-            window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
+            //window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
+            window.AppWindow.TitleBar.ButtonForegroundColor = Colors.LightSlateGray;
+       
         }
         window.SystemBackdrop = new MicaBackdrop()
         {

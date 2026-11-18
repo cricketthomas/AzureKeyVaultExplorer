@@ -64,7 +64,7 @@ public sealed partial class MainPage : Page
         var transform = element.TransformToVisual(null);
         var position = transform.TransformPoint(new Windows.Foundation.Point(0, 0));
 
-        var scale = element.XamlRoot.RasterizationScale;
+        var scale = element.XamlRoot?.RasterizationScale ?? 1.0;
 
         return new RectInt32
         {
