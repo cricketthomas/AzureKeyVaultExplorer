@@ -226,7 +226,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="TabStripHeaderIcon.Visibility" Value="Visible" />
-
                     </VisualState.Setters>
                 </VisualState>
 
@@ -236,6 +235,24 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="TabStripHeaderIcon.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+            <!--  this is a hack to fix the wird padding ossie wehn no tabs are op[en  -->
+            <VisualStateGroup x:Name="TabViewItemCountState">
+                <VisualState x:Name="IsEmpty">
+                    <VisualState.StateTriggers>
+                        <triggers:IsNotEqualStateTrigger Value="{x:Bind ViewModel.Tabs.Count, Mode=OneWay}" To="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters />
+                </VisualState>
+
+                <VisualState x:Name="HasItems">
+                    <VisualState.StateTriggers>
+                        <triggers:IsEqualStateTrigger Value="{x:Bind ViewModel.Tabs.Count, Mode=OneWay}" To="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainTabView.Padding" Value="0,39,0,0" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
