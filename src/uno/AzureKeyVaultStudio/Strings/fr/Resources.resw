@@ -732,4 +732,7 @@
   <data name="MoreOptionsButton.Label" xml:space="preserve">
     <value>Plus...</value>
   </data>
+  <data name="SubscriptionsHelpText.Text" xml:space="preserve">
+    <value>Sélectionnez les abonnements à afficher dans la barre latérale gauche.</value>
+  </data>
 </root>

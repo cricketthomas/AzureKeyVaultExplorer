@@ -732,4 +732,7 @@
   <data name="MoreOptionsButton.Label" xml:space="preserve">
     <value>More..</value>
   </data>
+  <data name="SubscriptionsHelpText.Text" xml:space="preserve">
+    <value>Select which subscriptions to show in the left sidebar.</value>
+  </data>
 </root>

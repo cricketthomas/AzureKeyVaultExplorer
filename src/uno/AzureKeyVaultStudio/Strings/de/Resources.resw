@@ -732,4 +732,7 @@
   <data name="MoreOptionsButton.Label" xml:space="preserve">
     <value>Mehr...</value>
   </data>
+  <data name="SubscriptionsHelpText.Text" xml:space="preserve">
+    <value>Wählen Sie aus, welche Abonnements in der linken Seitenleiste angezeigt werden sollen.</value>
+  </data>
 </root>

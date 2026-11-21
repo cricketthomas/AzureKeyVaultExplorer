@@ -57,7 +57,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Grid.Row="1" Background="Transparent">
+    <Grid Grid.Row="1" Background="{ThemeResource BaseBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="40" />
@@ -89,86 +89,84 @@
                 <Grid x:Name="CustomDragRegion" MinWidth="188" />
             </TabView.TabStripFooter>
         </TabView>
-        <Border
+        <Grid
+            x:Name="Toolbar"
             Grid.Row="1"
             Margin="5"
             Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
             BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
             BorderThickness="1"
             CornerRadius="{ThemeResource CornerRadiusValue}">
-            <Grid x:Name="Toolbar">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <CommandBar
-                    Grid.Column="0"
-                    Margin="-10"
-                    HorizontalAlignment="Left"
-                    HorizontalContentAlignment="Left"
-                    Background="Transparent"
-                    DefaultLabelPosition="Right"
-                    IsOpen="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <CommandBar
+                Grid.Column="0"
+                Margin="-10"
+                HorizontalAlignment="Left"
+                HorizontalContentAlignment="Left"
+                DefaultLabelPosition="Right"
+                IsOpen="False">
 
-                    <AppBarButton
-                        x:Name="VaultListButton"
-                        x:Uid="VaultListButton"
-                        Click="PaneAppBarButton_Click"
-                        Icon="Library">
-                        <AppBarButton.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="B" Modifiers="Control" />
-                        </AppBarButton.KeyboardAccelerators>
-                    </AppBarButton>
-                    <AppBarButton
-                        x:Name="SubscriptionsButton"
-                        x:Uid="SubscriptionsButton"
-                        Click="SubscriptionsButton_Click"
-                        Icon="Globe" />
-                    <!--<AppBarButton Icon="Add" Label="New.." />-->
+                <AppBarButton
+                    x:Name="VaultListButton"
+                    x:Uid="VaultListButton"
+                    Click="PaneAppBarButton_Click"
+                    Icon="Library">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="B" Modifiers="Control" />
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton
+                    x:Name="SubscriptionsButton"
+                    x:Uid="SubscriptionsButton"
+                    Click="SubscriptionsButton_Click"
+                    Icon="Globe" />
+                <!--<AppBarButton Icon="Add" Label="New.." />-->
 
-                    <AppBarButton
-                        x:Name="MoreOptionsButton"
-                        x:Uid="MoreOptionsButton"
-                        AllowFocusOnInteraction="True"
-                        Icon="SwitchApps">
-                        <AppBarButton.Flyout>
-                            <MenuFlyout Placement="Bottom">
-                                <MenuFlyoutItem x:Uid="PasswordGeneratorMenuItem" Command="{x:Bind ViewModel.OpenPasswordGeneratorCommand}">
-                                    <MenuFlyoutItem.Icon>
-                                        <FontIcon Glyph="&#xE8D7;" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <MenuFlyoutSeparator />
-                                <MenuFlyoutItem x:Uid="OpenExternalItemByURLMenuItem" Click="OpenExternalItemByURLMenuItem_Click">
-                                    <MenuFlyoutItem.Icon>
-                                        <SymbolIcon Symbol="OpenWith" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <MenuFlyoutItem x:Uid="OpenExternalVaultButton" Click="OpenExternalVaultButton_Click">
-                                    <MenuFlyoutItem.Icon>
-                                        <SymbolIcon Symbol="OpenLocal" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
+                <AppBarButton
+                    x:Name="MoreOptionsButton"
+                    x:Uid="MoreOptionsButton"
+                    AllowFocusOnInteraction="True"
+                    Icon="SwitchApps">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout Placement="Bottom">
+                            <MenuFlyoutItem x:Uid="PasswordGeneratorMenuItem" Command="{x:Bind ViewModel.OpenPasswordGeneratorCommand}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE8D7;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="OpenExternalItemByURLMenuItem" Click="OpenExternalItemByURLMenuItem_Click">
+                                <MenuFlyoutItem.Icon>
+                                    <SymbolIcon Symbol="OpenWith" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem x:Uid="OpenExternalVaultButton" Click="OpenExternalVaultButton_Click">
+                                <MenuFlyoutItem.Icon>
+                                    <SymbolIcon Symbol="OpenLocal" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
 
-                            </MenuFlyout>
-                        </AppBarButton.Flyout>
-                    </AppBarButton>
-                </CommandBar>
-                <Button
-                    x:Name="SettingsIconButton"
-                    x:Uid="SettingsIconButton"
-                    Grid.Column="1"
-                    HorizontalAlignment="Right"
-                    Click="SettingsMenuItemButton_Click"
-                    Content="&#xE713;"
-                    FontFamily="Segoe Fluent Icons"
-                    Style="{StaticResource TransparentButton}">
-                    <Button.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="I" Modifiers="Control" />
-                    </Button.KeyboardAccelerators>
-                </Button>
-            </Grid>
-        </Border>
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+            </CommandBar>
+            <Button
+                x:Name="SettingsIconButton"
+                x:Uid="SettingsIconButton"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Click="SettingsMenuItemButton_Click"
+                Content="&#xE713;"
+                FontFamily="Segoe Fluent Icons"
+                Style="{StaticResource TransparentButton}">
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="I" Modifiers="Control" />
+                </Button.KeyboardAccelerators>
+            </Button>
+        </Grid>
         <toolkit:SwitchPresenter
             Grid.Row="2"
             Background="{ThemeResource BaseBackgroundBrush}"

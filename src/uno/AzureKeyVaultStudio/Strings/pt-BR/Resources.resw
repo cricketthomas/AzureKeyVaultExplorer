@@ -732,4 +732,7 @@
   <data name="MoreOptionsButton.Label" xml:space="preserve">
     <value>Mais...</value>
   </data>
+  <data name="SubscriptionsHelpText.Text" xml:space="preserve">
+    <value>Selecione quais assinaturas deseja exibir na barra lateral esquerda.</value>
+  </data>
 </root>

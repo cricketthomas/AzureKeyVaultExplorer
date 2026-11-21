@@ -1,10 +1,7 @@
 using System.Diagnostics;
-using AzureKeyVaultStudio.Messages;
 using AzureKeyVaultStudio.Presentation.TabsModels;
 using AzureKeyVaultStudio.Presentation.ViewModels;
 using AzureKeyVaultStudio.UserControls;
-using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.UI.Windowing;
 
 namespace AzureKeyVaultStudio.Presentation;
 
@@ -13,34 +10,16 @@ public sealed partial class TabsControl : UserControl
     private readonly Dictionary<TabContainerBase, Frame> _tabFrameCache = new();
     private readonly Dictionary<TabContainerBase, CancellationTokenSource> _tabCancellationTokens = new();
     private Frame? _currentFrame;
-    private Window? _window;
 
     public FrameworkElement CustomDragRegionTabViewFooter => CustomDragRegion;
     public TabsControl()
     {
         ViewModel = new TabsControlViewModel();
         InitializeComponent();
-        _window = (Application.Current as App)?.MainWindow;
-        //_window.SetTitleBar(CustomDragRegion);
-        //_window.AppWindow.Changed += OnAppWindowChanged;
     }
     public TabsControlViewModel ViewModel { get; }
 
-
-    private void TabsControl_Loaded(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel.SelectedTab is not null &&
-            _tabFrameCache.TryGetValue(ViewModel.SelectedTab, out var frame))
-        {
-            frame.Visibility = Visibility.Visible;
-            _currentFrame = frame;
-        }
-    }
-
-    private void HomeMenuItem_Click(object sender, RoutedEventArgs e)
-    {
-        _ = this.Navigator()?.NavigateViewModelAsync<LoginViewModel>(this);
-    }
+ 
 
     private void MyTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
