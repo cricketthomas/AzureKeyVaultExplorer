@@ -92,7 +92,7 @@
         <Grid
             x:Name="Toolbar"
             Grid.Row="1"
-            Margin="5"
+            Margin="5,5,0,5"
             Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
             BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
             BorderThickness="1"

@@ -9,7 +9,7 @@
         <Setter Property="FontSize" Value="12" />
     </Style>
 
-    <CornerRadius x:Key="CornerRadiusValue">7,7,7,7</CornerRadius>
+    <CornerRadius x:Key="CornerRadiusValue">5</CornerRadius>
     <!--  CommandBar Style  -->
     <Style
         x:Key="CustomCommandBarStyle"
