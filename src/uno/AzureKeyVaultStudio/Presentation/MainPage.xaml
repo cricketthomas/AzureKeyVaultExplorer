@@ -43,7 +43,7 @@
                         Spacing="0">
                         <Image
                             Width="18"
-                            Margin="15,14,0,0"
+                            Margin="14,13,0,0"
                             HorizontalAlignment="Left"
                             Source="/Assets/Images/AppIcon.png" />
                     </StackPanel>
