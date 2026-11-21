@@ -41,11 +41,12 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Spacing="0">
-                        <Image
+                        <ImageIcon
                             Width="18"
                             Margin="14,13,0,0"
                             HorizontalAlignment="Left"
-                            Source="/Assets/Images/AppIcon.png" />
+                            CacheMode="BitmapCache"
+                            Source="/Assets/Images/AppIconSmall.png" />
                     </StackPanel>
 
                     <Grid

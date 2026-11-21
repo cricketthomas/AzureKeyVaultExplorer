@@ -76,12 +76,13 @@
             TabWidthMode="Equal">
             <TabView.TabStripHeader>
                 <Grid MinHeight="40">
-                    <Image
+                    <ImageIcon
                         x:Name="TabStripHeaderIcon"
                         Width="18"
                         Margin="14,4,12,0"
                         VerticalAlignment="Center"
-                        Source="/Assets/Images/AppIcon.png" />
+                        CacheMode="BitmapCache"
+                        Source="/Assets/Images/AppIconSmall.png" />
                 </Grid>
             </TabView.TabStripHeader>
             <TabView.TabStripFooter>

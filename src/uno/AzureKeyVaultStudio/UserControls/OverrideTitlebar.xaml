@@ -23,11 +23,12 @@
             FontFamily="Segoe Fluent Icons"
             FontSize="11"
             Visibility="{x:Bind IsBackButtonVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
-        <Image
+        <ImageIcon
             Width="16"
             Height="16"
             Margin="12,0,0,0"
-            Source="/Assets/Images/AppIcon.png" />
+            CacheMode="BitmapCache"
+            Source="/Assets/Images/AppIconSmall.png" />
         <TextBlock
             Margin="16,0,0,1"
             VerticalAlignment="Center"
