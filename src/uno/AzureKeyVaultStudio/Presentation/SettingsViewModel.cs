@@ -136,21 +136,10 @@ public partial class SettingsViewModel : ObservableRecipient
     public async Task ToggleThemeChangeAsync(AppTheme theme)
     {
         await _themeService.SetThemeAsync(theme);
-        var window = (Application.Current as App)?.MainWindow;
-
-        window.AppWindow.TitleBar.PreferredTheme = theme switch
-        {
-            AppTheme.Light => TitleBarTheme.Light,
-            AppTheme.Dark => TitleBarTheme.Dark,
-            _ => TitleBarTheme.UseDefaultAppMode,
-        };
-
-        //SelectedTheme = theme;
     }
 
     private void LoadSettings()
     {
-        //_dispatcher.TryEnqueue(() =>
         Task.Run(() =>
         {
             CustomClientId = _localSettings.GetValue<string>(nameof(CustomClientId), string.Empty);

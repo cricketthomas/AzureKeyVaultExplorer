@@ -18,27 +18,27 @@ public partial class App : Application
     {
         this.InitializeComponent();
 
-#if DEBUG
-        AppDomain.CurrentDomain.FirstChanceException += (_, e) =>
-        {
-            Debug.WriteLine($"[FirstChance] {e.Exception.GetType().FullName}: {e.Exception.Message}");
-            Debug.WriteLine(e.Exception.StackTrace);
-        };
+        //#if DEBUG
+        //        AppDomain.CurrentDomain.FirstChanceException += (_, e) =>
+        //        {
+        //            Debug.WriteLine($"[FirstChance] {e.Exception.GetType().FullName}: {e.Exception.Message}");
+        //            Debug.WriteLine(e.Exception.StackTrace);
+        //        };
 
-        TaskScheduler.UnobservedTaskException += (sender, e) =>
-        {
-            Console.WriteLine("Unobserved exception caught!");
-            foreach (var ex in e.Exception.Flatten().InnerExceptions)
-                Console.WriteLine(ex);
-            e.SetObserved();
-        };
+        //        TaskScheduler.UnobservedTaskException += (sender, e) =>
+        //        {
+        //            Console.WriteLine("Unobserved exception caught!");
+        //            foreach (var ex in e.Exception.Flatten().InnerExceptions)
+        //                Console.WriteLine(ex);
+        //            e.SetObserved();
+        //        };
 
-        UnhandledException += (sender, args) =>
-        {
-            Debug.WriteLine($"[Unhandled] {args.Exception}");
-            args.Handled = true;
-        };
-#endif
+        //        UnhandledException += (sender, args) =>
+        //        {
+        //            Debug.WriteLine($"[Unhandled] {args.Exception}");
+        //            args.Handled = true;
+        //        };
+        //#endif
     }
 
     public Window? MainWindow { get; private set; }
@@ -162,6 +162,7 @@ public partial class App : Application
 
         MainWindow = builder.Window;
         MainWindow.Title = AppTitle;
+
         EnsureEarlyWindow(MainWindow);
 
 #if DEBUG
@@ -170,6 +171,9 @@ public partial class App : Application
 
         MainWindow.SetWindowIcon();
 
+        // TODO: this is a hack
+        var shell = new Shell();
+        MainWindow.Content = shell;
 
         async Task InitialNavigate(IServiceProvider services, INavigator navigator)
         {
@@ -185,10 +189,10 @@ public partial class App : Application
             }
             _ = DbContext.InitializeDatabase();
         }
-        //Host = await MainWindow.InitializeNavigationAsync(() => Task.FromResult(builder.Build()),  initialNavigate:  builder.NavigateAsync<Shell>(initialNavigate: InitialNavigate));
-        Host = await builder.NavigateAsync<Shell>(initialNavigate: InitialNavigate);
 
-
+        // this is a hack, however, it makes startup much quicker
+        Host = await MainWindow.InitializeNavigationAsync(() => Task.FromResult(builder.Build()), navigationRoot: shell.ContentControl, initialNavigate: InitialNavigate);
+        //Host = await builder.NavigateAsync<Shell>(initialNavigate: InitialNavigate); // this is SLOW
     }
 
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)
@@ -199,7 +203,6 @@ public partial class App : Application
             new ViewMap<MainPage, MainViewModel>(),
             new ViewMap<SettingsPage, SettingsViewModel>(),
             new ViewMap<SubscriptionsPage, SubscriptionViewModel>()
-        //new DataViewMap<ItemDetails, ItemPropertiesViewModel, KeyVaultItemProperties>()
         );
 
         routes.Register(
@@ -217,29 +220,19 @@ public partial class App : Application
 
     private static void EnsureEarlyWindow(Window window)
     {
-#if WINDOWS && !HAS_UNO
+#if WINDOWS
         window.AppWindow.MoveAndResize(new RectInt32 { Width = 1100, Height = 640, X = 250, Y = 250 });
-        window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
-        //if (Microsoft.UI.Windowing.AppWindowTitleBar.IsCustomizationSupported())
-        //{
-        //window.ExtendsContentIntoTitleBar = true;
-        //}
-
-        //var content = window.Content?.XamlRoot?.Content as FrameworkElement;
-
-        //window.AppWindow.TitleBar.PreferredTheme = content?.RequestedTheme switch
-        //{
-        //    ElementTheme.Light => TitleBarTheme.Light,
-        //    ElementTheme.Dark => TitleBarTheme.Dark,
-        //    _ => TitleBarTheme.UseDefaultAppMode,
-        //};
-
+        if (AppWindowTitleBar.IsCustomizationSupported())
+        {
+            window.ExtendsContentIntoTitleBar = true;
+            window.AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
+            //window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
+            window.AppWindow.TitleBar.ButtonForegroundColor = Colors.LightSlateGray;
+        }
         window.SystemBackdrop = new MicaBackdrop()
         {
             Kind = MicaKind.Base,
         };
-#else
-        _ = window;
 #endif
         window.Closed += Window_Closed;
     }

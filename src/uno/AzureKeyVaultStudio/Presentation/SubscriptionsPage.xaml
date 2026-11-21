@@ -15,20 +15,20 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="32" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <uc:OverrideTitlebar Grid.Row="0" IsBackButtonVisible="True" />
 
+        <uc:OverrideTitlebar Grid.Row="0" IsBackButtonVisible="True" />
         <StackPanel
             Grid.Row="1"
             Margin="10,5"
             Orientation="Vertical"
             Spacing="5">
             <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Subscriptions" />
-            <TextBlock Text="Select which subscriptions to show in the left sidebar." TextWrapping="Wrap" />
+            <TextBlock x:Uid="SubscriptionsHelpText" TextWrapping="Wrap" />
             <Border
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"

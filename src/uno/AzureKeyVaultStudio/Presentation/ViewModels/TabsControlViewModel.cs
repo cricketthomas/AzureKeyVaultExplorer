@@ -18,11 +18,18 @@ public partial class TabsControlViewModel : ObservableRecipient
     public partial TabContainerBase? SelectedTab { get; set; }
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsLeftPaneClosed))]
+    [NotifyPropertyChangedFor(nameof(IsLeftPaneOpen))]
     public partial bool IsPaneOpen { get; set; }
   
-
     [ObservableProperty]
-    public partial bool IsTeachingTipOpen { get; set; } = false;
+    [NotifyPropertyChangedFor(nameof(IsLeftPaneClosed))]
+    [NotifyPropertyChangedFor(nameof(IsLeftPaneOpen))]
+    public partial SplitViewPanePlacement PanePlacement { get; set; }
+
+    public bool IsLeftPaneClosed => PanePlacement == SplitViewPanePlacement.Left && !IsPaneOpen;
+    public bool IsLeftPaneOpen => PanePlacement == SplitViewPanePlacement.Left && IsPaneOpen;
+
 
     [ObservableProperty]
     public partial VaultViewModel? CurrentVaultViewModel { get; set; }
@@ -47,7 +54,7 @@ public partial class TabsControlViewModel : ObservableRecipient
     {
         if (_suppressDispatch) return;
 
-        WeakReferenceMessenger.Default.Send(new PaneStateChangedMessage(value));
+        WeakReferenceMessenger.Default.Send(new PaneStateChangedMessage(new PaneState(value, PanePlacement)));
     }
 
 
@@ -76,7 +83,8 @@ public partial class TabsControlViewModel : ObservableRecipient
         WeakReferenceMessenger.Default.Register<TabsControlViewModel, PaneStateChangedMessage>(this, (r, m) =>
         {
             r._suppressDispatch = true;
-            r.IsPaneOpen = m.Value;
+            r.IsPaneOpen = m.Value.IsOpen;
+            r.PanePlacement = m.Value.PanePlacement;
             r._suppressDispatch = false;
         });
     }
@@ -91,8 +99,6 @@ public partial class TabsControlViewModel : ObservableRecipient
     partial void OnSelectedTabChanged(TabContainerBase? value)
     {
         UpdateCurrentVaultViewModel();
-        // show teaching tip until we figure out a better design for this would be menubar.
-        IsTeachingTipOpen = Tabs.Count == 0 && IsActive;
     }
 
     private void UpdateCurrentVaultViewModel()

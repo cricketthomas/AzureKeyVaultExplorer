@@ -9,7 +9,7 @@
         <Setter Property="FontSize" Value="12" />
     </Style>
 
-    <CornerRadius x:Key="CornerRadiusValue">7,7,7,7</CornerRadius>
+    <CornerRadius x:Key="CornerRadiusValue">5</CornerRadius>
     <!--  CommandBar Style  -->
     <Style
         x:Key="CustomCommandBarStyle"
@@ -186,136 +186,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DefaultMenuBarStyle"
-        BasedOn="{StaticResource DefaultMenuBarStyle}"
-        TargetType="muxc:MenuBar">
-        <Setter Property="Background" Value="{ThemeResource MenuBarBackground}" />
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="MinHeight" Value="35" />
-        <Setter Property="TabNavigation" Value="Once" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="muxc:MenuBar">
-                    <Grid
-                        x:Name="LayoutRoot"
-                        HorizontalAlignment="Stretch"
-                        Background="{TemplateBinding Background}">
-                        <ItemsControl
-                            x:Name="ContentRoot"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Stretch"
-                            IsTabStop="False"
-                            ItemsSource="{TemplateBinding Items}"
-                            TabNavigation="{TemplateBinding TabNavigation}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
-    <Style TargetType="muxc:MenuBarItem">
-        <Setter Property="Foreground" Value="{ThemeResource MenuBarItemForeground}" />
-        <Setter Property="Background" Value="{ThemeResource MenuBarItemBackground}" />
-        <Setter Property="BorderThickness" Value="{ThemeResource MenuBarItemBorderThickness}" />
-        <Setter Property="BorderBrush" Value="{ThemeResource MenuBarItemBorderBrush}" />
-        <Setter Property="Margin" Value="{ThemeResource MenuBarItemMargin}" />
-        <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
-        <Setter Property="Title" Value="Item" />
-        <Setter Property="IsTabStop" Value="True" />
-        <Setter Property="ExitDisplayModeOnAccessKeyInvoked" Value="False" />
-        <Setter Property="UseSystemFocusVisuals" Value="True" />
-        <Setter Property="FocusVisualMargin" Value="-3" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="muxc:MenuBarItem">
-                    <Grid
-                        x:Name="ContentRoot"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="{TemplateBinding CornerRadius}">
-                        <Grid.Resources>
-                            <SolidColorBrush x:Key="ButtonBackground" Color="Transparent" />
-                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="Transparent" />
-                            <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="Transparent" />
-                            <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent" />
-                        </Grid.Resources>
-                        <Border
-                            x:Name="Background"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{TemplateBinding CornerRadius}" />
-                        <Button
-                            x:Name="ContentButton"
-                            MaxHeight="18"
-                            Padding="4,0"
-                            VerticalAlignment="Stretch"
-                            AutomationProperties.AccessibilityView="Raw"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Content="{TemplateBinding Title}"
-                            FontSize="13"
-                            Foreground="{TemplateBinding Foreground}"
-                            IsTabStop="False" />
-
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal" />
-
-                                <VisualState x:Name="PointerOver">
-                                    <VisualState.Setters>
-                                        <Setter Target="Background.Background" Value="{ThemeResource MenuBarItemBackgroundPointerOver}" />
-                                        <Setter Target="Background.BorderBrush" Value="{ThemeResource MenuBarItemBorderBrushPointerOver}" />
-                                    </VisualState.Setters>
-                                </VisualState>
-
-                                <VisualState x:Name="Pressed">
-                                    <VisualState.Setters>
-                                        <Setter Target="Background.Background" Value="{ThemeResource MenuBarItemBackgroundPressed}" />
-                                        <Setter Target="Background.BorderBrush" Value="{ThemeResource MenuBarItemBorderBrushPressed}" />
-                                    </VisualState.Setters>
-                                </VisualState>
-
-                                <VisualState x:Name="Selected">
-                                    <VisualState.Setters>
-                                        <Setter Target="Background.Background" Value="{ThemeResource MenuBarItemBackgroundSelected}" />
-                                        <Setter Target="Background.BorderBrush" Value="{ThemeResource MenuBarItemBorderBrushSelected}" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style
-        x:Key="CompactToolbarButtonStyle"
-        BasedOn="{StaticResource DefaultButtonStyle}"
-        TargetType="Button">
-        <Setter Property="Padding" Value="6,4" />
-        <Setter Property="MinWidth" Value="0" />
-        <Setter Property="MinHeight" Value="28" />
-        <Setter Property="CornerRadius" Value="6" />
-        <Setter Property="FontSize" Value="12" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-
-    <Style
-        x:Key="IconToolbarButtonStyle"
-        BasedOn="{StaticResource CompactToolbarButtonStyle}"
-        TargetType="Button">
-        <Setter Property="Padding" Value="6" />
-        <Setter Property="MinWidth" Value="28" />
-    </Style>
     <!--  datagrid  -->
     <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
     <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="Transparent" />

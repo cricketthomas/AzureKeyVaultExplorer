@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DOTNET_VERSION: 10.0.x
+  DOTNET_VERSION: 11.0.x
   CONFIGURATION: Release
   STORE_APP_ID: ${{ secrets.STORE_APP_ID }}
   PROJECT_PATH: ./src/uno/AzureKeyVaultStudio/AzureKeyVaultStudio.csproj
@@ -75,7 +75,7 @@ jobs:
             /restore `
             /t:Build `
             /p:Configuration=Release `
-            /p:TargetFramework=net10.0-windows10.0.26100 `
+            /p:TargetFramework=net11.0-windows10.0.26100 `
             /p:WindowsPackageType=MSIX `
             /p:GenerateAppxPackageOnBuild=true `
             /p:UapAppxPackageBuildMode=StoreUpload `

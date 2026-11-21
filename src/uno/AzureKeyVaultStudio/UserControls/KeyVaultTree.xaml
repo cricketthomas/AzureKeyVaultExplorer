@@ -18,7 +18,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <win:ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
+                <!--<win:ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
 
             <MenuFlyout x:Key="TreeViewContextFlyout" x:Uid="TreeViewContextFlyout">
@@ -142,6 +142,8 @@
                 x:Name="SearchTextBox"
                 x:Uid="SearchTextBox"
                 Grid.Row="1"
+                MinHeight="30"
+                MaxHeight="30"
                 skia:Height="30"
                 skia:MaxHeight="30"
                 skia:MinHeight="30"
@@ -180,7 +182,15 @@
                 Expanding="KeyVaultTreeView_Expanding"
                 ItemTemplate="{StaticResource TreeNodeTemplate}"
                 ItemsSource="{x:Bind ViewModel.TreeDataSource, Mode=TwoWay}"
-                SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}" />
+                SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}">
+                <TreeView.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <win:ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </TreeView.Resources>
+            </TreeView>
         </ScrollViewer>
     </Grid>
 

@@ -11,6 +11,7 @@ public sealed partial class TabsControl : UserControl
     private readonly Dictionary<TabContainerBase, CancellationTokenSource> _tabCancellationTokens = new();
     private Frame? _currentFrame;
 
+    public FrameworkElement CustomDragRegionTabViewFooter => CustomDragRegion;
     public TabsControl()
     {
         ViewModel = new TabsControlViewModel();
@@ -18,22 +19,7 @@ public sealed partial class TabsControl : UserControl
     }
     public TabsControlViewModel ViewModel { get; }
 
-
-    private void TabsControl_Loaded(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel.SelectedTab is not null &&
-            _tabFrameCache.TryGetValue(ViewModel.SelectedTab, out var frame))
-        {
-            frame.Visibility = Visibility.Visible;
-            _currentFrame = frame;
-        }
-    }
-
-    private void HomeMenuItem_Click(object sender, RoutedEventArgs e)
-    {
-        _ = this.Navigator()?.NavigateViewModelAsync<LoginViewModel>(this);
-        SetTabPageState();
-    }
+ 
 
     private void MyTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -151,21 +137,15 @@ public sealed partial class TabsControl : UserControl
         frame.Navigate(targetPageType, parameter);
     }
 
-    private void SetTabPageState()
-    {
-        SplitButtonTeachingTip.IsOpen = false;
-    }
+  
     private void SettingsMenuItemButton_Click(object sender, RoutedEventArgs e)
     {
         _ = this.Navigator()?.NavigateViewModelAsync<SettingsViewModel>(this);
-        SetTabPageState();
-    
     }
 
     private void SubscriptionsButton_Click(object sender, RoutedEventArgs e)
     {
         _ = this.Navigator()?.NavigateViewModelAsync<SubscriptionViewModel>(this);
-        SetTabPageState();
     }
 
     private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
@@ -279,4 +259,12 @@ public sealed partial class TabsControl : UserControl
         };
         await dialog.ShowAsync();
     }
+
+
+
+    private void PaneAppBarButton_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.IsPaneOpen = !ViewModel.IsPaneOpen;
+    }
+
 }

@@ -1,4 +1,7 @@
+using System.Diagnostics;
+using AzureKeyVaultStudio.Messages;
 using AzureKeyVaultStudio.Services;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace AzureKeyVaultStudio.Presentation;
 
@@ -19,10 +22,31 @@ public class ShellViewModel
         _authentication = authentication;
         _settings = settings;
         _authentication.LoggedOut += LoggedOut;
+        WeakReferenceMessenger.Default.Register<NavigationBackRequestedMessage>(this, async (r, m) => await GoBack());
+
+     
+
     }
 
     private async void LoggedOut(object? sender, EventArgs e)
     {
         await _navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.ClearBackStack);
+    }
+
+
+    private async Task GoBack()
+    {
+
+        if (_navigator == null)
+            return;
+        try
+        {
+            if (await _navigator.CanGoBack())
+                await _navigator.NavigateBackAsync(this);
+        }
+        catch (Exception ex)
+        {
+            Debug.Write($"Failed to navigate back {ex.Message}", ex.StackTrace);
+        }
     }
 }

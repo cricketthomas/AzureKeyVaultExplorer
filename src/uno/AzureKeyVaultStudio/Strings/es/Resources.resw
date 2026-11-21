@@ -297,8 +297,11 @@
   <data name="SegmentedItemAll.ToolTipService.ToolTip" xml:space="preserve">
     <value>Todos</value>
   </data>
-  <data name="SubscriptionsMenuItem.Text" xml:space="preserve">
-    <value>Administrar suscripciones...</value>
+  <data name="SubscriptionsButton.Label" xml:space="preserve">
+    <value>Suscripciones</value>
+  </data>
+  <data name="VaultListButton.Label" xml:space="preserve">
+    <value>Lista de almacenes </value>
   </data>
   <data name="PasswordGeneratorMenuItem.Text" xml:space="preserve">
     <value>Generador de contraseñas..</value>
@@ -722,5 +725,14 @@
   </data>
   <data name="ExpiredTextBlock.Text" xml:space="preserve">
     <value>Expirado</value>
+  </data>
+  <data name="SubscriptionsMenuItem.Text" xml:space="preserve">
+    <value>Administrar suscripciones...</value>
+  </data>
+  <data name="MoreOptionsButton.Label" xml:space="preserve">
+    <value>Más...</value>
+  </data>
+  <data name="SubscriptionsHelpText.Text" xml:space="preserve">
+    <value>Seleccione las suscripciones que desea mostrar en la barra lateral izquierda.</value>
   </data>
 </root>

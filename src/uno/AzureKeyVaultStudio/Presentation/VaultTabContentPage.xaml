@@ -21,7 +21,7 @@
 
         <StackPanel
             Grid.Row="0"
-            Margin="10,5"
+            Margin="5,0,0,5"
             VerticalAlignment="Center"
             Background="{ThemeResource BaseBackgroundBrush}"
             Orientation="Vertical">
@@ -121,7 +121,7 @@
                 <toolkit:Case IsDefault="True" Value="False">
                     <controls:DataGrid
                         x:Name="VaultContentDataGrid"
-                        Margin="5,0,5,10"
+                        Margin="5,0,0,5"
                         VerticalAlignment="Stretch"
                         skia:PreviewKeyDown="VaultContentDataGrid_PreviewKeyDown"
                         AlternatingRowBackground="{ThemeResource LayerFillColorDefaultBrush}"

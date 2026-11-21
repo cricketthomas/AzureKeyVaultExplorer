@@ -297,8 +297,11 @@
   <data name="SegmentedItemAll.ToolTipService.ToolTip" xml:space="preserve">
     <value>Todos</value>
   </data>
-  <data name="SubscriptionsMenuItem.Text" xml:space="preserve">
-    <value>Gerenciar assinaturas...</value>
+  <data name="SubscriptionsButton.Label" xml:space="preserve">
+    <value>Assinaturas</value>
+  </data>
+  <data name="VaultListButton.Label" xml:space="preserve">
+    <value>Lista de cofres</value>
   </data>
   <data name="PasswordGeneratorMenuItem.Text" xml:space="preserve">
     <value>Gerador de senha..</value>
@@ -722,5 +725,14 @@
   </data>
   <data name="ExpiredTextBlock.Text" xml:space="preserve">
     <value>Expirado</value>
+  </data>
+  <data name="SubscriptionsMenuItem.Text" xml:space="preserve">
+    <value>Gerenciar assinaturas...</value>
+  </data>
+  <data name="MoreOptionsButton.Label" xml:space="preserve">
+    <value>Mais...</value>
+  </data>
+  <data name="SubscriptionsHelpText.Text" xml:space="preserve">
+    <value>Selecione quais assinaturas deseja exibir na barra lateral esquerda.</value>
   </data>
 </root>

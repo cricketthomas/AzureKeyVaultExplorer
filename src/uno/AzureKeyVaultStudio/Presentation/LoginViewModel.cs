@@ -58,9 +58,6 @@ public partial class LoginViewModel : ObservableObject
         {
             var success = await _authentication.LoginAsync(_dispatcher, new Dictionary<string, string> { { "Username", string.Empty }, { "Password", string.Empty } }, cancellationToken: token);
             token.ThrowIfCancellationRequested();
-#if DEBUG
-            await Task.Delay(4000, token);
-#endif
             if (success)
             {
                 await _navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack, cancellation: token);
